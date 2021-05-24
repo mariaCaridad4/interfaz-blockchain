@@ -1,0 +1,20 @@
+[
+    {
+        "id": "1",
+        "nombre": "lectura datos principales",
+        "nivelacceso": "1",
+        "atributo": []
+    },
+    {
+        "id": "2",
+        "nombre": "lectura datos clinicos",
+        "nivelacceso": "2",
+        "atributo": []
+    },
+    {
+        "id": "3",
+        "nombre": "lectura de todos los datos",
+        "nivelacceso": "3",
+        "atributo": []
+    }
+]

@@ -1,0 +1,17 @@
+[
+    {
+        "id": "1",
+        "nombre": "Organización 1",
+        "nivelacceso": "1"
+    },
+    {
+        "id": "2",
+        "nombre": "Organización 2",
+        "nivelacceso": "2"
+    },
+    {
+        "id": "3",
+        "nombre": "Organización 3",
+        "nivelacceso": "3"
+    }
+]

@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "nombre": "Médico 1",
+        "especialidad": "Especialidad 1",
+        "organizacion": "Organización 1",
+        "fecha": "01/05/2021",
+        "estado": "pnd"
+    },
+    {
+        "id": 2,
+        "nombre": "Médico 2",
+        "especialidad": "Especialidad 2",
+        "organizacion": "Organización 2",
+        "fecha": "02/05/2021",
+        "estado": "pnd"
+    },
+    {
+        "id": 3,
+        "nombre": "Médico 3",
+        "especialidad": "Especialidad 3",
+        "organizacion": "Organización 3",
+        "fecha": "03/05/2021",
+        "estado": "pnd"
+    },
+    {
+        "id": 4,
+        "nombre": "Médico 4",
+        "especialidad": "Especialidad 4",
+        "organizacion": "Organización 4",
+        "fecha": "03/08/2021",
+        "estado": "pnd"
+    }
+]

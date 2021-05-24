@@ -1,0 +1,23 @@
+[
+    {
+        "cedula": "0106056633",
+        "nombre": "Paciente 1",
+        "fecha": "01/05/2021",
+        "estado": "Aceptado",
+        "ver": true
+    },
+    {
+        "cedula": "0102518784",
+        "nombre": "Paciente 2",
+        "fecha": "02/05/2021",
+        "estado": "Rechazado",
+        "ver": false
+    },
+    {
+        "cedula": "0102754307",
+        "nombre": "Paciente 3",
+        "fecha": "03/05/2021",
+        "estado": "Aceptado",
+        "ver": true
+    }
+]

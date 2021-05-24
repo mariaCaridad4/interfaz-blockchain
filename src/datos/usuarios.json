@@ -1,0 +1,20 @@
+[
+    {
+        "cedula": "0106056633",
+        "nombre": "Paciente 1",
+        "rolusuario": "Paciente",
+        "fecha": "01/05/2021"
+    },
+    {
+        "cedula": "0102518784",
+        "nombre": "Paciente 2",
+        "rolusuario": "Paciente",
+        "fecha": "02/05/2021"
+    },
+    {
+        "cedula": "0102754307",
+        "nombre": "Médico 1",
+        "rolusuario": "Médico",
+        "fecha": "03/05/2021"
+    }
+]
