@@ -1,28 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import reportWebVitals from './reportWebVitals';
 
-import NavPaciente from './NavPaciente';
-import NavMedico from './NavMedico';
-import NavAdministrador from './NavAdministrador';
-import NavOrg from './NavOrg';
-import SingIn from './SingIn';
 
+import App from './App';  
+import Register from './Components/Register'
+import Login from './Components/Login'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <NavAdministrador />
-    
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+  <Register />,
+  document.getElementById('root'));
 
-reportWebVitals();
 
 /*
-<NavMedico />
-    <NavAdministrador />
-    <NavOrg />
-    <SingIn />
-*/
+<React.StrictMode>
+    
+    
+  </React.StrictMode>,
+  */

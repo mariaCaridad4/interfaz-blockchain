@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -13,10 +13,15 @@ import Tab from '@material-ui/core/Tab';
 import Notificaciones from './Paciente/Notificaciones';
 import MedicoConfianza from './Paciente/MedicoConfianza';
 
+import { Redirect } from '@reach/router';
+import { userContext } from '../src/App';
+
+
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
-
+    const [user] = useContext(userContext);
+    if (!user.accesstoken) return <Redirect from='' to='singin' noThrow />
     return (
         <div
             role="tabpanel"
@@ -32,6 +37,7 @@ function TabPanel(props) {
             )}
         </div>
     );
+
 }
 
 TabPanel.propTypes = {
@@ -58,6 +64,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function FullWidthTabs() {
+    const [user] = useContext(userContext);
+
     const classes = useStyles();
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
@@ -69,7 +77,7 @@ export default function FullWidthTabs() {
     const handleChangeIndex = (index) => {
         setValue(index);
     };
-
+    if (!user.accestoken) return <Redirect from='' to='singin' noThrow />
     return (
         <Container component="main" >
             <CssBaseline />
