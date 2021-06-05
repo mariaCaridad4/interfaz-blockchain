@@ -11,7 +11,7 @@ const Protected = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    authorization: `Beat ${user.accesstoken}`,
+                    authorization: `Bearer ${user.accesstoken}`,
                 },
             })).json();
             if (result.data) setContent(result.data)

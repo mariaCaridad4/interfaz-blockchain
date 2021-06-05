@@ -15,7 +15,7 @@ function App() {
     const [loading, setLoading] = useState(true);
 
     const logOutCallback = async () => {
-        await fetch('http://localhost/logout', {
+        await fetch('http://localhost:4000/logout', {
             method: 'POST',
             credentials: 'include',
         });
@@ -25,21 +25,21 @@ function App() {
     }
 
     useEffect(() => {
-       async function checkRefreshToken() {
-           const result = await (await fetch('http://localhost/refresh_token', {
+        async function checkRefreshToken() {
+          const result = await (await fetch('http://localhost:4000/refresh_token', {
             method: 'POST',
-            credentials: 'include',
+            credentials: 'include', // Needed to include the cookie
             headers: {
-                'Content-Type': 'application/json',
+              'Content-Type': 'application/json',
             }
-        })).json();
-        setUser({
-            accesstoken: result.accesstoken,
-        });
-        setLoading(false);
-       }
-       checkRefreshToken();
-    }, []);
+          })).json();
+            setUser({
+              accesstoken: result.accesstoken,
+            });
+            setLoading(false);
+        }
+        checkRefreshToken();
+      }, []);
 
     if (loading) return <div>Loading ...</div>
 
@@ -51,7 +51,7 @@ function App() {
                     <Login path="login" />
                     <Register path="register" />
                     <Protected path="protected" />
-                    <Content path="content" />
+                    <Content path="/" />
                 </Router>
             </div>
         </UserContext.Provider>

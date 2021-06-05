@@ -77,7 +77,6 @@ const Register = () => {
     const [nombre, setNombre] = useState(null);
     const [rol1, setRol1] = useState(null);
     const [org1, setOrg1] = useState(null);
-    const [aux, setAux] = useState(1);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -143,7 +142,6 @@ const Register = () => {
         } else {
             setOrg1('org 4');
         }
-        setAux(5);
     };
 
 
@@ -158,7 +156,6 @@ const Register = () => {
         } else {
             setRol1('medico');
         }
-        setAux(5);
     };
 
 
