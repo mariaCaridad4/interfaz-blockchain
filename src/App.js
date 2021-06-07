@@ -11,7 +11,7 @@ export const UserContext = React.createContext([]);
 
 function App() {
   const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const logOutCallback = async () => {
     await fetch('http://localhost:4000/logout', {
