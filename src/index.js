@@ -4,17 +4,9 @@ import './index.css';
 
 
 import App from './App';  
-import Register from './Components/Register'
-import Login from './Components/Login'
+//import Register from './Components/Register'
+//import Login from './Components/Login'
 
 ReactDOM.render(
-  <Register />,
+  <App />,
   document.getElementById('root'));
-
-
-/*
-<React.StrictMode>
-    
-    
-  </React.StrictMode>,
-  */

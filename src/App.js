@@ -1,62 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import { navigate, Router } from '@reach/router';
+import { Router, navigate } from '@reach/router';
 
 import Navigation from './Components/Navigation';
 import Login from './Components/Login';
-import Register from './Components/Register'
+import Register from './Components/Register';
 import Protected from './Components/Protected';
 import Content from './Components/Content';
-
 
 export const UserContext = React.createContext([]);
 
 function App() {
-    const [user, setUser] = useState({});
-    const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(false);
 
-    const logOutCallback = async () => {
-        await fetch('http://localhost:4000/logout', {
-            method: 'POST',
-            credentials: 'include',
-        });
+  const logOutCallback = async () => {
+    await fetch('http://localhost:4000/logout', {
+      method: 'POST',
+      credentials: 'include', // Needed to include the cookie
+    });
+    // Clear user from context
+    setUser({});
+    // Navigate back to startpage
+    navigate('/');
+  }
 
-        setUser({});
-        navigate('/');
-    }
-
-    useEffect(() => {
-        async function checkRefreshToken() {
-          const result = await (await fetch('http://localhost:4000/refresh_token', {
-            method: 'POST',
-            credentials: 'include', // Needed to include the cookie
-            headers: {
-              'Content-Type': 'application/json',
-            }
-          })).json();
-            setUser({
-              accesstoken: result.accesstoken,
-            });
-            setLoading(false);
+  // First thing, check if a refreshtoken exist
+  useEffect(() => {
+    async function checkRefreshToken() {
+      const result = await (await fetch('http://localhost:4000/refresh_token', {
+        method: 'POST',
+        credentials: 'include', // Needed to include the cookie
+        headers: {
+          'Content-Type': 'application/json',
         }
-        checkRefreshToken();
-      }, []);
+      })).json();
+        setUser({
+          accesstoken: result.accesstoken,
+        });
+        setLoading(false);
+    }
+    checkRefreshToken();
+  }, []);
 
-    if (loading) return <div>Loading ...</div>
+  if (loading) return <div>Loading ...</div>
 
-    return (
-        <UserContext.Provider value={[user, setUser]}>
-            <div className="app">
-                <Navigation logOutCallback={logOutCallback} />
-                <Router id="router">
-                    <Login path="login" />
-                    <Register path="register" />
-                    <Protected path="protected" />
-                    <Content path="/" />
-                </Router>
-            </div>
-        </UserContext.Provider>
-    )
-
+  return (
+    <UserContext.Provider value={[user, setUser]}>
+      <div className="app">
+        <Navigation logOutCallback={logOutCallback} />
+        <Router id="router">
+          <Login path="login" />
+          <Register path="register" />
+          <Protected path="protected" />
+          <Content path="/" />
+        </Router>
+      </div>
+    </UserContext.Provider>
+  );
 }
 
 export default App;

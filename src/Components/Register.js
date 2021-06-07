@@ -172,7 +172,8 @@ const Register = () => {
                 <form onSubmit={handleSubmit} className={classes.form} noValidate>
                     <Grid item xs={12} sm={6} className={classes.grid} >
                         <TextField
-                            autoComplete="fname"
+                            value={nombre}
+                            autoComplete="firstName"
                             name="firstName"
                             variant="outlined"
                             required
@@ -222,7 +223,7 @@ const Register = () => {
                                 label="Rol"
                                 inputProps={{
                                     name: 'rol',
-                                    id: 'outlined-age-native-simple',
+                                    id: 'rol',
                                 }}
                             >
                                 <option aria-label="None" value="" />
@@ -242,7 +243,7 @@ const Register = () => {
                                     label="Organización"
                                     inputProps={{
                                         name: 'organizacion',
-                                        id: 'outlined-age-native-simple',
+                                        id: 'org',
                                     }}
                                 >
                                     <option aria-label="None" value="" />
