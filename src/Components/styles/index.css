@@ -1,0 +1,58 @@
+
+.paper {
+  display: 'flex';
+  flex-direction: 'column';
+  align-items: 'center';
+  width: 900, /*depende en donde este. por el momento se usa en nav adminsitrador*/
+}
+
+.form {
+  width: '100%';
+}
+
+.formControl {
+  min-width: 180;
+}
+
+.root {
+  display: 'flex';
+  width: 400;
+  flex-grow: 1; /*nav paciente*/
+}
+
+.search {
+  position: 'relative';
+  background-color: '#ECE0F8';
+}
+
+.searchIcon {
+  height: '100%';
+  position: absolute;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: 'center',
+}
+
+.inputRoot {
+  color: 'inherit';
+}
+
+.inputInput {
+  width: '100%';
+}
+
+.details {
+  display: 'flex';
+  flex-direction: 'column';
+}
+
+.buttons {
+  display: 'flex';
+  width: 100;
+}
+
+.link {
+  color: "white";
+  text-decoration: "none";
+}

@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext } from 'react';
-import { UserContext } from '../App';
+import { UserContext } from '../reduces/App';
 
 const Protected = () => {
     const [user] = useContext(UserContext);

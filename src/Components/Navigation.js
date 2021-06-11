@@ -1,13 +1,47 @@
 import React from 'react';
-import { Link } from '@reach/router';
+import { Link } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import './styles/index.css';
 
-const Navigation = ({ logOutCallback}) => (
-    <ul>
-        <li><Link to='/'>Home</Link></li>
-        <li><Link to='/protected'>Protected</Link></li>
-        <li><Link to='/register'>Register</Link></li>
-        <li><button onClick={logOutCallback}>Log Out</button></li>
-    </ul>
-)
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    title: {
+        flexGrow: 1,
+    },
+    link: {
+        color: "white",
+        textDecoration: "none",
+      }
+}));
+
+
+function Navigation() {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.root}>
+            <AppBar position="static">
+                <Toolbar>
+                    <Typography variant="h6" className={classes.title}>
+                        <Link className={classes.link} to='/'>Home</Link>
+                    </Typography>
+                    <Button color="inherit"><Link className={classes.link} to='/register'>Register</Link></Button>
+                    <Button color="inherit"><Link className={classes.link} to='/login'>Log In</Link></Button>
+                </Toolbar>
+            </AppBar>
+        </div>
+    
+    
+    )
+}
 
 export default Navigation;

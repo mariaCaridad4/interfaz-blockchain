@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { navigate } from '@reach/router';
-import { UserContext } from '../App';
+import { Link } from  'react-router-dom';
+
+  import axios from 'axios';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -46,43 +47,39 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  link: {
+    color: "white",
+    textDecoration: "none",
+  }
 }));
+  
 
 
 const Login = () => {
   const classes = useStyles();
 
-  const [user, setUser] = useContext(UserContext);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    const result = await (await fetch('http://localhost:4000/login', {
-      method: 'POST',
-      credentials: 'include', // Needed to include the cookie
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-      }),
-    })).json();
+  
+    const data = {
+      email: email,
+      pwd: password
+    };
 
-    if (result.accesstoken) {
-      setUser({
-        accesstoken: result.accesstoken,
-      });
-      navigate('/');
-    } else {
-      console.log(result.error);
-    }
+    axios.post('login', data)
+      .then(res => {
+        //console.log(res)
+        localStorage.setItem('token', res.token);
+      })
+      .catch(err => {
+        console.log(err)
+      })
   };
 
-  useEffect(() => {
-    console.log(user)
-  }, [user])
 
   const handleChange = e => {
     if (e.currentTarget.name === 'email') {
@@ -103,7 +100,7 @@ const Login = () => {
           Sign In
             </Typography>
         <form onSubmit={handleSubmit} className={classes.form} noValidate>
-          <div>Login</div>
+          
           <div className="login-input">
             <TextField
               value={email}
@@ -136,7 +133,7 @@ const Login = () => {
               color="primary"
               className={classes.submit}
             >
-              Sing in
+              <Link className={classes.link} to='/paciente'>Sing in</Link>
                     </Button>
           </div>
         </form>

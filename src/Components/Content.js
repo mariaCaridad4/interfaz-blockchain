@@ -1,13 +1,36 @@
-import React, { useContex } from 'react';
-import { Redirect } from '@reach/router';
-import { UserContext } from '../App';
+import React, { Component } from 'react';
+import axios from 'axios';
 
-import Paciente from '../NavPaciente';
+import Inicio from './Inicio';
+import Paciente from './Navs/NavPaciente';
 
-const Content = () => {
-    const [user] = useContex(UserContext);
-    if(!user.accestoken) return <Redirect from='' to='login' noThrow />
-    return <div><Paciente /></div>;
+export default class Content extends Component {
+
+    state = {};
+    componentDiMount() {
+        
+        axios.get('user').then(
+            res => {
+                //console.log(res);
+                this.setState({
+                    user: res.data
+                })
+            },
+            err => {
+                console.log(err)
+            }
+        )
+    }
+    render () {
+        if (this.state.user){
+           //falta condicion del rol para ver a donde se dirige
+           return (
+            <Paciente />
+           )
+
+        }
+        return <div><Inicio /></div>;
+    }
+    
 }
 
-export default Content;

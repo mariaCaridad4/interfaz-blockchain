@@ -58,9 +58,14 @@ const useStyles = makeStyles((theme) => ({
     grid: {
         alignItems: 'center',
         marginLeft: theme.spacing(25),
-    }
+    },
+    link: {
+        color: "white",
+        textDecoration: "none",
+      },
 }));
 
+    
 
 const Register = () => {
     const classes = useStyles();
