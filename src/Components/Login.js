@@ -72,7 +72,7 @@ const Login = () => {
 
     axios.post('login', data)
       .then(res => {
-        //console.log(res)
+        console.log(res)
         localStorage.setItem('token', res.token);
       })
       .catch(err => {

@@ -5,24 +5,9 @@ import Inicio from './Inicio';
 import Paciente from './Navs/NavPaciente';
 
 export default class Content extends Component {
-
-    state = {};
-    componentDiMount() {
-        
-        axios.get('user').then(
-            res => {
-                //console.log(res);
-                this.setState({
-                    user: res.data
-                })
-            },
-            err => {
-                console.log(err)
-            }
-        )
-    }
+    
     render () {
-        if (this.state.user){
+        if (this.props.user){
            //falta condicion del rol para ver a donde se dirige
            return (
             <Paciente />

@@ -36,7 +36,7 @@
 
 .inputRoot {
   color: 'inherit';
-}
+} 
 
 .inputInput {
   width: '100%';
@@ -55,4 +55,16 @@
 .link {
   color: "white";
   text-decoration: "none";
+}
+
+.root1 {
+  flex-grow: 1;
+}
+
+.menuButton {
+  margin-right: theme,spacing(2),
+}
+
+.title {
+  flex-grow: 1,
 }

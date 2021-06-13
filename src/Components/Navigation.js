@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles  } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import './styles/index.css';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = theme => ({
     root: {
         flexGrow: 1,
     },
@@ -20,28 +20,47 @@ const useStyles = makeStyles((theme) => ({
     link: {
         color: "white",
         textDecoration: "none",
-      }
-}));
+    }
+});
 
 
-function Navigation() {
-    const classes = useStyles();
 
-    return (
-        <div className={classes.root}>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography variant="h6" className={classes.title}>
-                        <Link className={classes.link} to='/'>Home</Link>
-                    </Typography>
+class Navigation extends Component {
+    
+    render() {
+        const { classes } = this.props;
+        let buttons;
+
+        if (this.props.user) {
+            buttons = (
+                <div>
+                    <Button color="inherit"><Link className={classes.link} to='/' onClick={() => localStorage.clear()}>Log Out</Link></Button>
+                </div>
+            )
+        } else {
+            buttons = (
+                <div>
                     <Button color="inherit"><Link className={classes.link} to='/register'>Register</Link></Button>
                     <Button color="inherit"><Link className={classes.link} to='/login'>Log In</Link></Button>
-                </Toolbar>
-            </AppBar>
-        </div>
-    
-    
-    )
+                </div>
+            )
+        }
+        return (
+            <div className={classes.root}>
+                <AppBar position="static">
+                    <Toolbar>
+                        <Typography variant="h6" className={classes.title}>
+                            <Link className={classes.link} to='/'>Home</Link>
+                        </Typography>
+                        {buttons}
+                    </Toolbar>
+                </AppBar>
+            </div>
+
+
+        )
+    }
+
 }
 
-export default Navigation;
+export default withStyles(useStyles)(Navigation)

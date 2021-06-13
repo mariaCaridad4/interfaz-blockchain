@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -6,7 +6,7 @@ import {
   Switch
 } from 'react-router-dom';
 
-
+import axios from 'axios';
 import Navigation from '../Components/Navigation';
 import Login from '../Components/Login';
 import Register from '../Components/Register';
@@ -18,31 +18,30 @@ import Navorg from '../Components/Navs/NavOrg';
 
 import ehr from '../Components/Medico/EHR';
 
-function App() {
-  const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  const logOutCallback = async () => {
-    await fetch('http://localhost:4000/logout', {
-      method: 'POST',
-      credentials: 'include',
-    });
-
-    setUser({});
-
-    // navigate('/');
-  }
-
-
+export default class App extends Component {
+  state = {};
+  componentDiMount = () => {
+    axios.get('user').then(
+        res => {
+            //console.log(res);
+            this.setState({
+                user: res.data
+            })
+        },
+        err => {
+            console.log(err)
+        }
+    )
+}
+render() {
   return (
-
     <div className="app">
       <Router id="router">
-        <Navigation />
+        <Navigation user={this.state.user}/>
         <Switch>
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
-          <Route path="/" exact component={Content} />
+          <Route path="/" exact component={() => <Content user={this.state.user}/>} />
           <Route path="/paciente" exact component={Navpaciente}/>
           <Route path="/medico" exact component={Navmedico}/>
           <Route path="/administrador" exact component={Navadministrador}/>
@@ -51,8 +50,8 @@ function App() {
         </Switch>
       </Router>
     </div>
-
   );
 }
+  
+}
 
-export default App;

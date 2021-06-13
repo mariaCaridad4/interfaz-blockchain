@@ -55,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
     marginLeft: theme.spacing(30),
   },
+  link: {
+    color: "white",
+    textDecoration: "none",
+},
 }));
 
 export default function SignInSide() {
@@ -85,7 +89,7 @@ export default function SignInSide() {
               className={classes.submit}
               path='/'
             >
-              <Link to='/login'>Iniciar</Link>
+              <Link className={classes.link} to='/login'>Iniciar</Link>
             </Button>
             <br></br>
             <br></br>
