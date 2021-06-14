@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
-
+import { useHistory } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -61,23 +61,30 @@ const Login = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  let history = useHistory();
 
   const handleSubmit = e => {
     e.preventDefault();
-  
+    
     const data = {
-      email: email,
-      pwd: password
+      cedula: email,
+      password: password
     };
-
-    axios.post('login', data)
+    
+    axios.post('registro/login', data)
       .then(res => {
         console.log(res)
         localStorage.setItem('token', res.token);
+          
+        if(res.status === 200)
+          history.push("/paciente")
+        //si status === 401 cuando no tiene acceso
       })
       .catch(err => {
         console.log(err)
       })
+
+      
   };
 
 
@@ -133,7 +140,7 @@ const Login = () => {
               color="primary"
               className={classes.submit}
             >
-              <Link className={classes.link} to='/paciente'>Sing in</Link>
+              {/* <Link className={classes.link} to='/paciente'>Sign in</Link> */}
                     </Button>
           </div>
         </form>
