@@ -2,21 +2,21 @@ import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
   Switch
 } from 'react-router-dom';
 
 import axios from 'axios';
-import Navigation from '../Components/Navigation';
-import Login from '../Components/Login';
-import Register from '../Components/Register';
-import Content from '../Components/Content';
-import Navpaciente from '../Components/Navs/NavPaciente';
-import Navmedico from '../Components/Navs/NavMedico';
-import Navadministrador from '../Components/Navs/NavAdministrador';
-import Navorg from '../Components/Navs/NavOrg';
 
-import ehr from '../Components/Medico/EHR';
+import Navigation from './Components/Navigation';
+import Login from './Components/Login';
+import Register from './Components/Register';
+import Content from './Components/Content';
+import Navpaciente from './Components/Navs/NavPaciente';
+import Navmedico from './Components/Navs/NavMedico';
+import Navadministrador from './Components/Navs/NavAdministrador';
+import Navorg from './Components/Navs/NavOrg';
+
+import ehr from './Components/Medico/EHR';
 
 export default class App extends Component {
   state = {};

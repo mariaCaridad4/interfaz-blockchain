@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Link } from  'react-router-dom';
-
-  import axios from 'axios';
+import { Redirect } from 'react-router';
+import { useSelector, useDispatch } from "react-redux";
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -14,12 +13,16 @@ import Box from '@material-ui/core/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
 
+import { login } from '../actions/auth';
+import { clearMessage } from "../actions/message";
+
+
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'María Caridad Cáceres - Daniel Fabricio Peralta '}
       <br></br>
-        INTRATEC S.A.{' '}
+      INTRATEC S.A.{' '}
       {new Date().getFullYear()}
       {'.'}
       <br></br>
@@ -52,52 +55,88 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: "none",
   }
 }));
-  
 
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
 
-
-  const [email, setEmail] = useState('');
+  const [cedula, setcedula] = useState('');
   const [password, setPassword] = useState('');
+
+  
+  let user = localStorage.getItem('user');
+
+  const { isLoggedIn, setIsLoggedIn} = useState(false);
+  const { message } = "";
+
+  const [load, setLoad] = useState(false)
   let history = useHistory();
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log('cambiado message')
+    if (message)
+      setLoad(false)
+  }, [message])
+
+  if (user) {
+    setIsLoggedIn(true)
+;  }
 
   const handleSubmit = e => {
     e.preventDefault();
-    
     const data = {
-      cedula: email,
+      cedula: cedula,
       password: password
     };
-    
-    axios.post('registro/login', data)
+    /*axios.post('registro/login', data)
       .then(res => {
         console.log(res)
-        localStorage.setItem('token', res.token);
-          
+        localStorage.setItem('token', res.token);   
         if(res.status === 200)
           history.push("/paciente")
         //si status === 401 cuando no tiene acceso
       })
       .catch(err => {
         console.log(err)
-      })
+      })*/
+    console.log(data);
+    setLoad(true)
+    dispatch(clearMessage());
+    dispatch(login(data.usuario, data.password));
+    console.log({ isLoggedIn, message });
 
-      
+    const user = JSON.parse(String(localStorage.getItem("user")));
+    console.log(user);
+
+    if (isLoggedIn && user.role === 'PACIENTE') {
+      <Redirect to="/paciente" />
+    } else if (isLoggedIn && user.role === 'MEDICO') {
+      <Redirect to="/medico" />
+    }else if (isLoggedIn && user.role === 'AMINISTRADOR_ORG') {
+      <Redirect to="/administrador" />
+    } else if (isLoggedIn && user.role === 'AMINISTRADOR_CONSORCIO'){
+      <Redirect to="/organizacion" />
+    } else {
+      <Redirect to="/" />
+    }
   };
 
 
   const handleChange = e => {
-    if (e.currentTarget.name === 'email') {
-      setEmail(e.currentTarget.value);
+    if (e.currentTarget.name === 'cedula') {
+      setcedula(e.currentTarget.value);
     } else {
       setPassword(e.currentTarget.value);
     }
   };
 
+
+
   return (
     <Container component="main" maxWidth="xs" >
+      {load}
+
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -105,21 +144,21 @@ const Login = () => {
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign In
-            </Typography>
+        </Typography>
         <form onSubmit={handleSubmit} className={classes.form} noValidate>
-          
+
           <div className="login-input">
             <TextField
-              value={email}
+              value={cedula}
               onChange={handleChange}
               type="text"
               label="Cédula"
               variant="outlined"
               margin="normal"
-              name="email"
+              name="cedula"
               required
               fullWidth
-              autoComplete="email"
+              autoComplete="cedula"
               autoFocus
             />
             <TextField
@@ -140,14 +179,15 @@ const Login = () => {
               color="primary"
               className={classes.submit}
             >
+              Log In
               {/* <Link className={classes.link} to='/paciente'>Sign in</Link> */}
-                    </Button>
+            </Button>
           </div>
         </form>
       </div>
       <Box mt={8}>
-          <Copyright />
-        </Box>
+        <Copyright />
+      </Box>
     </Container>
   );
 };
