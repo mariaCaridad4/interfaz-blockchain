@@ -34,7 +34,7 @@ const Navigation = (props) => {
 
     let user = localStorage.getItem('user');
 
-    const { isLoggedIn, setIsLoggedIn} = React.useState(false);
+    const [ isLoggedIn, setIsLoggedIn] = React.useState(false);
     const dispatch = useDispatch();
     const [isvalidToken, setIsValidToken] = React.useState(false);
 
@@ -42,6 +42,7 @@ const Navigation = (props) => {
     let buttons;
 
     React.useEffect(() => {
+        console.log("ATRAPADO")
         //Calling to middleware for display ended session Alert
         check_token_alive();
     }, []);

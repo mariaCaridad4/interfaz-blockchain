@@ -16,6 +16,7 @@ import { useHistory } from "react-router-dom";
 import { login } from '../actions/auth';
 import { clearMessage } from "../actions/message";
 
+const {ADMIN, ADMIN_ORGANIZACION, PACIENTE, MEDICO} = require("../constantes/constantes_roles")
 
 function Copyright() {
   return (
@@ -66,7 +67,8 @@ const Login = (props) => {
   
   let user = localStorage.getItem('user');
 
-  const { isLoggedIn, setIsLoggedIn} = useState(false);
+  const [ isLoggedIn, setIsLoggedIn] = useState(false);
+  
   const { message } = "";
 
   const [load, setLoad] = useState(false)
@@ -79,10 +81,7 @@ const Login = (props) => {
       setLoad(false)
   }, [message])
 
-  if (user) {
-    setIsLoggedIn(true)
-;  }
-
+ 
   const handleSubmit = e => {
     e.preventDefault();
     const data = {
@@ -103,23 +102,44 @@ const Login = (props) => {
     console.log(data);
     setLoad(true)
     dispatch(clearMessage());
-    dispatch(login(data.usuario, data.password));
-    console.log({ isLoggedIn, message });
+    dispatch(login(data.cedula, data.password)).then( (_) =>{
+      console.log({ isLoggedIn, message });
+      console.log("ANTES CONSULTA USER");
+      const user = JSON.parse(String(localStorage.getItem("user")));
+  
+      let logoneado = false
+      if (user) {
+        setIsLoggedIn(true)
+        logoneado = true;  
 
-    const user = JSON.parse(String(localStorage.getItem("user")));
-    console.log(user);
+        console.log(user);
+        console.log(user.role === ADMIN);
+        console.log(logoneado && user.role === ADMIN );  
+        if (logoneado && user.role === PACIENTE) {
+          history.push("/paciente")
+          // return <Redirect to="/paciente" />
+        } else if (logoneado && user.role === MEDICO) {
+          // return <Redirect to="/medico" />
+          history.push("/medico")
+        }else if (logoneado && user.role === ADMIN ) {
+            // console.log("ENTRO REDIRECT");
+          history.push("/administrador")
 
-    if (isLoggedIn && user.role === 'PACIENTE') {
-      <Redirect to="/paciente" />
-    } else if (isLoggedIn && user.role === 'MEDICO') {
-      <Redirect to="/medico" />
-    }else if (isLoggedIn && user.role === 'AMINISTRADOR_ORG') {
-      <Redirect to="/administrador" />
-    } else if (isLoggedIn && user.role === 'AMINISTRADOR_CONSORCIO'){
-      <Redirect to="/organizacion" />
-    } else {
-      <Redirect to="/" />
-    }
+          // return<Redirect to="/administrador" />
+        } else if (logoneado && user.role === ADMIN_ORGANIZACION){
+          history.push("/organizacion")
+          
+          // return <Redirect to="/organizacion" />
+        } else {
+          history.push("/")
+
+          // return <Redirect to="/" />
+        }
+      }
+     
+      
+    });
+  
   };
 
 
