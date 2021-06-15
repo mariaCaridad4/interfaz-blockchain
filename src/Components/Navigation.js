@@ -67,7 +67,7 @@ const Navigation = (props) => {
 
 
     if (!isLoggedIn) {
-        return <Redirect to="/login" />;
+        return <Redirect to="/" />;
     }
     user = JSON.parse(String(localStorage.getItem("user")));
     console.log(user);
