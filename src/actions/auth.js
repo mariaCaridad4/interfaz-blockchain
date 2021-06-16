@@ -15,8 +15,8 @@ export const login = (username, password) => (dispatch) => {
             var decoded = jwt.decode(response.data.token.split(' ')[1], {complete: true});
             console.log(decoded.payload);
             if (response.data.token) {
-                localStorage.setItem("user", JSON.stringify(decoded.payload))
-                localStorage.setItem("token",response.data.token)
+                sessionStorage.setItem("user", JSON.stringify(decoded.payload))
+                sessionStorage.setItem("token",response.data.token)
             }
             console.log('despachando login success')
             dispatch({

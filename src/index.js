@@ -11,7 +11,7 @@ import App from './App';
 //import Login from './Components/Login'
 
 axios.defaults.baseURL = 'http://localhost:8080/';
-axios.defaults.headers.common['Authorization'] = localStorage.getItem('token');
+axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('token');
 
 
 ReactDOM.render(
