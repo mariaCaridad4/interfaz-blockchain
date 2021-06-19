@@ -15,8 +15,11 @@ import Navpaciente from './Components/Navs/NavPaciente';
 import Navmedico from './Components/Navs/NavMedico';
 import Navadministrador from './Components/Navs/NavAdministrador';
 import Navorg from './Components/Navs/NavOrg';
+import Tabla from './Components/Medico/tabla';
 
-import ehr from './Components/Medico/EHR';
+import { ThemeProvider } from '@material-ui/core/styles';
+import theme from './Components/styles/theme';
+
 
 export default class App extends Component {
   state = {};
@@ -35,6 +38,7 @@ export default class App extends Component {
 }
 render() {
   return (
+    <ThemeProvider theme={theme}>
     <div className="app">
       <Router id="router">
         <Navigation user={this.state.user}/>
@@ -46,10 +50,11 @@ render() {
           <Route path="/medico" exact component={Navmedico}/>
           <Route path="/administrador" exact component={Navadministrador}/>
           <Route path="/organizacion" exact component={Navorg}/>
-          <Route path="/ehr" exact component={ehr}/>
+          <Route path="/tabla" exact component={Tabla}/>
         </Switch>
       </Router>
     </div>
+    </ThemeProvider>
   );
 }
   

@@ -2,7 +2,7 @@ const verify_token = async ()=>{
     let response = true
     try{
         let user=undefined
-        user =localStorage.getItem("user")
+        user =sessionStorage.getItem("user")
         if(user){
             user = JSON.parse(user)
             let actualTime = Date.now()

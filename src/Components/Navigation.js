@@ -32,7 +32,7 @@ const useStyles = theme => ({
 
 const Navigation = (props) => {
 
-    let user = localStorage.getItem('user');
+    let user = sessionStorage.getItem('user');
 
     const [ isLoggedIn, setIsLoggedIn] = React.useState(false);
     const dispatch = useDispatch();
@@ -70,20 +70,21 @@ const Navigation = (props) => {
     if (!isLoggedIn) {
         return <Redirect to="/" />;
     }
-    user = JSON.parse(String(localStorage.getItem("user")));
+    user = JSON.parse(String(sessionStorage.getItem("user")));
     console.log(user);
 
     if (props.user) {
         buttons = (
             <div>
-                <Button color="inherit"><Link className={classes.link} to='/' onClick={() => localStorage.clear()}>Log Out</Link></Button>
+                <Button color="inherit"><Link className={classes.link} to='/' onClick={() => sessionStorage.clear()}>Salir</Link></Button>
             </div>
         )
     } else {
         buttons = (
             <div>
-                <Button color="inherit"><Link className={classes.link} to='/register'>Register</Link></Button>
-                <Button color="inherit"><Link className={classes.link} to='/login'>Log In</Link></Button>
+                <Button color="inherit"><Link className={classes.link} to='/register'>Registrarse</Link></Button>
+                <Button color="inherit"><Link className={classes.link} to='/login'>Ingresar</Link></Button>
+                <Button color="inherit"><Link className={classes.link} to='/medico'>PAciente</Link></Button>
             </div>
         )
     }
@@ -107,7 +108,7 @@ const Navigation = (props) => {
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                        <Link className={classes.link} to='/'>Home</Link>
+                        <Link className={classes.link} to='/'>Inicio</Link>
                     </Typography>
                     {buttons}
                 </Toolbar>

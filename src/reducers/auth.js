@@ -4,7 +4,7 @@ import {
     LOGOUT,
   } from "../actions/types";
 
-const user = localStorage.getItem('user');
+const user = sessionStorage.getItem('user');
 const initialState = user ? {isLoggedIn: true, user} : {isLoggedIn: false, user: null}
 
 export default function (state = initialState, action){

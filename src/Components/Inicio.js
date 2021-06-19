@@ -8,8 +8,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import HomeIcon from '@material-ui/icons/Home';
-import { Link } from 'react-router-dom';
 import background from '../imagenes/OIP.jfif';
+import { useHistory } from "react-router-dom";
 
 function Copyright() {
     return (
@@ -26,14 +26,11 @@ function Copyright() {
   };
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    height: '45vh',
-  },
   image: {
     backgroundImage: `url(${background})`, 
     backgroundRepeat: 'no-repeat',
     backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
@@ -44,8 +41,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   avatar: {
-    margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
+        margin: theme.spacing(1),
+        width: theme.spacing(8),
+        height: theme.spacing(8),
+        marginBottom: theme.spacing(2),
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -53,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-    marginLeft: theme.spacing(30),
   },
   link: {
     color: "white",
@@ -63,9 +62,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
   const classes = useStyles();
+  let history = useHistory();
+
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    history.push("/login")
+  }
 
   return (
-    <Grid container component="main" className={classes.root}>
+    <Grid container component="main">
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -78,21 +84,20 @@ export default function SignInSide() {
             <h4 align="center">a</h4>
             <h4 align="center">Prototipo de identidad Digital para Historial Clínico Unificado Utilizando Tecnología Blockchain</h4>
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <br></br>
           <br></br>
-            <Button
+          <div align="center">
+          <Button
               type="submit"
               align="center"
               variant="contained"
               color="primary"
               className={classes.submit}
-              path='/'
             >
-              <Link className={classes.link} to='/login'>Iniciar</Link>
+              Iniciar
             </Button>
-            <br></br>
-            <br></br>
+          </div>
             <br></br>
             <br></br>
             <Box mt={5}>

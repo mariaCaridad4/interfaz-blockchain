@@ -1,11 +1,13 @@
 [
     {
         "id": 1,
+        "cedula": "0106056633",
         "nombre": "Médico 1",
         "especialidad": "Especialidad 1",
         "organizacion": "Organización 1",
         "fecha": "01/05/2021",
-        "estado": "pnd"
+        "estado": "pnd",
+        "nivelacceso":  "3"
     },
     {
         "id": 2,
@@ -13,7 +15,8 @@
         "especialidad": "Especialidad 2",
         "organizacion": "Organización 2",
         "fecha": "02/05/2021",
-        "estado": "pnd"
+        "estado": "pnd",
+        "nivelacceso":  2
     },
     {
         "id": 3,
@@ -21,7 +24,8 @@
         "especialidad": "Especialidad 3",
         "organizacion": "Organización 3",
         "fecha": "03/05/2021",
-        "estado": "pnd"
+        "estado": "pnd",
+        "nivelacceso":  3
     },
     {
         "id": 4,
@@ -29,6 +33,8 @@
         "especialidad": "Especialidad 4",
         "organizacion": "Organización 4",
         "fecha": "03/08/2021",
-        "estado": "pnd"
+        "estado": "pnd",
+        "nivelacceso":  1
+
     }
 ]

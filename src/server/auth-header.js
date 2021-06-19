@@ -1,6 +1,7 @@
 export default function authHeader(){
     
-    const user =localStorage.getItem('token')
+    const user =sessionStorage.getItem('token')
+    //const user = sessionStorage.setItem('Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbjMiLCJpYXQiOjE2MjM3MjgyNzY4ODQsInJvbGUiOjcyNTgsImV4cCI6MTYyOTcyODI3Njg4NH0.Qs_ynbNJW8hJuxCxnni76F8BjdipPYULpY8N6pH_hy4J1zGbtdcRWsaVhoYSjsJGvjdvLg9r6PSlyEB5ZwOI_QVAL2z46xxPRxMQCr5XI880_7-YEE8KehD8wV2OF9P1BUd5jOnTyPPVRyz_IXzvizLN_zAV0E0IZ--Eg1j-c9kgUTppvgwvpXA-kDdZG02KYenlZ2pFoV2v01OkwDEx4_Y_5_ohGpq_ixtvTXoTxFWNfZ6nLWzAk21bpiBrLKFulFqGHPOs5-wvT8FkAeiSBt-JUN8vzdSG65vHIiln2Y7OuiuByaOGPYERYl1D_D7ElibOUEU07Lk6gxLmY3O3nPDlZ_dKQKxdlRbo8M02z347_3eVcs-Q794EM4sQKOiBv9hu3dgutR4EMDyFcnrYmaQwzP4MzUZtttm1fp-0c_RS29vfhqYpaFrkSPNg5BAHgmrUxvGozjQp9sa2wrasWRE3S4ROqFfEpOsdhRuA7_GTbagdY7K5kiltC7Cf1HgwBn4TYGJkHLRa1SCjbTphARB1u-ABg_z6nUi7p8Vmot5k41Bx6__dD4cSmOtA7P66mZJH-JM4ckpzrYcRiC7DvgnaEgdDmZLgfLiN8RwxBOKEoDgoT31d7EtT5dqgoHkBHdC0S7tbQmU3eFZNMtR9_W8FqGf9VxEi0jkWt047cgQ')
     if(user){
         return {Authorization: user}
     }else{

@@ -44,8 +44,11 @@ function Copyright() {
         alignItems: 'center',
     },
     avatar: {
-        margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
+        margin: theme.spacing(1),
+        width: theme.spacing(8),
+        height: theme.spacing(8),
+        marginBottom: theme.spacing(2),
     },
     root: {
         //display: 'flex',

@@ -20,7 +20,7 @@ function Copyright() {
         <Typography variant="body2" color="textSecondary" align="center">
             {'María Caridad Cáceres - Daniel Fabricio Peralta '}
             <br></br>
-          INTRATEC S.A.{' '}
+            INTRATEC S.A.{' '}
             {new Date().getFullYear()}
             {'.'}
             <br></br>
@@ -37,35 +37,38 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
     },
     avatar: {
-        margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
+        margin: theme.spacing(1),
+        width: theme.spacing(8),
+        height: theme.spacing(8),
+        marginBottom: theme.spacing(2),
     },
     form: {
-        width: '70%', // Fix IE 11 issue.
-        marginTop: theme.spacing(3),
-        alignItems: 'center',
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+        //alignItems: 'center',
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
-        alignItems: 'center',
-        marginLeft: theme.spacing(47),
+        //alignItems: 'center',
+        //marginLeft: theme.spacing(47),
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 120,
+        //minWidth: 220,
         alignItems: 'center',
     },
     grid: {
         alignItems: 'center',
-        marginLeft: theme.spacing(25),
+        //marginLeft: theme.spacing(25),
     },
     link: {
         color: "white",
         textDecoration: "none",
-      },
+    },
 }));
 
-    
+
 
 const Register = () => {
     const classes = useStyles();
@@ -101,7 +104,7 @@ const Register = () => {
         } else {
             alert("Ningún campo debe estar vacío. Verifique su información.");
         }
-        
+
         const result = await (await fetch('http://localhost:4000/register', {
             method: 'POST',
             headers: {
@@ -119,17 +122,17 @@ const Register = () => {
         } else {
             console.log(result.error);
         }
-        
+
     };
 
     const handleChange = e => {
         if (e.currentTarget.name === 'email') {
             setEmail(e.currentTarget.value);
-        } else if (e.currentTarget.name === 'password'){
+        } else if (e.currentTarget.name === 'password') {
             setPassword(e.currentTarget.value);
-        } else if (e.currentTarget.name === 'firstName'){
+        } else if (e.currentTarget.name === 'firstName') {
             setNombre(e.currentTarget.value);
-        } 
+        }
     };
 
     const handleChange2 = (event) => {
@@ -165,7 +168,7 @@ const Register = () => {
 
 
     return (
-        <Container component="main" >
+        <Container component="main" maxWidth="sm">
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -173,9 +176,112 @@ const Register = () => {
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Crear Usuario
-            </Typography>
+                </Typography>
                 <form onSubmit={handleSubmit} className={classes.form} noValidate>
-                    <Grid item xs={12} sm={6} className={classes.grid} >
+                    <div className="login-input">
+                        <TextField
+                            value={nombre}
+                            autoComplete="firstName"
+                            name="firstName"
+                            variant="outlined"
+                            required
+                            fullWidth
+                            label="Nombre"
+                            autoFocus
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            value={email}
+                            onChange={handleChange}
+                            type="text"
+                            label="Cédula"
+                            variant="outlined"
+                            margin="normal"
+                            name="email"
+                            required
+                            fullWidth
+                            autoComplete="email"
+                            autoFocus
+                        />
+                        <TextField
+                            value={password}
+                            onChange={handleChange}
+                            type="password"
+                            label="Password"
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            autoComplete="current-password"
+                        />
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel htmlFor="outlined-age-native-simple">Rol</InputLabel>
+                            <Select
+                                native
+                                value={rol.rol}
+                                name="rol"
+                                onChange={handleChange1}
+                                label="Rol"
+                                inputProps={{
+                                    name: 'rol',
+                                    id: 'rol',
+                                }}
+                            >
+                                <option aria-label="None" value="" />
+                                <option value={10}>Médico</option>
+                                <option value={20}>Paciente</option>
+                            </Select>
+                        </FormControl>
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel htmlFor="outlined-age-native-simple">Organización</InputLabel>
+                            <Select
+                                native
+                                value={org.rol}
+                                name="org"
+                                onChange={handleChange2}
+                                label="Organización"
+                                inputProps={{
+                                    name: 'organizacion',
+                                    id: 'org',
+                                }}
+                            >
+                                <option aria-label="None" value="" />
+                                <option value={10}>Organización 1</option>
+                                <option value={20}>Organización 2</option>
+                                <option value={30}>Organización 3</option>
+                                <option value={40}>...</option>
+                            </Select>
+                        </FormControl>
+                        <div align="center">
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                Crear
+                            </Button>
+                        </div>
+
+
+                    </div>
+                </form>
+
+            </div >
+            <Box mt={8}>
+                <Copyright />
+            </Box>
+        </Container >
+
+    );
+};
+
+export default Register;
+
+
+/*
+<Grid item xs={12} sm={6} className={classes.grid} >
                         <TextField
                             value={nombre}
                             autoComplete="firstName"
@@ -259,23 +365,4 @@ const Register = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
-                    <Button
-                        type="submit"
-                        //fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Crear
-                    </Button>
-                </form>
-            </div >
-            <Box mt={8}>
-                <Copyright />
-            </Box>
-        </Container >
-
-    );
-};
-
-export default Register;
+                        */

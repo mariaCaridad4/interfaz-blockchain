@@ -44,8 +44,11 @@ function Copyright() {
         alignItems: 'center',
     },
     avatar: {
-        margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
+        margin: theme.spacing(1),
+        width: theme.spacing(8),
+        height: theme.spacing(8),
+        marginBottom: theme.spacing(2),
     },
     form: {
         width: '100%', // Fix IE 11 issue.
@@ -336,15 +339,18 @@ export default function SignUp() {
                                         <br></br>
                                         <br></br>
                                         <br></br>
+                                        <div align="center">
                                         <Button
                                             onClick={Guardar}
                                             type="submit"
-                                            fullWidth
+                                            //fullWidth
                                             variant="contained"
                                             color="primary"
                                             className={classes.submit}
                                         > Guardar
                                             </Button>
+                                        </div>
+                                        
                                     </div>
                                 </React.Fragment>
                             ))}

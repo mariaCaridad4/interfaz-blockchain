@@ -18,7 +18,7 @@ function Copyright() {
         <Typography variant="body2" color="textSecondary" align="center">
             {'María Caridad Cáceres - Daniel Fabricio Peralta '}
             <br></br>
-          INTRATEC S.A.{' '}
+            INTRATEC S.A.{' '}
             {new Date().getFullYear()}
             {'.'}
             <br></br>
@@ -35,8 +35,11 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center',
     },
     avatar: {
-        margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
+        margin: theme.spacing(1),
+        width: theme.spacing(8),
+        height: theme.spacing(8),
+        marginBottom: theme.spacing(2),
     },
     form: {
         width: '70%',
@@ -104,7 +107,7 @@ export default function SignUp() {
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Crear Política
-        </Typography>
+                </Typography>
                 <form onSubmit={onSubmit} className={classes.form} noValidate>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
@@ -144,15 +147,18 @@ export default function SignUp() {
                         </Grid>
 
                     </Grid>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Crear
-          </Button>
+                    <div align="center">
+                        <Button
+                            type="submit"
+                            //fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                        >
+                            Crear
+                        </Button>
+                    </div>
+
                 </form>
             </div>
             <Box mt={8}>

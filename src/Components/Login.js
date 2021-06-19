@@ -1,6 +1,5 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Redirect } from 'react-router';
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from "react-redux";
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -41,8 +40,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   avatar: {
-    margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
+        margin: theme.spacing(1),
+        width: theme.spacing(8),
+        height: theme.spacing(8),
+        marginBottom: theme.spacing(2),
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -65,7 +67,7 @@ const Login = (props) => {
   const [password, setPassword] = useState('');
 
   
-  let user = localStorage.getItem('user');
+  let user = sessionStorage.getItem('user');
 
   const [ isLoggedIn, setIsLoggedIn] = useState(false);
   
@@ -88,24 +90,14 @@ const Login = (props) => {
       cedula: cedula,
       password: password
     };
-    /*axios.post('registro/login', data)
-      .then(res => {
-        console.log(res)
-        localStorage.setItem('token', res.token);   
-        if(res.status === 200)
-          history.push("/paciente")
-        //si status === 401 cuando no tiene acceso
-      })
-      .catch(err => {
-        console.log(err)
-      })*/
+    
     console.log(data);
     setLoad(true)
     dispatch(clearMessage());
     dispatch(login(data.cedula, data.password)).then( (_) =>{
       console.log({ isLoggedIn, message });
       console.log("ANTES CONSULTA USER");
-      const user = JSON.parse(String(localStorage.getItem("user")));
+      const user = JSON.parse(String(sessionStorage.getItem("user")));
   
       let logoneado = false
       if (user) {
@@ -117,31 +109,18 @@ const Login = (props) => {
         console.log(logoneado && user.role === ADMIN );  
         if (logoneado && user.role === PACIENTE) {
           history.push("/paciente")
-          // return <Redirect to="/paciente" />
         } else if (logoneado && user.role === MEDICO) {
-          // return <Redirect to="/medico" />
           history.push("/medico")
         }else if (logoneado && user.role === ADMIN ) {
-            // console.log("ENTRO REDIRECT");
           history.push("/administrador")
-
-          // return<Redirect to="/administrador" />
         } else if (logoneado && user.role === ADMIN_ORGANIZACION){
           history.push("/organizacion")
-          
-          // return <Redirect to="/organizacion" />
         } else {
           history.push("/")
-
-          // return <Redirect to="/" />
         }
       }
-     
-      
     });
-  
   };
-
 
   const handleChange = e => {
     if (e.currentTarget.name === 'cedula') {
@@ -150,7 +129,6 @@ const Login = (props) => {
       setPassword(e.currentTarget.value);
     }
   };
-
 
 
   return (
@@ -163,7 +141,7 @@ const Login = (props) => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign In
+          Ingresar
         </Typography>
         <form onSubmit={handleSubmit} className={classes.form} noValidate>
 
@@ -192,16 +170,17 @@ const Login = (props) => {
               fullWidth
               autoComplete="current-password"
             />
+            <div align="center">
             <Button
               type="submit"
-              fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
             >
-              Log In
-              {/* <Link className={classes.link} to='/paciente'>Sign in</Link> */}
+              Ingresar
             </Button>
+            </div>
+            
           </div>
         </form>
       </div>

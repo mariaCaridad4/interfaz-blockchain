@@ -38,8 +38,11 @@ function Copyright() {
         alignItems: 'center',
     },
     avatar: {
-        margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
+        margin: theme.spacing(1),
+        width: theme.spacing(8),
+        height: theme.spacing(8),
+        marginBottom: theme.spacing(2),
     },
     root: {
         display: 'flex',
@@ -53,16 +56,16 @@ function Copyright() {
     buttons: {
         display: 'flex',
         width: 100,
-        paddingLeft: theme.spacing(7),
-        paddingRight: theme.spacing(-7),
+        align: 'center',
     },
     submit: {
         margin: theme.spacing(3, 0, 0),
     },
     demo: {
         backgroundColor: theme.palette.background.paper,
-        paddingLeft: theme.spacing(7),
-        marginTop: theme.spacing(-2),
+        align: 'center',
+        //paddingLeft: theme.spacing(7),
+        //marginTop: theme.spacing(-2),
     },
 }));
 

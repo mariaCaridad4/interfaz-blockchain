@@ -8,7 +8,7 @@ const login = (username,password)=>{
 }
 
 const logout = ()=>{
-    localStorage.removeItem('user')
+    sessionStorage.removeItem('user')
     console.log('logout')
 }
 
