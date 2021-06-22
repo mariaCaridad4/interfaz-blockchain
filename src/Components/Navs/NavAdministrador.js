@@ -14,6 +14,7 @@ import CrearUsuario from '../Register';
 import ActualizarUsuario from '../Administrador/ActualizarUsuario';
 import CrearPolitica from '../Administrador/CrearPolitica';
 import ActualizarPolitica from '../Administrador/ActualizarPolitica';
+import Navigation from '../Navigation';
  
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -70,6 +71,9 @@ export default function FullWidthTabs() {
     };
 
     return (
+        <>
+            <Navigation></Navigation>
+
         <Container component="main">
             <CssBaseline />
             <div className={classes.paper}>
@@ -109,5 +113,6 @@ export default function FullWidthTabs() {
                 </SwipeableViews>
             </div>
         </Container>
+        </>
     );
 }

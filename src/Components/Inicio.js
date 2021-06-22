@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import HomeIcon from '@material-ui/icons/Home';
 import background from '../imagenes/OIP.jfif';
 import { useHistory } from "react-router-dom";
+import Navigation from './Navigation';
 
 function Copyright() {
     return (
@@ -71,6 +72,8 @@ export default function SignInSide() {
   }
 
   return (
+    <>
+    <Navigation></Navigation>
     <Grid container component="main">
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
@@ -79,10 +82,18 @@ export default function SignInSide() {
           <Avatar className={classes.avatar}>
             <HomeIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            <h1 align="center"> Bienvenido </h1>
-            <h4 align="center">a</h4>
-            <h4 align="center">Prototipo de identidad Digital para Historial Clínico Unificado Utilizando Tecnología Blockchain</h4>
+          <Typography component="h1" variant="h4">
+            Bienvenido
+            {/* <h4 align="center">a</h4>
+            <h4 align="center">Prototipo de identidad Digital para Historial Clínico Unificado Utilizando Tecnología Blockchain</h4> */}
+          </Typography>
+          <Typography component="h1" variant="h4">
+            {/* <span align="center"> Bienvenido </span> */}
+            a
+            {/* <h4 align="center">Prototipo de identidad Digital para Historial Clínico Unificado Utilizando Tecnología Blockchain</h4> */}
+          </Typography>
+          <Typography component="h5" align="center" variant="h5">
+            Prototipo de identidad Digital para Historial Clínico Unificado Utilizando Tecnología Blockchain
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <br></br>
@@ -107,5 +118,6 @@ export default function SignInSide() {
         </div>
       </Grid>
     </Grid>
+    </>
   );
 }

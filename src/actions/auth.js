@@ -8,6 +8,7 @@ import {
 import AuthService from '../server/auth.service';
 import jwt from 'jsonwebtoken';
 
+
 export const login = (username, password) => (dispatch) => {
     console.log('dentro del actions',username, password)
     return AuthService.login(username, password)
@@ -36,6 +37,20 @@ export const login = (username, password) => (dispatch) => {
             });
 
         })
+}
+
+export const comprobarLogueo = () => {
+
+    const user = JSON.parse(String(sessionStorage.getItem("user")));
+  
+      let logoneado = false
+      if (user) {
+        
+        return user
+      }else{
+        return null
+      }
+      
 }
 
 export const logout = () => (dispatch) => {

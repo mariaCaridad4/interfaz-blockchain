@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router";
 import { withStyles } from '@material-ui/core/styles';
@@ -31,52 +31,75 @@ const useStyles = theme => ({
 
 
 const Navigation = (props) => {
-
+    console.log("AQUIIIIII NAVIGATIOn")
     let user = sessionStorage.getItem('user');
 
     const [ isLoggedIn, setIsLoggedIn] = React.useState(false);
+    const [ primera, setPrimera] = React.useState(true);
+
     const dispatch = useDispatch();
     const [isvalidToken, setIsValidToken] = React.useState(false);
 
     const { classes } = props;
     let buttons;
+    let history = useHistory()
 
-    React.useEffect(() => {
-        console.log("ATRAPADO")
-        //Calling to middleware for display ended session Alert
-        check_token_alive();
-    }, []);
+    // React.useEffect(() => {
+    //     console.log("ATRAPADO")
+    //     //Calling to middleware for display ended session Alert
+    //     check_token_alive();
+    // }, []);
 
-    const check_token_alive = async () => {
-        let interval_id = setInterval(async () => {
-            try {
-                let response = await middleware.verify_token();
-                if (!response) {
-                    console.log("token expirado");
-                    // console.log('res',res)
-                    clearInterval(interval_id);
-                    setIsValidToken(true);
-                }else{
-                    setIsLoggedIn(true);
-                }
+    // const check_token_alive = async () => {
+    //     if(primera){
+    //         try {
+    //             let response = await middleware.verify_token();
+    //             if (!response) {
+    //                 console.log("token expirado");
+    //                 // console.log('res',res)
+    //                 // clearInterval(interval_id);
+    //                 setIsValidToken(true);
+    //             }else{
+    //                 setIsLoggedIn(true);
+    //             }
 
-            } catch (e) {
-                console.log(e);
-            }
-        }, 5000);
-    };
+    //         } catch (e) {
+    //             console.log(e);
+    //         }
+    //         setPrimera(true)
+    //     }else{
+    //         let interval_id = setInterval(async () => {
+    //             try {
+    //                 let response = await middleware.verify_token();
+    //                 if (!response) {
+    //                     console.log("token expirado");
+    //                     // console.log('res',res)
+    //                     clearInterval(interval_id);
+    //                     setIsValidToken(true);
+    //                 }else{
+    //                     setIsLoggedIn(true);
+    //                 }
+    
+    //             } catch (e) {
+    //                 console.log(e);
+    //             }
+    //         }, 5000);
+    //     }
+       
+    // };
 
-
-    if (!isLoggedIn) {
-        return <Redirect to="/" />;
-    }
+   
+    // if (!isLoggedIn) {
+    //     return <Redirect to="/" />;
+    // }
     user = JSON.parse(String(sessionStorage.getItem("user")));
+    console.log("USUARIO DE NAVIGATION");
     console.log(user);
 
-    if (props.user) {
+    if (user) {
         buttons = (
             <div>
-                <Button color="inherit"><Link className={classes.link} to='/' onClick={() => sessionStorage.clear()}>Salir</Link></Button>
+                <Button color="inherit"><Link className={classes.link} to='/' onClick={() => {sessionStorage.clear() }}>Salir</Link></Button>
             </div>
         )
     } else {
@@ -88,6 +111,8 @@ const Navigation = (props) => {
             </div>
         )
     }
+
+
     return (
         <div className={classes.root}>
             {isvalidToken && (

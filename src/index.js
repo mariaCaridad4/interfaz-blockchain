@@ -7,6 +7,9 @@ import store from './store';
 
 import App from './App';
 
+// import { PersistGate } from 'redux-persist/integration/react';
+import {BrowserRouter} from 'react-router-dom';
+
 //import Register from './Components/Register'
 //import Login from './Components/Login'
 
@@ -17,7 +20,10 @@ axios.defaults.headers.common['Authorization'] = sessionStorage.getItem('token')
 ReactDOM.render(
   <React.StrictMode>
   <Provider store ={store}>
+  <BrowserRouter basename='/'>
     <App />
+  </BrowserRouter>
+    
   </Provider>
   </React.StrictMode>,
   document.getElementById('root'));

@@ -9,6 +9,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Navigation from '../Navigation';
 
 import Notificaciones from '../Paciente/Notificaciones';
 import MedicoConfianza from '../Paciente/MedicoConfianza';
@@ -71,6 +72,8 @@ export default function FullWidthTabs() {
         setValue(index);
     };
     return (
+        <>
+        <Navigation></Navigation>
         <Container component="main" className={classes.root} >
             <CssBaseline />
             <div className={classes.paper}>
@@ -101,5 +104,6 @@ export default function FullWidthTabs() {
                 </SwipeableViews>
             </div>
         </Container>
+        </>
     );
 }
