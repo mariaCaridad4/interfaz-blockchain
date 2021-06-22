@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -15,7 +15,8 @@ import ActualizarUsuario from '../Administrador/ActualizarUsuario';
 import CrearPolitica from '../Administrador/CrearPolitica';
 import ActualizarPolitica from '../Administrador/ActualizarPolitica';
 import Navigation from '../Navigation';
- 
+import { HttpClient } from '../../server/http.client';
+
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -63,12 +64,20 @@ export default function FullWidthTabs() {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
+        console.log(event)
+
+        console.log(newValue)
         setValue(newValue);
     };
 
     const handleChangeIndex = (index) => {
+        console.log("INDICE ")
+        console.log(index)
         setValue(index);
     };
+
+  
+
 
     return (
         <>
@@ -95,7 +104,7 @@ export default function FullWidthTabs() {
                 <SwipeableViews
                     axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                     index={value}
-                    onChangeIndex={handleChangeIndex}
+                    onChangeIndex={() =>{}}
                 >
                     <TabPanel value={value} index={0} dir={theme.direction}>
                         <CrearUsuario />

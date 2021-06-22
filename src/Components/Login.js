@@ -15,7 +15,12 @@ import { useHistory } from "react-router-dom";
 
 import { login } from '../actions/auth';
 import { clearMessage } from "../actions/message";
-
+import {
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
+  LOGOUT,
+  SET_MESSAGE
+} from '../actions/types';
 const {ADMIN, ADMIN_ORGANIZACION, PACIENTE, MEDICO} = require("../constantes/constantes_roles")
 
 function Copyright() {
@@ -85,7 +90,7 @@ const Login = (props) => {
   }, [message])
 
  
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
       cedula: cedula,
@@ -95,32 +100,45 @@ const Login = (props) => {
     console.log(data);
     setLoad(true)
     dispatch(clearMessage());
-    dispatch(login(data.cedula, data.password)).then( (_) =>{
-      console.log({ isLoggedIn, message });
-      console.log("ANTES CONSULTA USER");
-      const user = JSON.parse(String(sessionStorage.getItem("user")));
-  
-      let logoneado = false
-      if (user) {
+    let respuesta =  await login(data.cedula, data.password)
+      console.log("AQUIII para la respuesta")
+      console.log(respuesta)
+    switch(respuesta.type){
+      case LOGIN_FAIL:
+        setIsLoggedIn(false)
+        alert(respuesta.payload)
+        break;
+      case LOGIN_SUCCESS:
         setIsLoggedIn(true)
-        logoneado = true;  
+        const user = JSON.parse(String(sessionStorage.getItem("user")));
 
-        console.log(user);
-        console.log(user.role === ADMIN);
-        console.log(logoneado && user.role === ADMIN );  
-        if (logoneado && user.role === PACIENTE) {
-          history.push("/paciente")
-        } else if (logoneado && user.role === MEDICO) {
-          history.push("/medico")
-        }else if (logoneado && user.role === ADMIN ) {
-          history.push("/administrador")
-        } else if (logoneado && user.role === ADMIN_ORGANIZACION){
-          history.push("/organizacion")
-        } else {
-          history.push("/")
+        let logoneado = false
+        if (user) {
+          setIsLoggedIn(true)
+          logoneado = true;  
+
+          console.log(user);
+          console.log(user.role === ADMIN);
+          console.log(logoneado && user.role === ADMIN );  
+          if (logoneado && user.role === PACIENTE) {
+            history.push("/paciente")
+          } else if (logoneado && user.role === MEDICO) {
+            history.push("/medico")
+          }else if (logoneado && user.role === ADMIN ) {
+            history.push("/administrador")
+          } else if (logoneado && user.role === ADMIN_ORGANIZACION){
+            history.push("/organizacion")
+          } else {
+            history.push("/")
+          }
         }
-      }
-    });
+  
+        break;
+    }
+    
+    // console.log({ isLoggedIn, message });
+    // console.log("ANTES CONSULTA USER");
+    
   };
 
   const handleChange = e => {

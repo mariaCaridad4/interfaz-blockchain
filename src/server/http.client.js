@@ -1,4 +1,5 @@
-import axios from 'axios';
+import api from './api';
+import authHeader from './auth-header';
 
 /**
  * Axios http Client. Every API call will be made through this Client.
@@ -12,16 +13,16 @@ import axios from 'axios';
  * @param {string} data
  * @param {Object} config
  */
-const post = (url = '', data = '', config = {}) => {
-  return axios.post(url, data, config);
+const post = (url = '', data = '', config = authHeader()) => {
+  return api.post(url, data, config);
 };
 
 /**
  * Get Request.
  * @param {string} url
  */
-const get = (url) => {
-  return axios(url);
+const get = (url, config=authHeader()) => {
+  return api(url, config);
 };
 
 /**
@@ -30,8 +31,8 @@ const get = (url) => {
  * @param {string} data
  * @param {Object} config
  */
-const put = (url = '', data = '', config = {}) => {
-  return axios.put(url, data, config);
+const put = (url = '', data = '', config = authHeader()) => {
+  return api.put(url, data, config);
 };
 
 /**
@@ -40,8 +41,8 @@ const put = (url = '', data = '', config = {}) => {
  * @param {string} url
  * @param {Object} config
  */
-const remove = (url = '', config = {}) => {
-  return axios.delete(url, config);
+const remove = (url = '', config = authHeader()) => {
+  return api.delete(url, config);
 };
 
 /**

@@ -1,7 +1,7 @@
 import api from './api'
 
-const login = (username,password)=>{
-    return api.post("/registro/login",{
+const login = async (username,password)=>{
+    return  await api.post("/registro/login",{
         cedula: username,
         password
     })

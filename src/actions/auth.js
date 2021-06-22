@@ -9,34 +9,54 @@ import AuthService from '../server/auth.service';
 import jwt from 'jsonwebtoken';
 
 
-export const login = (username, password) => (dispatch) => {
+export const login = async (username, password) => {
     console.log('dentro del actions',username, password)
-    return AuthService.login(username, password)
-        .then((response) => {
-            var decoded = jwt.decode(response.data.token.split(' ')[1], {complete: true});
+    try {
+        let response = await AuthService.login(username, password)
+        var decoded = jwt.decode(response.data.token.split(' ')[1], {complete: true});
             console.log(decoded.payload);
             if (response.data.token) {
                 sessionStorage.setItem("user", JSON.stringify(decoded.payload))
                 sessionStorage.setItem("token",response.data.token)
             }
             console.log('despachando login success')
-            dispatch({
+            return({
                 type: LOGIN_SUCCESS,
                 payload: { user: decoded }
             });
-        }, (error) => {
-            console.log('despachando error')
+    } catch (error) {
+        console.log('despachando error')
             console.log('res: ',error.response)
-            const message = error.response ?  error.response.data.msg || error.response.data : String(error)
-            dispatch({
-                type: SET_MESSAGE,
-                payload: message
-            });
-            dispatch({
-                type: LOGIN_FAIL,
-            });
+            let status = error.response.status 
+            let message = ""
+            if(status != 200 || status != 201){
+                if(status == 401){
+                    message = "El usuario o contraseña no son los correrctos"
+                }else{
+                    message = error.response ?  error.response.data.msg || error.response.data : String(error)
 
-        })
+                }
+            
+            }
+            console.log(message)
+            return({
+                type: LOGIN_FAIL,
+                payload: message
+            })
+            // dispatch({
+            //     type: SET_MESSAGE,
+            //     payload: message
+            // });
+            // dispatch({
+            //     type: LOGIN_FAIL,
+            // });
+    }
+
+            
+       
+            
+
+        
 }
 
 export const comprobarLogueo = () => {

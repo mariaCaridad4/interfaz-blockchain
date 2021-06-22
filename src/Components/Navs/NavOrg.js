@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +14,7 @@ import Navigation from '../Navigation';
 
 import CrearOrg from '../AdminConsorcio/CrearOrg';
 import ActualizarOrg from '../AdminConsorcio/ActualizarOrg';
+import RegisterAdmin from '../RegisterAdmin';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -27,7 +28,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box p={2}>
+                <Box p={3}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -56,18 +57,25 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function FullWidthTabs() {
+export default function FullWidthTabs2() {
     const classes = useStyles();
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
+        console.log(newValue)
+
         setValue(newValue);
     };
 
     const handleChangeIndex = (index) => {
+        console.log(index)
         setValue(index);
     };
+
+    useEffect( () =>{
+        console.log('AQUIII USE EFECT')
+    }, [])
 
     return (
         <>
@@ -86,12 +94,13 @@ export default function FullWidthTabs() {
                     >
                         <Tab label="Crear Organización" {...a11yProps(0)} />
                         <Tab label="Actualizar Organización" {...a11yProps(1)} />
+                        <Tab label="Registrar Administrador" {...a11yProps(2)} />
                     </Tabs>
                 </AppBar>
                 <SwipeableViews
                     axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                     index={value}
-                    onChangeIndex={handleChangeIndex}
+                    onChangeIndex={() =>{}}
                 >
                     <TabPanel value={value} index={0} dir={theme.direction}>
                         <CrearOrg />
@@ -99,9 +108,14 @@ export default function FullWidthTabs() {
                     <TabPanel value={value} index={1} dir={theme.direction}>
                         <ActualizarOrg />
                     </TabPanel>
+                    <TabPanel value={value} index={2} dir={theme.direction}>
+                        <RegisterAdmin/>
+                    </TabPanel>
                 </SwipeableViews>
             </div>
         </Container>
         </>
     );
 }
+
+
