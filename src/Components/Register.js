@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,6 +13,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Box from '@material-ui/core/Box';
 import { navigate } from '@reach/router';
+import orgService from '../server/org.service';
 
 
 function Copyright() {
@@ -77,28 +78,25 @@ const Register = () => {
         name: '',
     });
 
-    const [org, setOrg] = useState({
-        org: '',
-        name: '',
-    });
+    const [org, setOrg] = useState(-1);
 
     const [nombre, setNombre] = useState(null);
     const [rol1, setRol1] = useState(null);
-    const [org1, setOrg1] = useState(null);
+    const [org1, setOrg1] = useState("");
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = async e => {
         e.preventDefault();
-        if (nombre !== null && email !== null && password !== null && rol1 !== null && org1 !== null) {
+        if (nombre !== null && email !== null && password !== null && rol1 !== null && org !== -1) {
             alert("Usuario creado correctamente!");
             const newUsuario = {
                 nombre: nombre,
                 cedula: email,
                 contrasena: password,
                 rol: rol1,
-                org: org1,
+                organizacion: org,
             }
             console.log(newUsuario);
         } else {
@@ -166,7 +164,17 @@ const Register = () => {
         }
     };
 
-
+    useEffect( () =>{
+        const user = JSON.parse(String(sessionStorage.getItem("user")));
+        orgService.obtenerUnaOrg(user.org).then( (response) =>{
+            if(response.data.success){
+                setOrg1(response.data.msg.name)
+                setOrg(response.data.msg.id)
+            }
+        })
+        // console.log(user.org)
+        setOrg1(user.org)
+    }, [])
     return (
         <Container component="main" maxWidth="sm">
             <CssBaseline />
@@ -175,8 +183,13 @@ const Register = () => {
                     <PersonAddIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Crear Usuario
+                    Crear Usuario 
                 </Typography>
+                <Typography component="h1" variant="h5">
+                    de Organizacion: {org1}
+                </Typography>
+                <br></br>
+                <br></br>
                 <form onSubmit={handleSubmit} className={classes.form} noValidate>
                     <div className="login-input">
                         <TextField
@@ -233,7 +246,7 @@ const Register = () => {
                                 <option value={20}>Paciente</option>
                             </Select>
                         </FormControl>
-                        <FormControl variant="outlined" className={classes.formControl}>
+                        {/* <FormControl variant="outlined" className={classes.formControl}>
                             <InputLabel htmlFor="outlined-age-native-simple">Organización</InputLabel>
                             <Select
                                 native
@@ -253,6 +266,24 @@ const Register = () => {
                                 <option value={40}>...</option>
                             </Select>
                         </FormControl>
+                        <Typography component="h5" variant="h5">
+                            Organizacion
+                        </Typography>
+                        <TextField
+                            value={org1}
+                            // onChange={handleChange}
+                            disabled={true}
+                            type="text"
+                            label=""
+                            variant="outlined"
+                            margin="normal"
+                            name="orga"
+                            
+                            fullWidth
+                            autoComplete="orga"
+                            
+                        /> */}
+                
                         <div align="center">
                             <Button
                                 type="submit"
@@ -263,7 +294,8 @@ const Register = () => {
                                 Crear
                             </Button>
                         </div>
-
+                        <br></br>
+                        <br></br>
 
                     </div>
                 </form>

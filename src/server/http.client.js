@@ -13,7 +13,8 @@ import authHeader from './auth-header';
  * @param {string} data
  * @param {Object} config
  */
-const post = (url = '', data = '', config = authHeader()) => {
+const post = (url = '', data = '') => {
+  let config = {"headers": authHeader()}
   return api.post(url, data, config);
 };
 
@@ -21,7 +22,8 @@ const post = (url = '', data = '', config = authHeader()) => {
  * Get Request.
  * @param {string} url
  */
-const get = (url, config=authHeader()) => {
+const get = (url) => {
+  let config = {"headers": authHeader()}
   return api(url, config);
 };
 
@@ -31,7 +33,8 @@ const get = (url, config=authHeader()) => {
  * @param {string} data
  * @param {Object} config
  */
-const put = (url = '', data = '', config = authHeader()) => {
+const put = (url = '', data = '') => {
+  let config = {"headers": authHeader()}
   return api.put(url, data, config);
 };
 
@@ -41,7 +44,8 @@ const put = (url = '', data = '', config = authHeader()) => {
  * @param {string} url
  * @param {Object} config
  */
-const remove = (url = '', config = authHeader()) => {
+const remove = (url = '') => {
+  let config = {"headers": authHeader()}
   return api.delete(url, config);
 };
 

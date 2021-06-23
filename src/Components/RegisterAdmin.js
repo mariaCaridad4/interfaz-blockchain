@@ -13,6 +13,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Box from '@material-ui/core/Box';
 import { navigate } from '@reach/router';
+import orgService from '../server/org.service';
+import { ADMIN } from '../constantes/constantes_roles';
 
 
 function Copyright() {
@@ -82,93 +84,125 @@ const RegisterAdmin = () => {
         name: '',
     });
 
-    const [nombre, setNombre] = useState(null);
-    const [rol1, setRol1] = useState(null);
-    const [org1, setOrg1] = useState(null);
+    const [cedula, setCedula] = useState("");
+
+
+    const [orgSelect, setOrgSelect] = useState(-1);
 
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    // const [password, setPassword] = useState('');
+    const [orgaizaciones, setOrganizaciones] = useState([]);
 
     const handleSubmit = async e => {
         e.preventDefault();
-        if (nombre !== null && email !== null && password !== null && rol1 !== null && org1 !== null) {
-            alert("Administrador creado correctamente!");
+        if (cedula !== "" && email !== ""      && orgSelect !== -1) {
+         
             const newUsuario = {
-                nombre: nombre,
-                cedula: email,
-                contrasena: password,
-                rol: rol1,
-                org: org1,
+                cedula: cedula,
+                correo: email,
+                id_tipo: ADMIN,
+                organizacion: orgSelect
             }
             console.log(newUsuario);
+            try {
+                orgService.crearAdmin(newUsuario)
+                .then( (response)=>{
+                    
+                    if(response.status === 201){
+                        setCedula("")
+                        setEmail("")
+                        setOrgSelect(-1)
+                        alert("Administrador creado correctamente!");
+                        
+                        // setOrganizaciones(response.data.msg)
+                    }else{
+
+                        alert(response.data.msg)
+                    }
+                })
+            } catch (error) {
+                
+                    // console.log(result.message);
+                    // navigate('/');
+                // } else {
+                    console.log(error);
+                // }
+            }
         } else {
             alert("Ningún campo debe estar vacío. Verifique su información.");
         }
+     
 
-        const result = await (await fetch('http://localhost:4000/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-            }),
-        })).json();
+        // const result = await (await fetch('http://localhost:4000/register', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //         email: email,
+        //         password: password,
+        //     }),
+        // })).json();
 
-        if (!result.error) {
-            console.log(result.message);
-            navigate('/');
-        } else {
-            console.log(result.error);
-        }
+       
 
     };
 
     const handleChange = e => {
         if (e.currentTarget.name === 'email') {
             setEmail(e.currentTarget.value);
-        } else if (e.currentTarget.name === 'password') {
-            setPassword(e.currentTarget.value);
-        } else if (e.currentTarget.name === 'firstName') {
-            setNombre(e.currentTarget.value);
+        }else if (e.currentTarget.name === 'firstName') {
+            setCedula(e.currentTarget.value);
         }
     };
 
     const handleChange2 = (event) => {
         const name = event.target.name;
-        setOrg({
-            ...org,
-            [name]: event.target.value,
-        });
-        if (event.target.value === 10) {
-            setOrg1('org 1');
-        } else if (event.target.value === 20) {
-            setOrg1('org 2');
-        } else if (event.target.value === 30) {
-            setOrg1('org 3');
-        } else {
-            setOrg1('org 4');
-        }
+        setOrgSelect(event.target.value)
+        // console.log(event.target.value)
+        // setOrg({
+        //     ...org,
+        //     [name]: event.target.value,
+        // });
+        // if (event.target.value === 10) {
+        //     setOrg1('org 1');
+        // } else if (event.target.value === 20) {
+        //     setOrg1('org 2');
+        // } else if (event.target.value === 30) {
+        //     setOrg1('org 3');
+        // } else {
+        //     setOrg1('org 4');
+        // }
     };
 
 
-    const handleChange1 = (event) => {
-        const name = event.target.name;
-        setRol({
-            ...rol,
-            [name]: event.target.value,
-        });
-        if (event.target.value === 20) {
-            setRol1('paciente');
-        } else {
-            setRol1('medico');
-        }
-    };
+    // const handleChange1 = (event) => {
+    //     const name = event.target.name;
+    //     setRol({
+    //         ...rol,
+    //         [name]: event.target.value,
+    //     });
+    //     if (event.target.value === 20) {
+    //         setRol1('paciente');
+    //     } else {
+    //         setRol1('medico');
+    //     }
+    // };
     
     useEffect( () =>{
         console.log('AQUIII USE EFECT adflaf')
-        
+        try {
+            orgService.obtenerOrganizaciones()
+            .then( (response)=>{
+                if(response.status === 200){
+                    setOrganizaciones(response.data.msg)
+                }
+            })
+        } catch (error) {
+            
+        }
+       
+    
     }, [])
 
     return (
@@ -184,13 +218,13 @@ const RegisterAdmin = () => {
                 <form onSubmit={handleSubmit} className={classes.form} noValidate>
                     <div className="login-input">
                         <TextField
-                            value={nombre}
+                            value={cedula}
                             autoComplete="firstName"
                             name="firstName"
                             variant="outlined"
                             required
                             fullWidth
-                            label="Nombre"
+                            label="Cedula"
                             autoFocus
                             onChange={handleChange}
                         />
@@ -198,7 +232,7 @@ const RegisterAdmin = () => {
                             value={email}
                             onChange={handleChange}
                             type="text"
-                            label="Cédula"
+                            label="Correo"
                             variant="outlined"
                             margin="normal"
                             name="email"
@@ -207,7 +241,7 @@ const RegisterAdmin = () => {
                             autoComplete="email"
                             autoFocus
                         />
-                        <TextField
+                        {/* <TextField
                             value={password}
                             onChange={handleChange}
                             type="password"
@@ -218,8 +252,8 @@ const RegisterAdmin = () => {
                             fullWidth
                             name="password"
                             autoComplete="current-password"
-                        />
-                        <FormControl variant="outlined" className={classes.formControl}>
+                        /> */}
+                        {/* <FormControl variant="outlined" className={classes.formControl}>
                             <InputLabel htmlFor="outlined-age-native-simple">Rol</InputLabel>
                             <Select
                                 native
@@ -236,12 +270,12 @@ const RegisterAdmin = () => {
                                 <option value={10}>Médico</option>
                                 <option value={20}>Paciente</option>
                             </Select>
-                        </FormControl>
+                        </FormControl> */}
                         <FormControl variant="outlined" className={classes.formControl}>
                             <InputLabel htmlFor="outlined-age-native-simple">Organización</InputLabel>
                             <Select
                                 native
-                                value={org.rol}
+                                
                                 name="org"
                                 onChange={handleChange2}
                                 label="Organización"
@@ -250,11 +284,17 @@ const RegisterAdmin = () => {
                                     id: 'org',
                                 }}
                             >
-                                <option aria-label="None" value="" />
-                                <option value={10}>Organización 1</option>
-                                <option value={20}>Organización 2</option>
+                                <option aria-label="None" value="-1" />
+                                {orgaizaciones.map( org =>{
+                                    return(
+                                        <option value={org.id}>{org.name}</option>
+
+                                    )
+                                })}
+                                
+                                {/* <option value={20}>Organización 2</option>
                                 <option value={30}>Organización 3</option>
-                                <option value={40}>...</option>
+                                <option value={40}>...</option> */}
                             </Select>
                         </FormControl>
                         <div align="center">
