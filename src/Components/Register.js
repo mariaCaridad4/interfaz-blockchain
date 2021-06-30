@@ -14,6 +14,7 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Box from '@material-ui/core/Box';
 import { navigate } from '@reach/router';
 import orgService from '../server/org.service';
+import { MEDICO, PACIENTE } from '../constantes/constantes_roles';
 
 
 function Copyright() {
@@ -80,57 +81,74 @@ const Register = () => {
 
     const [org, setOrg] = useState(-1);
 
-    const [nombre, setNombre] = useState(null);
-    const [rol1, setRol1] = useState(null);
+    const [cedula, setCedula] = useState("");
+    const [rol1, setRol1] = useState(-1);
+    const [rolSelected, setRolSelected] = useState(-1);
     const [org1, setOrg1] = useState("");
 
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    // const [password, setPassword] = useState('');
 
     const handleSubmit = async e => {
         e.preventDefault();
-        if (nombre !== null && email !== null && password !== null && rol1 !== null && org !== -1) {
-            alert("Usuario creado correctamente!");
+        if (cedula !== "" && email !== "" &&  rol1 !== -1) {
             const newUsuario = {
-                nombre: nombre,
-                cedula: email,
-                contrasena: password,
-                rol: rol1,
-                organizacion: org,
+                cedula: cedula,
+                correo: email,
+                id_tipo: rol1,
             }
             console.log(newUsuario);
+            try {
+                orgService.crearAdmin(newUsuario)
+                .then( (response)=>{
+                    
+                    if(response.status === 201){
+                        setCedula("")
+                        setEmail("")
+                        setRol1(-1)
+                        setRol({
+                            rol: '',
+                            name: '',
+                        });
+                        // setOrg1(-1)
+                        alert("Usuario creado correctamente, se ha enviado un correo con las credenciales!");
+                        
+                        // setOrganizaciones(response.data.msg)
+                    }else{
+
+                        alert(response.data.msg)
+                    }
+                })
+            } catch (error) {
+                
+                    // console.log(result.message);
+                    // navigate('/');
+                // } else {
+                    console.log(error);
+                // }
+            }
+            
         } else {
-            alert("Ningún campo debe estar vacío. Verifique su información.");
+            if(org === -1){
+                alert("No se encuentra logueado en el sistema");
+
+            }else{
+                alert(rol1)
+                alert("Ningún campo debe estar vacío. Verifique su información.");
+
+            }
         }
 
-        const result = await (await fetch('http://localhost:4000/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-            }),
-        })).json();
-
-        if (!result.error) {
-            console.log(result.message);
-            navigate('/');
-        } else {
-            console.log(result.error);
-        }
+   
 
     };
 
     const handleChange = e => {
         if (e.currentTarget.name === 'email') {
             setEmail(e.currentTarget.value);
-        } else if (e.currentTarget.name === 'password') {
-            setPassword(e.currentTarget.value);
-        } else if (e.currentTarget.name === 'firstName') {
-            setNombre(e.currentTarget.value);
-        }
+        } else if (e.currentTarget.name === 'cedula') {
+            setCedula(e.currentTarget.value);
+        } 
     };
 
     const handleChange2 = (event) => {
@@ -157,11 +175,16 @@ const Register = () => {
             ...rol,
             [name]: event.target.value,
         });
-        if (event.target.value === 20) {
-            setRol1('paciente');
-        } else {
-            setRol1('medico');
+        console.log(event.target.value)
+        if (event.target.value == 20) {
+            setRol1(PACIENTE);
+        } else if(event.target.value == 10){
+            setRol1(MEDICO);
+        }else{
+            setRol1(-1);
+
         }
+        console.log(rol1)
     };
 
     useEffect( () =>{
@@ -175,6 +198,17 @@ const Register = () => {
         // console.log(user.org)
         setOrg1(user.org)
     }, [])
+    // useEffect( () =>{
+    //     const user = JSON.parse(String(sessionStorage.getItem("user")));
+    //     orgService.obtenerUnaOrg(user.org).then( (response) =>{
+    //         if(response.data.success){
+    //             setOrg1(response.data.msg.name)
+    //             setOrg(response.data.msg.id)
+    //         }
+    //     })
+    //     // console.log(user.org)
+    //     setOrg1(user.org)
+    // }, [org1])
     return (
         <Container component="main" maxWidth="sm">
             <CssBaseline />
@@ -193,30 +227,31 @@ const Register = () => {
                 <form onSubmit={handleSubmit} className={classes.form} noValidate>
                     <div className="login-input">
                         <TextField
-                            value={nombre}
-                            autoComplete="firstName"
-                            name="firstName"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            label="Nombre"
-                            autoFocus
-                            onChange={handleChange}
-                        />
-                        <TextField
-                            value={email}
+                            value={cedula}
                             onChange={handleChange}
                             type="text"
                             label="Cédula"
                             variant="outlined"
                             margin="normal"
-                            name="email"
+                            name="cedula"
                             required
                             fullWidth
-                            autoComplete="email"
+                            autoComplete="cedula"
                             autoFocus
                         />
                         <TextField
+                            value={email}
+                            autoComplete="email"
+                            name="email"
+                            variant="outlined"
+                            required
+                            fullWidth
+                            label="Correo"
+                            autoFocus
+                            onChange={handleChange}
+                        />
+                       
+                        {/* <TextField
                             value={password}
                             onChange={handleChange}
                             type="password"
@@ -227,7 +262,7 @@ const Register = () => {
                             fullWidth
                             name="password"
                             autoComplete="current-password"
-                        />
+                        /> */}
                         <FormControl variant="outlined" className={classes.formControl}>
                             <InputLabel htmlFor="outlined-age-native-simple">Rol</InputLabel>
                             <Select

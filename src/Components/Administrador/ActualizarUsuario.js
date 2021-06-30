@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,6 +14,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import CardContent from '@material-ui/core/CardContent';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import orgService from '../../server/org.service';
 import Box from '@material-ui/core/Box';
   
 import datos from '../datos/usuarios.json';
@@ -175,7 +176,18 @@ export default function SignUp() {
         }
         e.preventDefault();
     }
-
+    useEffect( () =>{
+        try {
+            orgService.obtenerUsuario()
+            .then( (response)=>{
+                if(response.status === 200){
+                    setPac({paciente: response.data.msg})
+                }
+            })
+        } catch (error) {
+            
+        }
+    }, [])
 
     return (
         <Container component="main">

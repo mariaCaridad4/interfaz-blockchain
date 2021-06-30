@@ -1,7 +1,12 @@
 import { HttpClient } from "./http.client";
 
 
-
+const obtenerUsuario = async ()=>{
+    return  await HttpClient.get("/registro/user/obtener")
+}
+const obtenerTipo = async (id)=>{
+    return  await HttpClient.get(`/registro/user/obtener/tipo/${id}`)
+}
 const obtenerOrganizaciones = async ()=>{
     return  await HttpClient.get("/registro/organizacion/obtener")
 }
@@ -22,6 +27,8 @@ const crearAdmin = async (datos)=>{
 export default {
     obtenerOrganizaciones,
     crearAdmin,
-    obtenerUnaOrg
+    obtenerUnaOrg,
+    obtenerUsuario,
+    obtenerTipo
     
 }

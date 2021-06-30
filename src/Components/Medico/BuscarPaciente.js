@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -21,6 +21,9 @@ import Box from '@material-ui/core/Box';
 import { Link } from  'react-router-dom';
   
 import EHR from './EHR';
+
+import medService from '../../server/med.service';
+import orgService from '../../server/org.service';
 
 function Copyright() {
     return (
@@ -123,38 +126,11 @@ function Copyright() {
 }));
 
 const datos = [
-    {
-        cedula: '0106056633',
-        nombre: 'Paciente 1',
-        fecha: '01/05/2021',
-    },
-    {
-        cedula: '0102518784',
-        nombre: 'Paciente 2',
-        fecha: '02/05/2021',
-    },
-    {
-        cedula: '0102754307',
-        nombre: 'Paciente 3',
-        fecha: '03/05/2021',
-    },
+    
 ]
 
 const solicitudes = [
-    {
-        cedula: '0102518784',
-        nombre: 'Paciente 2',
-        estado: "Aceptado",
-        ver: true,
-        fecha: '02/05/2021',
-    },
-    {
-        cedula: '0102754307',
-        nombre: 'Paciente 3',
-        estado: "Rechazado",
-        ver: false,
-        fecha: '03/05/2021',
-    },
+   
 ]
 
 const paciente = [
@@ -181,28 +157,34 @@ export default function SignIn() {
     })
 
 
-    let onClick = (id,nombre) => {
-        alert("Solicitud de acceso enviada!");
+    let onClick = async (id,nombre) => {
         console.log(id);
-        const newPaciente = {
-            person: '/public/logo192.png',
-            cedula: '',
-            nombre: ''
-        };
-        setPac({
-            paciente: [newPaciente]
-        })
-        const current = new Date();
-        const newSolicitud = {
-            cedula: id,
-            nombre: nombre,
-            estado: "Pendiente",
-            ver: false,
-            fecha: `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`,
-        };
-        setSoli({
-            solicitudes: [...soli.solicitudes, newSolicitud]
-        })
+        const user = JSON.parse(String(sessionStorage.getItem("user")));
+
+        let resu = await medService.solicitarAcceso({paciente:id, medico:user.sub})
+        if(resu.data.success){
+            alert("Solicitud de acceso enviada!");
+
+        }
+        // const newPaciente = {
+        //     person: '/public/logo192.png',
+        //     cedula: '',
+        //     nombre: ''
+        // };
+        // setPac({
+        //     paciente: [newPaciente]
+        // })
+        // const current = new Date();
+        // const newSolicitud = {
+        //     cedula: id,
+        //     nombre: nombre,
+        //     estado: "Pendiente",
+        //     ver: false,
+        //     fecha: `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`,
+        // };
+        // setSoli({
+        //     solicitudes: [...soli.solicitudes, newSolicitud]
+        // })
     }
 
     let onSubmit = e => {
@@ -234,16 +216,48 @@ export default function SignIn() {
         e.preventDefault();
     }
 
-    let ehr = ( estado) => {
-        
-        if (estado === "Aceptado"){
-            <EHR />
-        }else if (estado === "Rechazado"){
+    let ehr = async ( paciente, medico, estado) => {
+        console.log(estado)
+        if (estado === "Autorizado"){
+            let respu = await medService.consumirAcceso({medico:medico, paciente:paciente})
+            if(respu.status == 200){
+                if(respu.data.msg[0]){
+                    alert(`Se le presenta la siguiente informacion ${respu.data.msg[1]}` )
+                }else{
+                    alert("Su acceso ya fue consumido")
+                }
+            }
+            // <EHR />
+        }else if (estado === "No autorizado"){
             alert("No tiene acceso a la información de este paciente porque su solicitud de acceso ha sido rechazada.");
         }else{
             alert("Su solicitud de acceso aún está pendiente");
         }
     }
+    useEffect(()=>{
+        try {
+            const user = JSON.parse(String(sessionStorage.getItem("user")));
+            console.log(user)
+            medService.obtenerNotificaciones(user.sub)
+            .then(response =>{
+                // console.log(response)
+                if(response.status == 200){
+                    // console.log(response.data.msg)
+                    setSoli({solicitudes: response.data.msg})
+                    setState(response.data.msg)
+                }
+            })
+            orgService.obtenerTipo(1).
+            then(response =>{
+              if(response.status == 200){
+                  setPac({paciente:response.data.msg})
+                //   console.log(response.data.msg)
+              }  
+            })
+        } catch (error) {
+            
+        }
+    },[])
 
     return (
         <Container component="main">
@@ -303,19 +317,19 @@ export default function SignIn() {
                     <div className={classes.titulo}>
                         <Typography component="h1" variant="h5">Solicitudes de Acceso</Typography>
                     </div>
-                    {soli.solicitudes.map(({ cedula, nombre, estado, fecha, ver}) => (
-                        <React.Fragment key={cedula}>
+                    {soli.solicitudes.map(({ paciente, medico, fecha_autorizacion, acceso}) => (
+                        <React.Fragment key={paciente}>
                             <div className={classes.details}>
                                 <div className={classes.demo}>
                                     <List>
                                         <ListItem>
-                                            <ListItemText primary={nombre} secondary={fecha} />
-                                            <ListItemText secondary={estado} />
+                                            <ListItemText primary={paciente} secondary={fecha_autorizacion} />
+                                            <ListItemText secondary={acceso?"Autorizado":"No autorizado"} />
                                             <ListItemSecondaryAction>
-                                                <IconButton onClick={() => ehr(cedula, nombre,estado)} edge="end" aria-label="delete">
+                                                {acceso&&<IconButton onClick={() => ehr(paciente, medico,acceso?"Autorizado":"No autorizado")} edge="end" aria-label="delete">
                                                     <VisibilityIcon />
                                                     <Link path='/ehr'> </Link>
-                                                </IconButton>
+                                                </IconButton>}
                                             </ListItemSecondaryAction>
                                         </ListItem>
                                     </List>

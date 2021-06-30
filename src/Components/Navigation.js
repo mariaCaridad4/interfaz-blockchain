@@ -105,9 +105,9 @@ const Navigation = (props) => {
     } else {
         buttons = (
             <div>
-                <Button color="inherit"><Link className={classes.link} to='/register'>Registrarse</Link></Button>
+                {/* <Button color="inherit"><Link className={classes.link} to='/register'>Registrarse</Link></Button> */}
                 <Button color="inherit"><Link className={classes.link} to='/login'>Ingresar</Link></Button>
-                <Button color="inherit"><Link className={classes.link} to='/medico'>PAciente</Link></Button>
+                {/* <Button color="inherit"><Link className={classes.link} to='/medico'>PAciente</Link></Button> */}
             </div>
         )
     }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -21,6 +21,8 @@ import GavelIcon from '@material-ui/icons/Gavel';
 import Box from '@material-ui/core/Box';
   
 import datos from '../datos/politicas.json';
+import polservice from '../../server/pol.service';
+
 
 function Copyright() {
     return (
@@ -101,18 +103,16 @@ function Copyright() {
 }));
 
 const atributos = [
-    {
-        id: '',
-        nombre: '',
-    },
+   
+    ""
 ]
 
 const politica = [
     {
         id: 'id',
         nombre: 'Descripcion',
-        nivelacceso: '',
-        atributo: atributos,
+        nivel_acceso: '',
+        atributos: atributos
     },
 ]
 
@@ -229,7 +229,29 @@ export default function SignUp() {
         });
     };
 
+    useEffect( ()=>{
+        try {
+            polservice.obtenerPoliticas(1)
+            .then( (response)=>{
+                if(response.status === 200){
+                    console.log(response.data.msg)
+                    // setAtributos(response.data.msg)
+                    setPol({politica: response.data.msg})
+                }
+            })
 
+            // polservice.obtenerPoliticas(2)
+            // .then( (response)=>{
+            //     if(response.status === 200){
+            //         console.log(response.data.msg)
+            //         // setAtributos(response.data.msg)
+            //     }
+            // })
+            
+        } catch (error) {
+            
+        }
+    }, [])
     return (
         <Container component="main" >
             <CssBaseline />
@@ -259,46 +281,31 @@ export default function SignUp() {
 
                         </form>
                         <CardContent className={classes.content}>
-                            {pol.politica.map(({ id, nombre, nivelacceso }) => (
+                            {pol.politica.map(({ id, atributos, nivel_acceso }) => (
                                 <React.Fragment key={id}>
                                     <div className={classes.demo}>
                                         <List>
-                                            <ListItem>
+                                            {/* <ListItem>
                                                 <ListItemText primary={nombre} secondary={id} />
-                                            </ListItem>
+                                            </ListItem> */}
                                             <ListItem>
-                                                <ListItemText primary={'Nivel Acceso:'} />
-                                                <ListItemSecondaryAction>
+                                                <ListItemText primary={'Nivel Acceso:  ' + nivel_acceso} />
+                                                {/* <ListItemSecondaryAction>
                                                     <form className={classes.form} noValidate>
                                                         <Grid container>
                                                             <Grid item xs={12}>
                                                                 <FormControl variant="outlined" className={classes.formControl}>
-                                                                    <InputLabel htmlFor="outlined-age-native-simple">Nivel de Acceso</InputLabel>
-                                                                    <Select
-                                                                        native
-                                                                        value={rol.rol}
-                                                                        onChange={handleChange1}
-                                                                        label="Nivel de Acceso"
-                                                                        inputProps={{
-                                                                            name: 'rol',
-                                                                            id: 'outlined-age-native-simple',
-                                                                        }}
-                                                                    >
-                                                                        <option aria-label="None" value="" />
-                                                                        <option value={10}>Nivel 1</option>
-                                                                        <option value={20}>Nivel 2</option>
-                                                                        <option value={30}>Nivel 3</option>
-                                                                        <option value={40}>...</option>
-                                                                    </Select>
+                                                                    <InputLabel htmlFor="outlined-age-native-simple">{nivel_acceso}</InputLabel>
+                                                                    
                                                                 </FormControl>
                                                             </Grid>
                                                         </Grid>
                                                     </form>
-                                                </ListItemSecondaryAction>
+                                                </ListItemSecondaryAction> */}
                                             </ListItem>
-                                            <ListItem>
-                                                <ListItemText secondary={nivelacceso} />
-                                            </ListItem>
+                                            {/* <ListItem>
+                                                <ListItemText secondary={nivel_acceso} />
+                                            </ListItem> */}
                                             <ListItem>
                                                 <ListItemText primary={'Atributos:'} />
                                                 <ListItemSecondaryAction>
@@ -317,11 +324,14 @@ export default function SignUp() {
                                                                             id: 'outlined-age-native-simple',
                                                                         }}
                                                                     >
-                                                                        <option aria-label="None" value="" />
-                                                                        <option value={10}>Atributo 1</option>
+                                                                        {atributos && atributos.map(atributo => {
+                                                                            return(<option value={atributo}>{atributo}</option>)
+
+                                                                        })}
+                                                                        {/* <option value={10}>Atributo 1</option>
                                                                         <option value={20}>Atributo 2</option>
                                                                         <option value={30}>Atributo 3</option>
-                                                                        <option value={40}>...</option>
+                                                                        <option value={40}>...</option> */}
                                                                     </Select>
                                                                 </FormControl>
                                                             </Grid>
@@ -329,12 +339,15 @@ export default function SignUp() {
                                                     </form>
                                                 </ListItemSecondaryAction>
                                             </ListItem>
-                                        
-                                        {atributo.atributos.map(({ id, nombre }) => (
-                                            <React.Fragment key={id}>
-                                                    <p>{nombre}</p> 
-                                            </React.Fragment>
-                                        ))}
+                                            {/* {atributos.map(atributo => {
+                                                                            return(<React.Fragment key={atributo}>
+                                                                                <p>{atributo}</p> 
+                                                                        </React.Fragment>)
+
+                                                                        })} */}
+                                        {/* {atributo.atributos.map(({ id, nombre }) => (
+                                            
+                                        ))} */}
                                         </List>
                                         <br></br>
                                         <br></br>

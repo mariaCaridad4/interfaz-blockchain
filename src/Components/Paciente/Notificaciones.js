@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,7 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Box from '@material-ui/core/Box';
 
 import datos from '../datos/medicos.json';
-
+import usuService from '../../server/usu.service';
 
 function Copyright() {
     return (
@@ -72,25 +72,36 @@ function Copyright() {
  
 export default function Notificaciones() {
     const classes = useStyles();
-    let [state, setState] = useState({
-        datos: datos
-    });
+    let [state, setState] = useState([]);
 
 
-    let onClick = (tipo, id, fecha) => {
+    let onClick = async (tipo, medico, paciente) => {
         if (tipo) {
+            console.log(medico, paciente)
+            let respu = await usuService.autorizarAcceso({medico:medico, paciente:paciente})
+            console.log(respu)
             alert("Solicitud para acceso del médico Aceptada!");
         } else {
+            let respu = await usuService.eliminarAcceso({medico:medico, paciente:paciente})
+
             alert("Solicitud para acceso del médico Rechazada!");
         }
-        console.log(id, fecha);
-        if (state.datos.length === 1) {
-            alert("No hay solicitudes pendientes");
-        }
-        setState({ datos: state.datos.filter(item => item.id !== id) });
+        // console.log(id, fecha);
+        // if (state.length === 1) {
+        //     alert("No hay solicitudes pendientes");
+        // }
+        // setState({ datos: state.datos.filter(item => item.id !== id) });
     }
 
-
+    useEffect(()=>{
+        const user = JSON.parse(String(sessionStorage.getItem("user")));
+        usuService.obtenerNotificaciones(user.sub)
+        .then(response =>{
+            if(response.status == 200){
+                setState(response.data.msg)
+            }
+        })
+    }, [])
 
     return (
         <Container component="main">
@@ -100,8 +111,8 @@ export default function Notificaciones() {
                     <NotificationsIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">Notificaciones</Typography>
-                {state.datos.map(({ id, nombre, especialidad, organizacion, fecha }) => (
-                    <React.Fragment key={id}>
+                {state.map((notificacion) => (
+                    <React.Fragment key={notificacion.medico}>
                         <Card className={classes.root}>
                             <div className={classes.details}>
                                 <CardContent className={classes.content}>
@@ -109,19 +120,19 @@ export default function Notificaciones() {
                                     <div className={classes.demo}>
                                         <List >
                                             <ListItem>
-                                                <ListItemText primary={nombre} secondary={especialidad} />
+                                                <ListItemText primary={notificacion.medico}  />
                                             </ListItem>
                                             <ListItem>
-                                                <ListItemText secondary={organizacion} />
+                                                <ListItemText secondary={notificacion.acceso? "Autorizado": 'No autorizado'} />
                                             </ListItem>
                                             <ListItem>
-                                                <ListItemText secondary={fecha} />
+                                                <ListItemText secondary={notificacion.fecha_autorizacion} />
                                             </ListItem>
                                         </List>
                                     </div>
                                 </CardContent>
                             </div>
-                            <div className={classes.buttons} >
+                            {!notificacion.acceso && <div className={classes.buttons} >
                                 <CardContent className={classes.content}>
                                     <Button
                                         type="submit"
@@ -129,7 +140,7 @@ export default function Notificaciones() {
                                         variant="contained"
                                         color="primary"
                                         className={classes.submit}
-                                        onClick={() => onClick(true, id, nombre, fecha)}
+                                        onClick={() => onClick(true, notificacion.medico, notificacion.paciente)}
                                     > Aceptar
                             </Button>
                                     <br></br>
@@ -139,11 +150,11 @@ export default function Notificaciones() {
                                         variant="contained"
                                         color="primary"
                                         className={classes.submit}
-                                        onClick={() => onClick(false, id, nombre, fecha)}
+                                        onClick={() => onClick(false, notificacion.medico, notificacion.paciente)}
                                     > Rechazar
                             </Button>
                                 </CardContent>
-                            </div>
+                            </div>}
                         </Card>
                     </React.Fragment>
                 ))}

@@ -1,5 +1,5 @@
-const ADMIN = 7
-const ADMIN_ORGANIZACION = 7258
+const ADMIN = 7258
+const ADMIN_ORGANIZACION = 7
 const PACIENTE = 1
 const MEDICO = 2
 
