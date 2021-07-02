@@ -12,19 +12,9 @@ import background from '../imagenes/OIP.jfif';
 import { useHistory } from "react-router-dom";
 import Navigation from './Navigation';
 
-function Copyright() {
-    return (
-      <Typography variant="body2" color="textSecondary" align="center">
-        {'María Caridad Cáceres - Daniel Fabricio Peralta '}
-        <br></br>
-          INTRATEC S.A.{' '}
-        {new Date().getFullYear()}
-        {'.'}
-        <br></br>
-        <br></br>
-      </Typography>
-    );
-  };
+
+import Copyright from './footer';
+
 
 const useStyles = makeStyles((theme) => ({
   image: {

@@ -15,19 +15,7 @@ import Box from '@material-ui/core/Box';
 import { convertToObject } from 'typescript';
 import polservice from '../../server/pol.service';
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'María Caridad Cáceres - Daniel Fabricio Peralta '}
-            <br></br>
-            INTRATEC S.A.{' '}
-            {new Date().getFullYear()}
-            {'.'}
-            <br></br>
-            <br></br>
-        </Typography>
-    );
-};
+import Copyright from '../footer';
 
 const useStyles = makeStyles((theme) => ({
     paper: {

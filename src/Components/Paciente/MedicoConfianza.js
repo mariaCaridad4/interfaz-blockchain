@@ -16,22 +16,11 @@ import Box from '@material-ui/core/Box';
  
 import datos from '../datos/medicos.json';
 import '../styles/index.css';
+import Copyright from '../footer';
 
-function Copyright() {
-    return (
-      <Typography variant="body2" color="textSecondary" align="center">
-        {'María Caridad Cáceres - Daniel Fabricio Peralta '}
-        <br></br>
-          INTRATEC S.A.{' '}
-        {new Date().getFullYear()}
-        {'.'}
-        <br></br>
-        <br></br>
-      </Typography>
-    );
-  };
 
-  const useStyles = makeStyles((theme) => ({
+
+const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(5),
         display: 'flex',

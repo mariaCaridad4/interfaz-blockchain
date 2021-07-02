@@ -19,21 +19,8 @@ import Tabla from '../Medico/tabla';
 import Tabla1 from '../Medico/tabla1';
 import Tabla2 from '../Medico/tabla2';
 
+import Copyright from '../footer';
 
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'María Caridad Cáceres - Daniel Fabricio Peralta '}
-            <br></br>
-            INTRATEC S.A.{' '}
-            {new Date().getFullYear()}
-            {'.'}
-            <br></br>
-            <br></br>
-        </Typography>
-    );
-}
 
 const useStyles = makeStyles((theme) => ({
     paper: {

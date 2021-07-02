@@ -13,6 +13,8 @@ import Navigation from './Navigation';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
 
+import Copyright from './footer';
+
 import { login } from '../actions/auth';
 import { clearMessage } from "../actions/message";
 import {
@@ -22,20 +24,6 @@ import {
   SET_MESSAGE
 } from '../actions/types';
 const {ADMIN, ADMIN_ORGANIZACION, PACIENTE, MEDICO} = require("../constantes/constantes_roles")
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'María Caridad Cáceres - Daniel Fabricio Peralta '}
-      <br></br>
-      INTRATEC S.A.{' '}
-      {new Date().getFullYear()}
-      {'.'}
-      <br></br>
-      <br></br>
-    </Typography>
-  );
-}
 
 
 const useStyles = makeStyles((theme) => ({

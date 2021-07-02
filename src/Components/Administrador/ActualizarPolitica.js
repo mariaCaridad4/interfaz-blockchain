@@ -22,21 +22,8 @@ import Box from '@material-ui/core/Box';
   
 import datos from '../datos/politicas.json';
 import polservice from '../../server/pol.service';
+import Copyright from '../footer';
 
-
-function Copyright() {
-    return (
-      <Typography variant="body2" color="textSecondary" align="center">
-        {'María Caridad Cáceres - Daniel Fabricio Peralta '}
-        <br></br>
-          INTRATEC S.A.{' '}
-        {new Date().getFullYear()}
-        {'.'}
-        <br></br>
-        <br></br>
-      </Typography>
-    );
-  };
 
   const useStyles = makeStyles((theme) => ({
     paper: {
