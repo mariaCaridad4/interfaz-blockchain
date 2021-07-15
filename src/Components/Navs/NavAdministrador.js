@@ -15,6 +15,7 @@ import ActualizarUsuario from '../Administrador/ActualizarUsuario';
 import CrearPolitica from '../Administrador/CrearPolitica';
 import ActualizarPolitica from '../Administrador/ActualizarPolitica';
 import Navigation from '../Navigation';
+import CrearAtributo from '../Administrador/CrearAtributo';
 import { HttpClient } from '../../server/http.client';
 
 function TabPanel(props) {
@@ -29,7 +30,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box p={4}>
+                <Box p={5}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -97,8 +98,9 @@ export default function FullWidthTabs() {
                     >
                         <Tab label="Crear Usuarios" {...a11yProps(0)} />
                         <Tab label="Actualizar Usuario" {...a11yProps(1)} />
-                        <Tab label="Crear Política" {...a11yProps(2)} />
-                        <Tab label="Actualizar Política" {...a11yProps(3)} />
+                        <Tab label="Crear Atributos" {...a11yProps(2)} />
+                        <Tab label="Crear Política" {...a11yProps(3)} />
+                        <Tab label="Actualizar Política" {...a11yProps(4)} />
                     </Tabs>
                 </AppBar>
                 <SwipeableViews
@@ -113,9 +115,12 @@ export default function FullWidthTabs() {
                         <ActualizarUsuario />
                     </TabPanel>
                     <TabPanel value={value} index={2} dir={theme.direction}>
-                        <CrearPolitica />
+                        <CrearAtributo />
                     </TabPanel>
                     <TabPanel value={value} index={3} dir={theme.direction}>
+                        <CrearPolitica />
+                    </TabPanel>
+                    <TabPanel value={value} index={4} dir={theme.direction}>
                         <ActualizarPolitica />
                     </TabPanel>
                     

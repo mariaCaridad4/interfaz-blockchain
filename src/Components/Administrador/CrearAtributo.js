@@ -155,62 +155,32 @@ export default function SignUp() {
     }, [])
     return (
         <>
-        <Container component="main" maxWidth="sm" >
+        <Container component="main" maxWidth="sm"  >
             <CssBaseline />
-            <div className={classes.paper} align="center">
+            <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <GavelIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Crear Política
+                    Crear atributo
                 </Typography>
-                <form onSubmit={onSubmit} className={classes.form} noValidate>
+                <form onSubmit={onSubmit2} className={classes.form} noValidate>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel htmlFor="outlined-age-native-simple">Nivel de Acceso</InputLabel>
-                                <Select
-                                    native
-                                    value={rol.rol}
-                                    onChange={handleChange1}
-                                    label="Nivel de Acceso"
-                                    inputProps={{
-                                        name: 'rol',
-                                        id: 'outlined-age-native-simple',
-                                    }}
-                                >
-                                    <option aria-label="None" value="" />
-                                    <option value={1}>Nivel 1</option>
-                                    <option value={2}>Nivel 2</option>
-                               
-                                    <option value={-1}>...</option>
-                                </Select>
-                            </FormControl>
+                            <TextField
+                                autoComplete="fname"
+                                name="firstName"
+                                variant="outlined"
+                                required
+                                fullWidth
+                                id="firstName"
+                                label="Id"
+                                autoFocus
+                                onChange={handleChange}
+                            />
                         </Grid>
-                        <Grid item xs={12}>
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel htmlFor="outlined-age-native-simple">Atributo</InputLabel>
-                                <Select
-                                    native
-                                    value={rol2.rol}
-                                    onChange={handleChange2}
-                                    label="Nivel de Acceso"
-                                    inputProps={{
-                                        name: 'rol',
-                                        id: 'outlined-age-native-simple',
-                                    }}
-                                >
-                                    <option aria-label="None" value="" />
 
-                                    {atributos.map( (atrcosaibuto) =>{
-                                        return(
-                                        <option value={atrcosaibuto}>{atrcosaibuto}</option>
-                                        )
-                                    })} 
-                                
-                                </Select>
-                            </FormControl>
-                        </Grid>
+                        
 
                     </Grid>
                     <div align="center">
@@ -221,13 +191,12 @@ export default function SignUp() {
                             color="primary"
                             className={classes.submit}
                         >
-                            Crear politica
+                            Crear atributo
                         </Button>
                     </div>
 
                 </form>
             </div>
-
             <Box mt={8}>
                 <Copyright />
             </Box>

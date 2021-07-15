@@ -12,7 +12,8 @@ import Tab from '@material-ui/core/Tab';
 import Navigation from '../Navigation';
 
 
-import CrearOrg from '../AdminConsorcio/CrearOrg';
+import CrearNvlAcc from '../AdminConsorcio/CrearNvlAcc';
+import EliminarNvlAcc from '../AdminConsorcio/ActualziarNvlAcc';
 import ActualizarOrg from '../AdminConsorcio/ActualizarOrg';
 import RegisterAdmin from '../RegisterAdmin';
 
@@ -28,7 +29,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box p={3}>
+                <Box p={4}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -63,8 +64,9 @@ export default function FullWidthTabs2() {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event, newValue) => {
-        console.log(newValue)
+        console.log(event)
 
+        console.log(newValue)
         setValue(newValue);
     };
 
@@ -92,9 +94,10 @@ export default function FullWidthTabs2() {
                         variant="fullWidth"
                         aria-label="full width tabs example"
                     >
-                        <Tab label="Crear Organización" {...a11yProps(0)} />
-                        <Tab label="Actualizar Organización" {...a11yProps(1)} />
-                        <Tab label="Registrar Administrador" {...a11yProps(2)} />
+                        <Tab label="Crear Nivel de Acceso" {...a11yProps(0)} />
+                        <Tab label="Actualizar Nivel de Acceso" {...a11yProps(1)} />
+                        <Tab label="Actualizar Organización" {...a11yProps(2)} />
+                        <Tab label="Registrar Administrador" {...a11yProps(3)} />
                     </Tabs>
                 </AppBar>
                 <SwipeableViews
@@ -103,12 +106,15 @@ export default function FullWidthTabs2() {
                     onChangeIndex={() =>{}}
                 >
                     <TabPanel value={value} index={0} dir={theme.direction}>
-                        <CrearOrg />
+                        <CrearNvlAcc />
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>
-                        <ActualizarOrg />
+                        <EliminarNvlAcc />
                     </TabPanel>
                     <TabPanel value={value} index={2} dir={theme.direction}>
+                        <ActualizarOrg />
+                    </TabPanel>
+                    <TabPanel value={value} index={3} dir={theme.direction}>
                         <RegisterAdmin/>
                     </TabPanel>
                 </SwipeableViews>

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: 'center',
   },
   paper: {
-    margin: theme.spacing(8, 4),
+    margin: theme.spacing(13.75, 4),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -74,16 +74,15 @@ export default function SignInSide() {
           </Avatar>
           <Typography component="h1" variant="h4">
             Bienvenido
-            {/* <h4 align="center">a</h4>
-            <h4 align="center">Prototipo de identidad Digital para Historial Clínico Unificado Utilizando Tecnología Blockchain</h4> */}
           </Typography>
-          <Typography component="h1" variant="h4">
-            {/* <span align="center"> Bienvenido </span> */}
+          <Typography component="h5" variant="h4">
+            
             a
-            {/* <h4 align="center">Prototipo de identidad Digital para Historial Clínico Unificado Utilizando Tecnología Blockchain</h4> */}
+            
           </Typography>
+          <br></br>
           <Typography component="h5" align="center" variant="h5">
-            Prototipo de identidad Digital para Historial Clínico Unificado Utilizando Tecnología Blockchain
+            Subsistema de Identidad Digital para Historial Clínico Unificado Utilizando Tecnología Blockchain
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleSubmit}>
           <br></br>

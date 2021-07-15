@@ -182,7 +182,7 @@ export default function SignUp() {
             };
         }
         if (si && e.target.value !== '') {
-            alert("Paciente no encontrador");
+            alert("Política no encontrada");
             const newPolitica = {
                 id: 'id',
                 nombre: 'Descripcion',

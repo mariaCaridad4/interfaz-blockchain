@@ -43,18 +43,20 @@
             Autores: {'María Caridad Cáceres - Daniel Fabricio Peralta '}
         <br></br>
             Director: {'Ing. Villie Morocho Z. PhD.'}
+            <br></br>
         <br></br>
-        {new Date().getFullYear()}
-        {'.'}
+            UNVERSIDAD DE CUENCA
+
         <br></br>
         <br></br>
       </Typography>
         <Divider />
         <Typography variant="body2" color="textSecondary" align="center">
         <br></br>
-            UNVERSIDAD DE CUENCA
+          {'Copyright '}{new Date().getFullYear()}
         <br></br>
-          INTRATEC S.A.S.
+        
+          INTRATEC
           <br></br>
           <br></br>
       </Typography>

@@ -7,10 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import ApartmentIcon from '@material-ui/icons/Apartment';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 import Box from '@material-ui/core/Box';
 
 import Copyright from '../footer';
@@ -46,39 +43,23 @@ import Copyright from '../footer';
 export default function SignUp() {
     const classes = useStyles();
 
-    const [rol, setRol] = React.useState({
-        rol: '',
-        name: '',
-    });
-
-    const [org, setOrg] = React.useState({
-        org: '',
-        name: '',
-    });
-
     const [id, setId] = React.useState(null);
-    const [na, setNA] = React.useState(null);
+    const [name, setNA] = React.useState(null);
 
-    const handleChange = (e) => {
+    const handleChange1 = (e) => {
         setId(e.target.value);
+    }
+    const handleChange2 = (e) => {
+        setNA(e.target.value);
     }
 
 
-    const handleChange1 = (event) => {
-        const name = event.target.name;
-        setRol({
-            ...rol,
-            [name]: event.target.value,
-        });
-        setNA(event.target.value);
-    };
-
     let onSubmit = (e) => {
-        if (id !== null && na !== null) {
-            alert("Organización creada correctamente!");
+        if (id !== null && name !== null) {
+            alert("Nivel de Acceso creado correctamente!");
             const newUsuario = {
                 id: id,
-                na: na,
+                na: name,
             }
             console.log(newUsuario);
         }else{
@@ -88,17 +69,17 @@ export default function SignUp() {
     }
 
     return (
-        <Container component="main" >
+        <Container component="main" maxWidth="sm" >
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
-                    <ApartmentIcon />
+                    <LockOpenIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Crear Organización
+                    Crear Nivel de Acceso
         </Typography>
                 <form onSubmit={onSubmit} className={classes.form} noValidate>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={3}>
                         <Grid item xs={12}>
                             <TextField
                                 autoComplete="id"
@@ -109,7 +90,7 @@ export default function SignUp() {
                                 id="id"
                                 label="Id"
                                 autoFocus
-                                onChange={handleChange}
+                                onChange={handleChange1}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -122,31 +103,10 @@ export default function SignUp() {
                                 id="name"
                                 label="Nombre"
                                 autoFocus
-                                onChange={handleChange}
+                                onChange={handleChange2}
                             />
                         </Grid>
                         
-                        <Grid item xs={6}>
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel htmlFor="outlined-age-native-simple">Nivel de Acceso</InputLabel>
-                                <Select
-                                    native
-                                    value={rol.rol}
-                                    onChange={handleChange1}
-                                    label="Nivel de Acceso"
-                                    inputProps={{
-                                        name: 'rol',
-                                        id: 'outlined-age-native-simple',
-                                    }}
-                                >
-                                    <option aria-label="None" value="" />
-                                    <option value={10}>Nivel 1</option>
-                                    <option value={20}>Nivel 2</option>
-                                    <option value={30}>Nivel 3</option>
-                                    <option value={40}>...</option>
-                                </Select>
-                            </FormControl>
-                        </Grid>
                         
                     </Grid>
                     <div align="center">

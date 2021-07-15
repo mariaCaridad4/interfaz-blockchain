@@ -3,7 +3,7 @@
   display: 'flex';
   flex-direction: 'column';
   align-items: 'center';
-  width: 900, /*depende en donde este. por el momento se usa en nav adminsitrador*/
+  /*width: 900, /*depende en donde este. por el momento se usa en nav adminsitrador*/
 }
 
 .form {
