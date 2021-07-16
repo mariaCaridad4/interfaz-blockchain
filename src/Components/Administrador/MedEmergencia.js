@@ -1,33 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import Card from '@material-ui/core/Card';
+import SearchIcon from '@material-ui/icons/Search';
+import InputBase from '@material-ui/core/InputBase';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
-import IconButton from '@material-ui/core/IconButton';
-import Card from '@material-ui/core/Card';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import VisibilityIcon from '@material-ui/icons/Visibility';
-import Box from '@material-ui/core/Box';
-import { Link } from  'react-router-dom';
-  
-import EHR from './EHR';
-
-import medService from '../../server/med.service';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import orgService from '../../server/org.service';
+import Box from '@material-ui/core/Box';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+
+
+import datos from '../datos/usuarios.json';
 
 import Copyright from '../footer';
 
-  const useStyles = makeStyles((theme) => ({
+
+const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(5),
         display: 'flex',
@@ -41,39 +39,28 @@ import Copyright from '../footer';
         height: theme.spacing(8),
         marginBottom: theme.spacing(2),
     },
-    root: {
-        //display: 'flex',
-        width: 600,
-        marginTop: theme.spacing(5),
-    },
-    details: {
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    buttons: {
-        display: 'flex',
-        width: 100,
-        paddingLeft: theme.spacing(7),
-        paddingRight: theme.spacing(-7),
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(3),
     },
     submit: {
-        margin: theme.spacing(3, 0, 0),
+        margin: theme.spacing(3, 0, 2),
+        //width: '70%',
     },
-    demo: {
-        backgroundColor: theme.palette.background.paper,
-        paddingLeft: theme.spacing(7),
-        marginTop: theme.spacing(-2),
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 180,
+    },
+    root: {
+        //display: 'flex',
+        width: 400,
+        marginTop: theme.spacing(5),
     },
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
         backgroundColor: '#ECE0F8',
-        marginLeft: 0,
-        marginRight: theme.spacing(1),
-        marginTop: theme.spacing(1),
-        width: '60%',
         [theme.breakpoints.up('sm')]: {
-            marginLeft: theme.spacing(1),
             width: 'auto',
         },
     },
@@ -91,7 +78,6 @@ import Copyright from '../footer';
     },
     inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
         transition: theme.transitions.create('width'),
         width: '100%',
@@ -102,87 +88,57 @@ import Copyright from '../footer';
             },
         },
     },
-    large: {
-        width: theme.spacing(7),
-        height: theme.spacing(7),
-    },
-    titulo: {
-        paddingBottom: theme.spacing(3),
-        paddingTop: theme.spacing(3),
-        paddingLeft: theme.spacing(3),
-    },
 }));
-
-const datos = [
-    
-]
-
-const solicitudes = [
-   
-]
 
 const paciente = [
     {
-        person: '/public/logo192.png',
-        cedula: '',
-        nombre: '',
+        cedula: 'Cédula',
+        nombre: 'Usuario',
+        rolusuario: '',
     },
 ]
 
-
-export default function SignIn() {
+export default function SignUp() {
     const classes = useStyles();
-    let [state, setState] = useState({
+    const current = new Date();
+    const date  = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+
+    let [state, setState] = React.useState({
         datos: datos
     });
 
-    let [pac, setPac] = useState({
+    let [pac, setPac] = React.useState({
         paciente: paciente
     });
 
-    let [soli, setSoli] = useState({
-        solicitudes: solicitudes
-    })
 
+    let Baja = (e) => {
+        const newPaciente = {
+            cedula: 'Cédula',
+            nombre: 'Usuario',
+            rolusuario: '',
+        };
+        setPac({
+            paciente: [newPaciente]
+        })
+        alert('Médico agregado correctamente a la lista.');    
+    };
 
-    let onClick = async (id,nombre) => {
-        console.log(id);
-        const user = JSON.parse(String(sessionStorage.getItem("user")));
-
-        let resu = await medService.solicitarAcceso({paciente:id, medico:user.sub})
-        if(resu.data.success){
-            alert("Solicitud de acceso enviada!");
-
-        }
-        // const newPaciente = {
-        //     person: '/public/logo192.png',
-        //     cedula: '',
-        //     nombre: ''
-        // };
-        // setPac({
-        //     paciente: [newPaciente]
-        // })
-        // const current = new Date();
-        // const newSolicitud = {
-        //     cedula: id,
-        //     nombre: nombre,
-        //     estado: "Pendiente",
-        //     ver: false,
-        //     fecha: `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`,
-        // };
-        // setSoli({
-        //     solicitudes: [...soli.solicitudes, newSolicitud]
-        // })
+    let onClick = (id,fecha) => {
+        alert("El médico ya no se encuentra en su lista de Médicos de Confianza!");
+        console.log(id,fecha);
+        setState({datos: state.datos.filter(item => item.id !== id)});
     }
+
 
     let onSubmit = e => {
         let si = true;
         for (let i in state.datos) {
             if (e.target.value === state.datos[i].cedula) {
                 const newPaciente = {
-                    person: '/public/logo192.png',
                     cedula: e.target.value,
-                    nombre: state.datos[i].nombre
+                    nombre: state.datos[i].nombre,
+                    rolusuario: state.datos[i].rolusuario,
                 };
                 si = false;
                 setPac({
@@ -190,12 +146,12 @@ export default function SignIn() {
                 })
             };
         }
-        if (si && e.target.value!=='') {
-            alert("Paciente no encontrado.");
+        if (si && e.target.value !== '') {
+            alert("Médico no encontrador");
             const newPaciente = {
-                person: '/public/logo192.png',
-                cedula: '',
-                nombre: ''
+                cedula: 'Cédula',
+                nombre: 'Usuario',
+                rolusuario: '',
             };
             setPac({
                 paciente: [newPaciente]
@@ -203,40 +159,27 @@ export default function SignIn() {
         }
         e.preventDefault();
     }
-
-    useEffect(()=>{
+    useEffect( () =>{
         try {
-            const user = JSON.parse(String(sessionStorage.getItem("user")));
-            console.log(user)
-            medService.obtenerNotificaciones(user.sub)
-            .then(response =>{
-                // console.log(response)
-                if(response.status == 200){
-                    // console.log(response.data.msg)
-                    setSoli({solicitudes: response.data.msg})
-                    setState(response.data.msg)
+            orgService.obtenerUsuario()
+            .then( (response)=>{
+                if(response.status === 200){
+                    setPac({paciente: response.data.msg})
                 }
-            })
-            orgService.obtenerTipo(1).
-            then(response =>{
-              if(response.status == 200){
-                  setPac({paciente:response.data.msg})
-                //   console.log(response.data.msg)
-              }  
             })
         } catch (error) {
             
         }
-    },[])
+    }, [])
 
     return (
         <Container component="main">
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
-                    <AssignmentIndIcon />
+                    <PersonAddIcon />
                 </Avatar>
-                <Typography component="h1" variant="h5">Buscar Paciente</Typography>
+                <Typography component="h1" variant="h5">Médicos de Emergencia </Typography>
                 <Card className={classes.root}>
                     <div onClick={onSubmit} className={classes.search} >
                         <div className={classes.searchIcon}>
@@ -250,37 +193,64 @@ export default function SignIn() {
                             }}
                             name="buscar"
                             inputProps={{ 'aria-label': 'search' }}
-                        ></InputBase>
+                        />
                     </div>
+                </Card>
+                <Card className={classes.root}>
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
-                            {pac.paciente.map(({ person, cedula, nombre,fecha }) => (
+                            {pac.paciente.map(({ cedula, nombre, rolusuario }) => (
                                 <React.Fragment key={cedula}>
                                     <div className={classes.demo}>
                                         <List>
                                             <ListItem>
-                                                <ListItemAvatar>
-                                                    <Avatar alt="Remy Sharp" src={person} className={classes.large} />
-                                                </ListItemAvatar>
                                                 <ListItemText primary={nombre} secondary={cedula} />
                                                 <ListItemSecondaryAction>
                                                     <Button
+                                                        onClick={Baja}
                                                         type="submit"
                                                         fullWidth
                                                         variant="contained"
                                                         color="primary"
                                                         className={classes.submit}
-                                                        onClick={() => onClick(cedula, nombre)}
-                                                    > Solicitar Acceso
-                            </Button>
+                                                    > Agregar
+                                            </Button>
                                                 </ListItemSecondaryAction>
                                             </ListItem>
+                                            <ListItem>
+                                                <ListItemText secondary={rolusuario} />
+                                            </ListItem>
                                         </List>
+                                       
                                     </div>
                                 </React.Fragment>
                             ))}
                         </CardContent>
                     </div>
+                </Card>
+
+                <Card className={classes.root} >
+                    {pac.paciente.map(({ cedula, nombre, rolusuario }) => (
+                        <React.Fragment key={cedula}>
+                            <div className={classes.details}>
+                                <div className={classes.demo}>
+                                    <List>
+                                        <ListItem>
+                                            <ListItemText primary={cedula} secondary={date} />
+                                            <ListItemText primary={rolusuario}/>
+                                            <ListItemText primary="Nivel de acceso"/>
+                                            <ListItemSecondaryAction>
+                                                <IconButton edge="end" aria-label="delete" onClick={() => onClick(cedula, date)}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    </List>
+                                </div>
+                            </div>
+
+                        </React.Fragment>
+                    ))}
                 </Card>
 
             </div>
@@ -290,5 +260,3 @@ export default function SignIn() {
         </Container>
     );
 }
-
-

@@ -220,7 +220,7 @@ export default function SignUp() {
 
                                             </ListItem>
                                             <ListItem>
-                                                <ListItemText primary={'Nivel Acceso:'} />
+                                                <ListItemText primary={'Nivel Acceso Mínimo:'} />
                                                 <ListItemSecondaryAction>
                                                     <form className={classes.form} noValidate>
                                                         <Grid container>

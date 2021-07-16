@@ -14,6 +14,7 @@ import Navigation from '../Navigation';
 
 
 import BuscarPaciente from '../Medico/BuscarPaciente';
+import Solicitudes from '../Medico/Solicitudes';
 import EHR from '../Medico/EHR';
  
 function TabPanel(props) {
@@ -28,7 +29,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box p={2}>
+                <Box p={3}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -86,7 +87,8 @@ export default function FullWidthTabs() {
                         aria-label="full width tabs example"
                     >
                         <Tab label="Buscar Paciente" {...a11yProps(0)} />
-                        <Tab label="EHR" {...a11yProps(1)} />
+                        <Tab label="Solicitudes de Acceso" {...a11yProps(1)} />
+                        <Tab label="EHR" {...a11yProps(2)} />
                     </Tabs>
                 </AppBar>
                 <SwipeableViews
@@ -98,6 +100,9 @@ export default function FullWidthTabs() {
                     <BuscarPaciente />
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>
+                    <Solicitudes />
+                    </TabPanel>
+                    <TabPanel value={value} index={2} dir={theme.direction}>
                         <EHR />
                     </TabPanel>
                 </SwipeableViews>

@@ -16,6 +16,7 @@ import CrearPolitica from '../Administrador/CrearPolitica';
 import ActualizarPolitica from '../Administrador/ActualizarPolitica';
 import Navigation from '../Navigation';
 import CrearAtributo from '../Administrador/CrearAtributo';
+import MedicoConfianza from '../Administrador/MedEmergencia';
 import { HttpClient } from '../../server/http.client';
 
 function TabPanel(props) {
@@ -30,7 +31,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box p={5}>
+                <Box p={6}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -101,6 +102,7 @@ export default function FullWidthTabs() {
                         <Tab label="Crear Atributos" {...a11yProps(2)} />
                         <Tab label="Crear Política" {...a11yProps(3)} />
                         <Tab label="Actualizar Política" {...a11yProps(4)} />
+                        <Tab label="Médico de Emergencia" {...a11yProps(5)} />
                     </Tabs>
                 </AppBar>
                 <SwipeableViews
@@ -122,6 +124,9 @@ export default function FullWidthTabs() {
                     </TabPanel>
                     <TabPanel value={value} index={4} dir={theme.direction}>
                         <ActualizarPolitica />
+                    </TabPanel>
+                    <TabPanel value={value} index={5} dir={theme.direction}>
+                        <MedicoConfianza />
                     </TabPanel>
                     
                 </SwipeableViews>
