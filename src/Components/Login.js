@@ -158,6 +158,7 @@ const Login = (props) => {
             <TextField
               value={cedula}
               onChange={handleChange}
+              //type="number"
               type="text"
               label="Cédula"
               variant="outlined"

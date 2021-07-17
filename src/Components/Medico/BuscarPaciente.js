@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -8,7 +9,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
-import IconButton from '@material-ui/core/IconButton';
 import Card from '@material-ui/core/Card';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import InputBase from '@material-ui/core/InputBase';
@@ -16,9 +16,10 @@ import SearchIcon from '@material-ui/icons/Search';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import VisibilityIcon from '@material-ui/icons/Visibility';
 import Box from '@material-ui/core/Box';
-import { Link } from  'react-router-dom';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
   
 import EHR from './EHR';
 
@@ -129,6 +130,14 @@ const paciente = [
     },
 ]
 
+const politica = [
+    {
+        id: 'id',
+        nombre: 'Descripcion',
+        nivelacceso: '',
+    },
+]
+
 
 export default function SignIn() {
     const classes = useStyles();
@@ -144,6 +153,36 @@ export default function SignIn() {
         solicitudes: solicitudes
     })
 
+    let [pol, setPol] = React.useState({
+        politica: politica
+    });
+
+    const [nivelacceso, setnivelacceso] = React.useState({
+        nivelacceso: '',
+        name: '',
+    });
+
+
+    const handleChange1 = (event) => {
+        const name = event.target.name;
+        setnivelacceso({
+            ...nivelacceso,
+            [name]: event.target.value,
+        });
+        let newPolitica;
+        for (let i in state.datos) {
+            newPolitica = {
+                cedula: state.datos[i].cedula,
+                nombre: state.datos[i].nombre,
+                nivelacceso: event.target.value,
+                atributo: [],
+            };
+            setPol({
+                politica: [newPolitica]
+            });
+        };
+        console.log(pol.politica);
+    };
 
     let onClick = async (id,nombre) => {
         console.log(id);
@@ -264,17 +303,48 @@ export default function SignIn() {
                                                 </ListItemAvatar>
                                                 <ListItemText primary={nombre} secondary={cedula} />
                                                 <ListItemSecondaryAction>
-                                                    <Button
+                                                <form className={classes.form} noValidate>
+                                                        <Grid container>
+                                                            <Grid item ms={12}>
+                                                                <FormControl variant="outlined" className={classes.formContnivelacceso}>
+                                                                    <InputLabel htmlFor="outlined-age-native-simple">Nivel de Acceso</InputLabel>
+                                                                    <Select
+                                                                        native
+                                                                        fullWidth
+                                                                        value={nivelacceso.nivelacceso}
+                                                                        onChange={handleChange1}
+                                                                        label="Nivel de Acceso"
+                                                                        inputProps={{
+                                                                            name: 'nivelacceso',
+                                                                            id: 'outlined-age-native-simple',
+                                                                        }}
+                                                                    >
+                                                                        <option aria-label="None" value="" />
+                                                                        <option value={10}>Nivel 1</option>
+                                                                        <option value={20}>Nivel 2</option>
+                                                                        <option value={30}>Nivel 3</option>
+                                                                        <option value={40}>...</option>
+                                                                    </Select>
+                                                                </FormControl>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </form>
+                                                </ListItemSecondaryAction>
+                                            </ListItem>
+                                            <ListItem >
+                                            <ListItemText>
+                                                <Button
                                                         type="submit"
-                                                        fullWidth
+                                                        //fullWidth
                                                         variant="contained"
                                                         color="primary"
                                                         className={classes.submit}
                                                         onClick={() => onClick(cedula, nombre)}
                                                     > Solicitar Acceso
-                            </Button>
-                                                </ListItemSecondaryAction>
+                                                </Button>
+                                                </ListItemText>
                                             </ListItem>
+                                        <br></br>                                   
                                         </List>
                                     </div>
                                 </React.Fragment>

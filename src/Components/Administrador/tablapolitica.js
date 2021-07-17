@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -16,10 +16,20 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
+
+import polservice from '../../server/pol.service';
+
+
+
+const politica = [
+  {
+      id: '1',
+      nombre: 'Descripcion',
+      nivel_acceso: '',
+  },
+]
+
 
 
 function createData(id, nivel, nombre) {
@@ -27,9 +37,9 @@ function createData(id, nivel, nombre) {
 }
 
 const rows = [
-  createData(1,'Nivel 1', 'Informacion Basica'),
-  createData(2,'Nivel 2', 'Informacion de Emergencia'),
-  createData(3,'Nivel 3', 'Informacion Cronica'),
+  createData('1','Informacion Basica','Nivel 1'),
+  createData('2','Informacion de Emergencia','Nivel 2'),
+  createData('3','Informacion Cronica','Nivel 3', ),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -60,8 +70,8 @@ function stableSort(array, comparator) {
 
 const headCells = [
   { id: 'id', numeric: true, disablePadding: true, label: 'Id' },
-  { id: 'nivel', numeric: false, disablePadding: false, label: 'Nivel' },
-  { id: 'nombre', numeric: false, disablePadding: false, label: 'Nombre' },
+  { id: 'nivel', numeric: false, disablePadding: false, label: 'Nombre' },
+  { id: 'nombre', numeric: false, disablePadding: false, label: 'Nivel' },
 ];
 
 function EnhancedTableHead(props) {
@@ -203,6 +213,10 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  let [pol, setPol] = React.useState({//cambiar por rows con los datos correctos
+    politica: politica
+});
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -249,7 +263,29 @@ export default function EnhancedTable() {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
+  useEffect( ()=>{
+    try {
+        polservice.obtenerPoliticas(1)
+        .then( (response)=>{
+            if(response.status === 200){
+                console.log(response.data.msg)
+                // setAtributos(response.data.msg)
+                setPol({politica: response.data.msg})
+            }
+        })
 
+        // polservice.obtenerPoliticas(2)
+        // .then( (response)=>{
+        //     if(response.status === 200){
+        //         console.log(response.data.msg)
+        //         // setAtributos(response.data.msg)
+        //     }
+        // })
+        
+    } catch (error) {
+        
+    }
+}, [])
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>

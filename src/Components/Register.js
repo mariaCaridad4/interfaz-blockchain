@@ -216,7 +216,7 @@ const Register = () => {
                         <TextField
                             value={cedula}
                             onChange={handleChange}
-                            type="text"
+                            type="number"
                             label="Cédula"
                             variant="outlined"
                             margin="normal"
