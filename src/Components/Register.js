@@ -3,7 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -12,10 +11,10 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Box from '@material-ui/core/Box';
-import { navigate } from '@reach/router';
 import orgService from '../server/org.service';
 import { MEDICO, PACIENTE } from '../constantes/constantes_roles';
-
+import clsx from 'clsx';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Copyright from './footer';
 
 const useStyles = makeStyles((theme) => ({
@@ -61,6 +60,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Register = () => {
     const classes = useStyles();
+    const [loading, setLoading] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const timer = React.useRef();
     const [rol, setRol] = useState({
         rol: '',
         name: '',
@@ -138,23 +140,6 @@ const Register = () => {
         } 
     };
 
-    const handleChange2 = (event) => {
-        const name = event.target.name;
-        setOrg({
-            ...org,
-            [name]: event.target.value,
-        });
-        if (event.target.value === 10) {
-            setOrg1('org 1');
-        } else if (event.target.value === 20) {
-            setOrg1('org 2');
-        } else if (event.target.value === 30) {
-            setOrg1('org 3');
-        } else {
-            setOrg1('org 4');
-        }
-    };
-
 
     const handleChange1 = (event) => {
         const name = event.target.name;
@@ -174,6 +159,17 @@ const Register = () => {
         console.log(rol1)
     };
 
+    const handleButtonClick = () => {
+        if (!loading) {
+          setSuccess(false);
+          setLoading(true);
+          timer.current = window.setTimeout(() => {
+            setSuccess(true);
+            setLoading(false);
+          }, 2000);
+        }
+      };
+
     useEffect( () =>{
         const user = JSON.parse(String(sessionStorage.getItem("user")));
         orgService.obtenerUnaOrg(user.org).then( (response) =>{
@@ -184,6 +180,9 @@ const Register = () => {
         })
         // console.log(user.org)
         setOrg1(user.org)
+        return () => {
+            clearTimeout(timer.current);
+          };
     }, [])
     // useEffect( () =>{
     //     const user = JSON.parse(String(sessionStorage.getItem("user")));
@@ -306,15 +305,18 @@ const Register = () => {
                             
                         /> */}
                 
-                        <div align="center">
+                        <div className={classes.wrapper} align="center">
                             <Button
                                 type="submit"
                                 variant="contained"
                                 color="primary"
                                 className={classes.submit}
+                                disabled={loading}
+                                onClick={handleButtonClick}
                             >
                                 Crear
                             </Button>
+                            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                         </div>
                         <br></br>
                         <br></br>

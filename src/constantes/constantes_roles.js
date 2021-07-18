@@ -1,7 +1,7 @@
-const ADMIN = 7
-const ADMIN_ORGANIZACION = 1
+const ADMIN = 2
+const ADMIN_ORGANIZACION = 7258
 const PACIENTE = 1
-const MEDICO = 7258
+const MEDICO = 7
 
 module.exports = {
     ADMIN,

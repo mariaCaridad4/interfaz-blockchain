@@ -19,7 +19,9 @@ import CardContent from '@material-ui/core/CardContent';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ApartmentIcon from '@material-ui/icons/Apartment';
 import Box from '@material-ui/core/Box';
-  
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { green } from '@material-ui/core/colors';
+
 import datos from '../datos/org.json';
 import Copyright from '../footer';
 
@@ -88,6 +90,14 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
+    buttonProgress: {
+        color: green[500],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+      },
 }));
 
 const politica = [
@@ -100,6 +110,9 @@ const politica = [
 
 export default function SignUp() {
     const classes = useStyles();
+    const [loading, setLoading] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const timer = React.useRef();
 
     let [state, setState] = React.useState({
         datos: datos
@@ -179,6 +192,22 @@ export default function SignUp() {
         });
     };
 
+    React.useEffect(() => {
+        return () => {
+          clearTimeout(timer.current);
+        };
+      }, []);
+    
+      const handleButtonClick = () => {
+        if (!loading) {
+          setSuccess(false);
+          setLoading(true);
+          timer.current = window.setTimeout(() => {
+            setSuccess(true);
+            setLoading(false);
+          }, 2000);
+        }
+      };
 
     return (
         <Container component="main" >
@@ -262,8 +291,10 @@ export default function SignUp() {
                                             variant="contained"
                                             color="primary"
                                             className={classes.submit}
+                                            onClick={handleButtonClick}
                                         > Guardar
                                             </Button>
+                                            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                                     </div>
                                         
                                     </div>

@@ -9,6 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { green } from '@material-ui/core/colors';
 
 import Copyright from '../footer';
 
@@ -38,10 +40,22 @@ import Copyright from '../footer';
         margin: theme.spacing(1),
         minWidth: 180,
       },
+    buttonProgress: {
+        color: green[500],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
 }));
 
 export default function SignUp() {
     const classes = useStyles();
+    const [loading, setLoading] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const timer = React.useRef();
+
 
     const [id, setId] = React.useState(null);
     const [name, setNA] = React.useState(null);
@@ -53,15 +67,34 @@ export default function SignUp() {
         setNA(e.target.value);
     }
 
+    React.useEffect(() => {
+        return () => {
+          clearTimeout(timer.current);
+        };
+      }, []);
+    
+      const handleButtonClick = () => {
+        if (!loading) {
+          setSuccess(false);
+          setLoading(true);
+          timer.current = window.setTimeout(() => {
+            setSuccess(true);
+            setLoading(false);
+          }, 2000);
+        }
+      };
 
-    let onSubmit = (e) => {
+      let onSubmit = (e) => {
+        
         if (id !== null && name !== null) {
-            alert("Nivel de Acceso creado correctamente!");
+            
+            
             const newUsuario = {
                 id: id,
                 na: name,
             }
             console.log(newUsuario);
+            alert("Nivel de Acceso creado correctamente!");
         }else{
             alert("Ningún campo debe estar vacío. Verifique su información.");
         }
@@ -116,9 +149,11 @@ export default function SignUp() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        onClick={handleButtonClick}
                     >
                         Crear
-          </Button>
+                    </Button>
+                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                     </div>
                     
                 </form>

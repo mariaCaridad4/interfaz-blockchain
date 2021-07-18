@@ -16,7 +16,8 @@ import CardContent from '@material-ui/core/CardContent';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import orgService from '../../server/org.service';
 import Box from '@material-ui/core/Box';
-  
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import datos from '../datos/usuarios.json';
 import Copyright from '../footer';
 
@@ -96,6 +97,9 @@ const paciente = [
 
 export default function SignUp() {
     const classes = useStyles();
+    const [loading, setLoading] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const timer = React.useRef();
 
     let [habilitarLista, setHabilitarLista] = React.useState(true);
     let [habilitarBoton, setHabilitarBoton] = React.useState(true);
@@ -164,6 +168,18 @@ export default function SignUp() {
         }
         e.preventDefault();
     }
+
+    const handleButtonClick = () => {
+        if (!loading) {
+          setSuccess(false);
+          setLoading(true);
+          timer.current = window.setTimeout(() => {
+            setSuccess(true);
+            setLoading(false);
+          }, 2000);
+        }
+      };
+
     useEffect( () =>{
         try {
             orgService.obtenerUsuario()
@@ -175,6 +191,9 @@ export default function SignUp() {
         } catch (error) {
             
         }
+        return () => {
+            clearTimeout(timer.current);
+          };
     }, [])
 
     return (
@@ -234,8 +253,10 @@ export default function SignUp() {
                                             variant="contained"
                                             color="primary"
                                             className={classes.submit}
+                                            onClick={handleButtonClick}
                                         > Guardar
                                             </Button>
+                                            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                                     </div>
                                 </React.Fragment>
                             ))}

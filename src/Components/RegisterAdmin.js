@@ -15,6 +15,8 @@ import Box from '@material-ui/core/Box';
 import { navigate } from '@reach/router';
 import orgService from '../server/org.service';
 import { ADMIN } from '../constantes/constantes_roles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { green } from '@material-ui/core/colors';
 
 import Copyright from './footer';
 
@@ -55,16 +57,23 @@ const useStyles = makeStyles((theme) => ({
         color: "white",
         textDecoration: "none",
     },
+    buttonProgress: {
+        color: green[500],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+      },
 }));
 
 
 
 const RegisterAdmin = () => {
     const classes = useStyles();
-    const [rol, setRol] = useState({
-        rol: '',
-        name: '',
-    });
+    const [loading, setLoading] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const timer = React.useRef();
 
     const [org, setOrg] = useState({
         org: '',
@@ -188,9 +197,21 @@ const RegisterAdmin = () => {
         } catch (error) {
             
         }
-       
-    
+        return () => {
+            clearTimeout(timer.current);
+          };    
     }, [])
+
+    const handleButtonClick = () => {
+        if (!loading) {
+          setSuccess(false);
+          setLoading(true);
+          timer.current = window.setTimeout(() => {
+            setSuccess(true);
+            setLoading(false);
+          }, 2000);
+        }
+      };
 
     return (
         <Container component="main" maxWidth="sm">

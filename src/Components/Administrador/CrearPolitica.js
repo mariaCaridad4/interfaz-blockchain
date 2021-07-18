@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,8 +11,9 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import GavelIcon from '@material-ui/icons/Gavel';
 import Box from '@material-ui/core/Box';
-import { convertToObject } from 'typescript';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import polservice from '../../server/pol.service';
+import { green } from '@material-ui/core/colors';
 
 import Copyright from '../footer';
 
@@ -42,10 +42,21 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         minWidth: 180,
     },
+    buttonProgress: {
+        color: green[500],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+      },
 }));
 
 export default function SignUp() {
     const classes = useStyles();
+    const [loading, setLoading] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const timer = React.useRef();
 
     const [rol, setRol] = React.useState({
         rol: '',
@@ -65,10 +76,6 @@ export default function SignUp() {
     const [atributos, setAtributos] = React.useState([]);
     const [atributo, setAtributo] = React.useState(null);
     const [na, setNA] = React.useState(null);
-
-    const handleChange = (e) => {
-        setId(e.target.value);
-    }
 
 
     const handleChange1 = (event) => {
@@ -116,29 +123,18 @@ export default function SignUp() {
         e.preventDefault();
     }
 
-    
-    let onSubmit2 = (e) => {
-        if (id !== null ||id !== "" ) {
-            const newUsuario = {
-                atributo: id,                
-            }
-            // console.log(newUsuario);
-            polservice.crearAtributo(newUsuario) 
-            .then( (response)=>{
-                console.log(response)
-                if(response.status == 201){
-                    alert("Atributo creado correctamente!");
-                    setId("")
-                }else{
-                    alert("Hubo un incoveniente")
-                }
-                
-            })
-        } else {
-            alert("Ningún campo debe estar vacío. Verifique su información.");
+    const handleButtonClick = () => {
+        if (!loading) {
+          setSuccess(false);
+          setLoading(true);
+          timer.current = window.setTimeout(() => {
+            setSuccess(true);
+            setLoading(false);
+          }, 2000);
         }
-        e.preventDefault();
-    }
+      };
+
+    
     useEffect( () =>{
         try {
             polservice.obtenerAtributos()
@@ -152,6 +148,9 @@ export default function SignUp() {
         } catch (error) {
             
         }
+        return () => {
+            clearTimeout(timer.current);
+          };
     }, [])
     return (
         <>
@@ -220,9 +219,11 @@ export default function SignUp() {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            onClick={handleButtonClick}
                         >
                             Crear politica
                         </Button>
+                        {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                     </div>
 
                 </form>
