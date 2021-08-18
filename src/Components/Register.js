@@ -13,7 +13,6 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Box from '@material-ui/core/Box';
 import orgService from '../server/org.service';
 import { MEDICO, PACIENTE } from '../constantes/constantes_roles';
-import clsx from 'clsx';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Copyright from './footer';
 
@@ -61,7 +60,6 @@ const useStyles = makeStyles((theme) => ({
 const Register = () => {
     const classes = useStyles();
     const [loading, setLoading] = React.useState(false);
-    const [success, setSuccess] = React.useState(false);
     const timer = React.useRef();
     const [rol, setRol] = useState({
         rol: '',
@@ -72,7 +70,6 @@ const Register = () => {
 
     const [cedula, setCedula] = useState("");
     const [rol1, setRol1] = useState(-1);
-    const [rolSelected, setRolSelected] = useState(-1);
     const [org1, setOrg1] = useState("");
 
     const [email, setEmail] = useState('');
@@ -95,9 +92,9 @@ const Register = () => {
             [name]: event.target.value,
         });
         console.log(event.target.value)
-        if (event.target.value == 20) {
+        if (event.target.value === 20) {
             setRol1(PACIENTE);
-        } else if(event.target.value == 10){
+        } else if(event.target.value === 10){
             setRol1(MEDICO);
         }else{
             setRol1(-1);
@@ -108,7 +105,6 @@ const Register = () => {
 
     const handleButtonClick = () => {
         if (!loading) {
-          setSuccess(false);
           setLoading(true);
           if (cedula !== "" && email !== "" &&  rol1 !== -1) {
             const newUsuario = {
@@ -130,7 +126,6 @@ const Register = () => {
                             name: '',
                         });
                         // setOrg1(-1)
-                        setSuccess(true);
                         alert("Usuario creado correctamente, se ha enviado un correo con las credenciales!");
                         
                         // setOrganizaciones(response.data.msg)
@@ -173,6 +168,7 @@ const Register = () => {
         // console.log(user.org)
         setOrg1(user.org)
         return () => {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             clearTimeout(timer.current);
           };
     }, [])
@@ -202,7 +198,7 @@ const Register = () => {
                 </Typography>
                 <br></br>
                 <br></br>
-                <form onSubmit={handleSubmit} className={classes.form} noValidate>
+                <form className={classes.form} noValidate>
                     <div className="login-input">
                         <TextField
                             value={cedula}
