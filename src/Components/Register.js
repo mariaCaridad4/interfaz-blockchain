@@ -78,60 +78,7 @@ const Register = () => {
     const [email, setEmail] = useState('');
     // const [password, setPassword] = useState('');
 
-    const handleSubmit = async e => {
-        e.preventDefault();
-        if (cedula !== "" && email !== "" &&  rol1 !== -1) {
-            const newUsuario = {
-                cedula: cedula,
-                correo: email,
-                id_tipo: rol1,
-            }
-            console.log(newUsuario);
-            try {
-                orgService.crearAdmin(newUsuario)
-                .then( (response)=>{
-                    
-                    if(response.status === 201){
-                        setCedula("")
-                        setEmail("")
-                        setRol1(-1)
-                        setRol({
-                            rol: '',
-                            name: '',
-                        });
-                        // setOrg1(-1)
-                        alert("Usuario creado correctamente, se ha enviado un correo con las credenciales!");
-                        
-                        // setOrganizaciones(response.data.msg)
-                    }else{
-
-                        alert(response.data.msg)
-                    }
-                })
-            } catch (error) {
-                
-                    // console.log(result.message);
-                    // navigate('/');
-                // } else {
-                    console.log(error);
-                // }
-            }
-            
-        } else {
-            if(org === -1){
-                alert("No se encuentra logueado en el sistema");
-
-            }else{
-                alert(rol1)
-                alert("Ningún campo debe estar vacío. Verifique su información.");
-
-            }
-        }
-
-   
-
-    };
-
+  
     const handleChange = e => {
         if (e.currentTarget.name === 'email') {
             setEmail(e.currentTarget.value);
@@ -163,10 +110,55 @@ const Register = () => {
         if (!loading) {
           setSuccess(false);
           setLoading(true);
-          timer.current = window.setTimeout(() => {
-            setSuccess(true);
-            setLoading(false);
-          }, 2000);
+          if (cedula !== "" && email !== "" &&  rol1 !== -1) {
+            const newUsuario = {
+                cedula: cedula,
+                correo: email,
+                id_tipo: rol1,
+            }
+            console.log(newUsuario);
+            try {
+                orgService.crearAdmin(newUsuario)
+                .then( (response)=>{
+                    setLoading(false);
+                    if(response.status === 201){
+                        setCedula("")
+                        setEmail("")
+                        setRol1(-1)
+                        setRol({
+                            rol: '',
+                            name: '',
+                        });
+                        // setOrg1(-1)
+                        setSuccess(true);
+                        alert("Usuario creado correctamente, se ha enviado un correo con las credenciales!");
+                        
+                        // setOrganizaciones(response.data.msg)
+                    }else{
+                        
+                        alert(response.data.msg)
+                    }
+                })
+            } catch (error) {
+                
+                    // console.log(result.message);
+                    // navigate('/');
+                // } else {
+                    console.log(error);
+                // }
+            }
+            
+        } else {
+            if(org === -1){
+                alert("No se encuentra logueado en el sistema");
+
+            }else{
+                alert(rol1)
+                alert("Ningún campo debe estar vacío. Verifique su información.");
+
+            }
+        }
+
         }
       };
 
