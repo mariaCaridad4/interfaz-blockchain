@@ -23,7 +23,7 @@ import {
   LOGOUT,
   SET_MESSAGE
 } from '../actions/types';
-const {ADMIN, ADMIN_ORGANIZACION, PACIENTE, MEDICO} = require("../constantes/constantes_roles")
+const { ADMIN, ADMIN_ORGANIZACION, PACIENTE, MEDICO } = require("../constantes/constantes_roles")
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,10 +35,10 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     backgroundColor: theme.palette.secondary.main,
-        margin: theme.spacing(1),
-        width: theme.spacing(8),
-        height: theme.spacing(8),
-        marginBottom: theme.spacing(2),
+    margin: theme.spacing(1),
+    width: theme.spacing(8),
+    height: theme.spacing(8),
+    marginBottom: theme.spacing(2),
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -50,6 +50,9 @@ const useStyles = makeStyles((theme) => ({
   link: {
     color: "white",
     textDecoration: "none",
+  },
+  footer: {
+    marginTop: theme.spacing(10),
   }
 }));
 
@@ -60,11 +63,11 @@ const Login = (props) => {
   const [cedula, setcedula] = useState('');
   const [password, setPassword] = useState('');
 
-  
+
   let user = sessionStorage.getItem('user');
 
-  const [ isLoggedIn, setIsLoggedIn] = useState(false);
-  
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const { message } = "";
 
   const [load, setLoad] = useState(false)
@@ -77,56 +80,63 @@ const Login = (props) => {
       setLoad(false)
   }, [message])
 
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
       cedula: cedula,
       password: password
     };
-    
-    console.log(data);
-    setLoad(true)
-    dispatch(clearMessage());
-    let respuesta =  await login(data.cedula, data.password)
+
+    if (data.cedula === "" || data.password === "") {
+      alert("Ningún campo debe estar vacío. Verifique la información ingresada.")
+    } else {
+      console.log(data);
+      setLoad(true)
+      dispatch(clearMessage());
+      let respuesta = await login(data.cedula, data.password)
       console.log("AQUIII para la respuesta")
       console.log(respuesta)
-    switch(respuesta.type){
-      case LOGIN_FAIL:
-        setIsLoggedIn(false)
-        alert(respuesta.payload)
-        break;
-      case LOGIN_SUCCESS:
-        setIsLoggedIn(true)
-        const user = JSON.parse(String(sessionStorage.getItem("user")));
-
-        let logoneado = false
-        if (user) {
+      switch (respuesta.type) {
+        case LOGIN_FAIL:
+          setIsLoggedIn(false)
+          alert(respuesta.payload)
+          break;
+        case LOGIN_SUCCESS:
           setIsLoggedIn(true)
-          logoneado = true;  
+          const user = JSON.parse(String(sessionStorage.getItem("user")));
 
-          console.log(user);
-          console.log(user.role === ADMIN);
-          console.log(logoneado && user.role === ADMIN );  
-          if (logoneado && user.role === PACIENTE) {
-            history.push("/paciente")
-          } else if (logoneado && user.role === MEDICO) {
-            history.push("/medico")
-          }else if (logoneado && user.role === ADMIN ) {
-            history.push("/administrador")
-          } else if (logoneado && user.role === ADMIN_ORGANIZACION){
-            history.push("/organizacion")
-          } else {
-            history.push("/")
+          let logoneado = false
+          if (user) {
+            setIsLoggedIn(true)
+            logoneado = true;
+
+            console.log(user);
+            console.log(user.role === ADMIN);
+            console.log(logoneado && user.role === ADMIN);
+            if (logoneado && user.role === PACIENTE) {
+              history.push("/paciente")
+            } else if (logoneado && user.role === MEDICO) {
+              history.push("/medico")
+            } else if (logoneado && user.role === ADMIN) {
+              history.push("/administrador")
+            } else if (logoneado && user.role === ADMIN_ORGANIZACION) {
+              history.push("/organizacion")
+            } else {
+              history.push("/")
+            }
           }
-        }
-  
-        break;
+
+
+          break;
+      }
+
+
     }
-    
+
     // console.log({ isLoggedIn, message });
     // console.log("ANTES CONSULTA USER");
-    
+
   };
 
   const handleChange = e => {
@@ -140,64 +150,63 @@ const Login = (props) => {
 
   return (
     <>
-    <Navigation></Navigation>
-    <Container component="main" maxWidth="xs" >
-      {load}
+      <Navigation />
+      <Container component="main" maxWidth="xs" >
+        {load}
 
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Ingresar
-        </Typography>
-        <form onSubmit={handleSubmit} className={classes.form} noValidate>
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Ingresar
+          </Typography>
+          <form onSubmit={handleSubmit} className={classes.form} noValidate>
+            <div className="login-input">
+              <TextField
+                value={cedula}
+                onChange={handleChange}
+                //type="number"
+                type="text"
+                label="Cédula"
+                variant="outlined"
+                margin="normal"
+                name="cedula"
+                required
+                fullWidth
+                autoComplete="cedula"
+                autoFocus
+              />
+              <TextField
+                value={password}
+                onChange={handleChange}
+                type="password"
+                label="Contraseña"
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                autoComplete="current-password"
+              />
+              <div align="center">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  Ingresar
+                </Button>
+              </div>
 
-          <div className="login-input">
-            <TextField
-              value={cedula}
-              onChange={handleChange}
-              //type="number"
-              type="text"
-              label="Cédula"
-              variant="outlined"
-              margin="normal"
-              name="cedula"
-              required
-              fullWidth
-              autoComplete="cedula"
-              autoFocus
-            />
-            <TextField
-              value={password}
-              onChange={handleChange}
-              type="password"
-              label="Password"
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              autoComplete="current-password"
-            />
-            <div align="center">
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-            >
-              Ingresar
-            </Button>
             </div>
-            
-          </div>
-        </form>
-      </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+          </form>
+        </div>
+        <Box mt={8} className={classes.paper}>
+          <Copyright />
+        </Box>
+      </Container>
     </>
   );
 };
