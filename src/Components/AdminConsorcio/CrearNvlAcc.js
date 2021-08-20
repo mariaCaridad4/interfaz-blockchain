@@ -3,19 +3,17 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
-import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { green } from '@material-ui/core/colors';
 
 import Copyright from '../footer';
 
-
-  const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
         display: 'flex',
@@ -30,16 +28,12 @@ import Copyright from '../footer';
         marginBottom: theme.spacing(2),
     },
     form: {
-        width: '70%', 
+        width: '100%',
         marginTop: theme.spacing(3),
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 180,
-      },
     buttonProgress: {
         color: green[500],
         position: 'absolute',
@@ -50,8 +44,10 @@ import Copyright from '../footer';
     },
 }));
 
+
 export default function SignUp() {
     const classes = useStyles();
+
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
     const timer = React.useRef();
@@ -88,7 +84,6 @@ export default function SignUp() {
         
         if (id !== null && name !== null) {
             
-            
             const newUsuario = {
                 id: id,
                 na: name,
@@ -98,70 +93,60 @@ export default function SignUp() {
         }else{
             alert("Ningún campo debe estar vacío. Verifique su información.");
         }
-        e.preventDefault();
+       // e.preventDefault();
     }
 
     return (
-        <Container component="main" maxWidth="sm" >
+        <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOpenIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Crear Nivel de Acceso
-        </Typography>
+                Crear Nivel de Acceso
+                </Typography>
                 <form onSubmit={onSubmit} className={classes.form} noValidate>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                            <TextField
-                                autoComplete="id"
-                                name="id"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="id"
-                                label="Id"
-                                autoFocus
-                                onChange={handleChange1}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                autoComplete="name"
-                                name="name"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="name"
-                                label="Nombre"
-                                autoFocus
-                                onChange={handleChange2}
-                            />
-                        </Grid>
-                        
-                        
-                    </Grid>
-                    <div align="center">
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Id"
+                        name="id"
+                        autoComplete="id"
+                        autoFocus
+                        onChange={handleChange1}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="name"
+                        label="Nombre"
+                        id="name"
+                        autoComplete="Nombre"
+                        onChange={handleChange2}
+                    />
                     <Button
                         type="submit"
-                        //fullWidth
+                        fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
                         onClick={handleButtonClick}
                     >
-                        Crear
+                       Crear
                     </Button>
                     {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                    </div>
-                    
+
                 </form>
             </div>
-        <Box mt={8}>
-        <Copyright />
-      </Box>
+            <Box mt={8}>
+                <Copyright />
+            </Box>
         </Container>
-        
     );
 }

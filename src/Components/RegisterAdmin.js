@@ -36,26 +36,19 @@ const useStyles = makeStyles((theme) => ({
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(3),
         //alignItems: 'center',
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
-        //alignItems: 'center',
-        //marginLeft: theme.spacing(47),
     },
     formControl: {
-        margin: theme.spacing(1),
-        //minWidth: 220,
-        alignItems: 'center',
+        margin: theme.spacing(3, 0, 2),
+        minWidth: '100%',
     },
     grid: {
         alignItems: 'center',
         //marginLeft: theme.spacing(25),
-    },
-    link: {
-        color: "white",
-        textDecoration: "none",
     },
     buttonProgress: {
         color: green[500],
@@ -86,7 +79,6 @@ const RegisterAdmin = () => {
     const [orgSelect, setOrgSelect] = useState(-1);
 
     const [email, setEmail] = useState('');
-    // const [password, setPassword] = useState('');
     const [orgaizaciones, setOrganizaciones] = useState([]);
 
     const handleSubmit = async e => {
@@ -155,20 +147,6 @@ const RegisterAdmin = () => {
     const handleChange2 = (event) => {
         const name = event.target.name;
         setOrgSelect(event.target.value)
-        // console.log(event.target.value)
-        // setOrg({
-        //     ...org,
-        //     [name]: event.target.value,
-        // });
-        // if (event.target.value === 10) {
-        //     setOrg1('org 1');
-        // } else if (event.target.value === 20) {
-        //     setOrg1('org 2');
-        // } else if (event.target.value === 30) {
-        //     setOrg1('org 3');
-        // } else {
-        //     setOrg1('org 4');
-        // }
     };
 
 
@@ -214,7 +192,7 @@ const RegisterAdmin = () => {
       };
 
     return (
-        <Container component="main" maxWidth="sm">
+        <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -249,36 +227,6 @@ const RegisterAdmin = () => {
                             autoComplete="email"
                             autoFocus
                         />
-                        {/* <TextField
-                            value={password}
-                            onChange={handleChange}
-                            type="password"
-                            label="Password"
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            autoComplete="current-password"
-                        /> */}
-                        {/* <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel htmlFor="outlined-age-native-simple">Rol</InputLabel>
-                            <Select
-                                native
-                                value={rol.rol}
-                                name="rol"
-                                onChange={handleChange1}
-                                label="Rol"
-                                inputProps={{
-                                    name: 'rol',
-                                    id: 'rol',
-                                }}
-                            >
-                                <option aria-label="None" value="" />
-                                <option value={10}>Médico</option>
-                                <option value={20}>Paciente</option>
-                            </Select>
-                        </FormControl> */}
                         <FormControl variant="outlined" className={classes.formControl}>
                             <InputLabel htmlFor="outlined-age-native-simple">Organización</InputLabel>
                             <Select
@@ -299,10 +247,6 @@ const RegisterAdmin = () => {
 
                                     )
                                 })}
-                                
-                                {/* <option value={20}>Organización 2</option>
-                                <option value={30}>Organización 3</option>
-                                <option value={40}>...</option> */}
                             </Select>
                         </FormControl>
                         <div align="center">
@@ -310,6 +254,7 @@ const RegisterAdmin = () => {
                                 type="submit"
                                 variant="contained"
                                 color="primary"
+                                fullWidth
                                 className={classes.submit}
                             >
                                 Crear
