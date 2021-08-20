@@ -189,16 +189,15 @@ const Login = (props) => {
                 fullWidth
                 autoComplete="current-password"
               />
-              <div align="center">
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  className={classes.submit}
-                >
-                  Ingresar
-                </Button>
-              </div>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                className={classes.submit}
+              >
+                Ingresar
+              </Button>
 
             </div>
           </form>

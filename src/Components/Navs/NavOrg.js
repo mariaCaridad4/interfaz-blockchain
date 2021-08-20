@@ -15,7 +15,7 @@ import Navigation from '../Navigation';
 import CrearNvlAcc from '../AdminConsorcio/CrearNvlAcc';
 import EliminarNvlAcc from '../AdminConsorcio/ActualziarNvlAcc';
 import ActualizarOrg from '../AdminConsorcio/ActualizarOrg';
-import RegisterAdmin from '../RegisterAdmin';
+import RegisterAdmin from '../AdminConsorcio/RegisterAdmin';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;

@@ -7,19 +7,15 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
 import GavelIcon from '@material-ui/icons/Gavel';
 import Box from '@material-ui/core/Box';
-import { convertToObject } from 'typescript';
 import polservice from '../../server/pol.service';
 
 import Copyright from '../footer';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(1),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -32,15 +28,11 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(2),
     },
     form: {
-        width: '70%',
+        width: '100%',
         marginTop: theme.spacing(3),
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 180,
     },
 }));
 
@@ -95,112 +87,106 @@ export default function SignUp() {
             const newUsuario = {
                 nivel_acceso: na,
                 atributo: atributo,
-                
+
             }
             console.log(newUsuario);
-            polservice.crearPolitica(newUsuario) 
-            .then( (response)=>{
-                console.log(response)
-                if(response.status == 201){
-                    alert("Política creada correctamente!");
-                    setAtributo(null)
-                    setNA(null)
-                }else{
-                    alert("Hubo un incoveniente")
-                }
-                
-            })
+            polservice.crearPolitica(newUsuario)
+                .then((response) => {
+                    console.log(response)
+                    if (response.status == 201) {
+                        alert("Política creada correctamente!");
+                        setAtributo(null)
+                        setNA(null)
+                    } else {
+                        alert("Hubo un incoveniente")
+                    }
+
+                })
         } else {
             alert("Ningún campo debe estar vacío. Verifique su información.");
         }
         e.preventDefault();
     }
 
-    
+
     let onSubmit2 = (e) => {
-        if (id !== null ||id !== "" ) {
+        if (id !== null || id !== "") {
             const newUsuario = {
-                atributo: id,                
+                atributo: id,
             }
             // console.log(newUsuario);
-            polservice.crearAtributo(newUsuario) 
-            .then( (response)=>{
-                console.log(response)
-                if(response.status == 201){
-                    alert("Atributo creado correctamente!");
-                    setId("")
-                }else{
-                    alert("Hubo un incoveniente")
-                }
-                
-            })
+            polservice.crearAtributo(newUsuario)
+                .then((response) => {
+                    console.log(response)
+                    if (response.status == 201) {
+                        alert("Atributo creado correctamente!");
+                        setId("")
+                    } else {
+                        alert("Hubo un incoveniente")
+                    }
+
+                })
         } else {
             alert("Ningún campo debe estar vacío. Verifique su información.");
         }
         e.preventDefault();
     }
-    useEffect( () =>{
+    useEffect(() => {
         try {
             polservice.obtenerAtributos()
-            .then( (response)=>{
-                if(response.status === 200){
-                    console.log(response.data.msg)
-                    setAtributos(response.data.msg)
-                }
-            })
-            
+                .then((response) => {
+                    if (response.status === 200) {
+                        console.log(response.data.msg)
+                        setAtributos(response.data.msg)
+                    }
+                })
+
         } catch (error) {
-            
+
         }
     }, [])
     return (
         <>
-        <Container component="main" maxWidth="sm"  >
-            <CssBaseline />
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <GavelIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Crear atributo
-                </Typography>
-                <form onSubmit={onSubmit2} className={classes.form} noValidate>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                autoComplete="fname"
-                                name="firstName"
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="firstName"
-                                label="Id"
-                                autoFocus
-                                onChange={handleChange}
-                            />
-                        </Grid>
-
-                        
-
-                    </Grid>
-                    <div align="center">
+            <Container component="main" maxWidth="xs"  >
+                <CssBaseline />
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <GavelIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Crear atributo
+                    </Typography>
+                    <br></br>
+                    <form onSubmit={onSubmit2} className={classes.form} noValidate>
+                        <TextField
+                            autoComplete="fname"
+                            name="firstName"
+                            variant="outlined"
+                            required
+                            fullWidth
+                            id="firstName"
+                            label="Id"
+                            autoFocus
+                            onChange={handleChange}
+                        />
+                        <br></br>
+                        <br></br>
                         <Button
                             type="submit"
-                            //fullWidth
+                            fullWidth
                             variant="contained"
                             color="primary"
                             className={classes.submit}
                         >
                             Crear atributo
                         </Button>
-                    </div>
 
-                </form>
-            </div>
-            <Box mt={8}>
-                <Copyright />
-            </Box>
-        </Container>
+                    </form>
+                </div>
+                <Box mt={8}>
+                    <Copyright />
+                </Box>
+            </Container>
 
         </>
 

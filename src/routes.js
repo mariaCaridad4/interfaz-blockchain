@@ -19,7 +19,7 @@ import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 // Componentes 
 import Navigation from './Components/Navigation';
 import Login from './Components/Login';
-import Register from './Components/Register';
+import Register from './Components/Administrador/Register';
 import Content from './Components/Content';
 import Navpaciente from './Components/Navs/NavPaciente';
 import Navmedico from './Components/Navs/NavMedico';

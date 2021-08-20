@@ -15,7 +15,7 @@ import Tabla from './tablapolitica';
 
   const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -34,13 +34,10 @@ import Tabla from './tablapolitica';
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 180,
-    },
     root: {
         //display: 'flex',
-        width: 400,
+        //minwidth: '100%',
+        width: 600,
         marginTop: theme.spacing(5),
     },
 }));
@@ -51,7 +48,7 @@ export default function SignUp() {
 
 
     return (
-        <Container component="main" >
+        <Container component="main" maxWidth="sm" >
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>

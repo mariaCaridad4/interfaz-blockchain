@@ -11,14 +11,14 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Box from '@material-ui/core/Box';
-import orgService from '../server/org.service';
-import { MEDICO, PACIENTE } from '../constantes/constantes_roles';
+import orgService from '../../server/org.service';
+import { MEDICO, PACIENTE } from '../../constantes/constantes_roles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Copyright from './footer';
+import Copyright from '../footer';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(0),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -32,26 +32,15 @@ const useStyles = makeStyles((theme) => ({
     },
     form: {
         width: '100%', // Fix IE 11 issue.
-        marginTop: theme.spacing(1),
-        //alignItems: 'center',
+        marginTop: theme.spacing(-1),
     },
     submit: {
-        margin: theme.spacing(3, 0, 2),
-        //alignItems: 'center',
-        //marginLeft: theme.spacing(47),
+        margin: theme.spacing(3, 0, 1),
     },
     formControl: {
-        margin: theme.spacing(1),
-        //minWidth: 220,
-        alignItems: 'center',
-    },
-    grid: {
-        alignItems: 'center',
-        //marginLeft: theme.spacing(25),
-    },
-    link: {
-        color: "white",
-        textDecoration: "none",
+        margin: theme.spacing(3, 0, 1),
+        minWidth: '100%',
+        //alignItems: 'center',
     },
 }));
 
@@ -184,7 +173,7 @@ const Register = () => {
     //     setOrg1(user.org)
     // }, [org1])
     return (
-        <Container component="main" maxWidth="sm">
+        <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -196,7 +185,6 @@ const Register = () => {
                 <Typography component="h1" variant="h5">
                     de Organizacion: {org1}
                 </Typography>
-                <br></br>
                 <br></br>
                 <form className={classes.form} noValidate>
                     <div className="login-input">
@@ -224,23 +212,11 @@ const Register = () => {
                             autoFocus
                             onChange={handleChange}
                         />
-                       
-                        {/* <TextField
-                            value={password}
-                            onChange={handleChange}
-                            type="password"
-                            label="Password"
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            autoComplete="current-password"
-                        /> */}
                         <FormControl variant="outlined" className={classes.formControl}>
                             <InputLabel htmlFor="outlined-age-native-simple">Rol</InputLabel>
                             <Select
                                 native
+                                fullWidth
                                 value={rol.rol}
                                 name="rol"
                                 onChange={handleChange1}
@@ -255,46 +231,9 @@ const Register = () => {
                                 <option value={20}>Paciente</option>
                             </Select>
                         </FormControl>
-                        {/* <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel htmlFor="outlined-age-native-simple">Organización</InputLabel>
-                            <Select
-                                native
-                                value={org.rol}
-                                name="org"
-                                onChange={handleChange2}
-                                label="Organización"
-                                inputProps={{
-                                    name: 'organizacion',
-                                    id: 'org',
-                                }}
-                            >
-                                <option aria-label="None" value="" />
-                                <option value={10}>Organización 1</option>
-                                <option value={20}>Organización 2</option>
-                                <option value={30}>Organización 3</option>
-                                <option value={40}>...</option>
-                            </Select>
-                        </FormControl>
-                        <Typography component="h5" variant="h5">
-                            Organizacion
-                        </Typography>
-                        <TextField
-                            value={org1}
-                            // onChange={handleChange}
-                            disabled={true}
-                            type="text"
-                            label=""
-                            variant="outlined"
-                            margin="normal"
-                            name="orga"
-                            
-                            fullWidth
-                            autoComplete="orga"
-                            
-                        /> */}
                 
-                        <div className={classes.wrapper} align="center">
                             <Button
+                                fullWidth
                                 type="submit"
                                 variant="contained"
                                 color="primary"
@@ -305,7 +244,6 @@ const Register = () => {
                                 Crear
                             </Button>
                             {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                        </div>
                         <br></br>
                         <br></br>
 
@@ -324,89 +262,4 @@ const Register = () => {
 export default Register;
 
 
-/*
-<Grid item xs={12} sm={6} className={classes.grid} >
-                        <TextField
-                            value={nombre}
-                            autoComplete="firstName"
-                            name="firstName"
-                            variant="outlined"
-                            required
-                            fullWidth
-                            label="Nombre"
-                            autoFocus
-                            onChange={handleChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6} className={classes.grid}>
-                        <TextField
-                            value={email}
-                            onChange={handleChange}
-                            type="text"
-                            label="Cédula"
-                            variant="outlined"
-                            margin="normal"
-                            name="email"
-                            required
-                            fullWidth
-                            autoComplete="email"
-                            autoFocus
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6} className={classes.grid} >
-                        <TextField
-                            value={password}
-                            onChange={handleChange}
-                            type="password"
-                            label="Password"
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            autoComplete="current-password"
-                        />
-                    </Grid>
-                    <Grid item xs={12} className={classes.grid}>
-                        <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel htmlFor="outlined-age-native-simple">Rol</InputLabel>
-                            <Select
-                                native
-                                value={rol.rol}
-                                name="rol"
-                                onChange={handleChange1}
-                                label="Rol"
-                                inputProps={{
-                                    name: 'rol',
-                                    id: 'rol',
-                                }}
-                            >
-                                <option aria-label="None" value="" />
-                                <option value={10}>Médico</option>
-                                <option value={20}>Paciente</option>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} className={classes.grid}>
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel htmlFor="outlined-age-native-simple">Organización</InputLabel>
-                                <Select
-                                    native
-                                    value={org.rol}
-                                    name="org"
-                                    onChange={handleChange2}
-                                    label="Organización"
-                                    inputProps={{
-                                        name: 'organizacion',
-                                        id: 'org',
-                                    }}
-                                >
-                                    <option aria-label="None" value="" />
-                                    <option value={10}>Organización 1</option>
-                                    <option value={20}>Organización 2</option>
-                                    <option value={30}>Organización 3</option>
-                                    <option value={40}>...</option>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                        */
+                     

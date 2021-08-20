@@ -74,7 +74,7 @@ export default function FullWidthTabs() {
     return (
         <>
         <Navigation></Navigation>
-        <Container component="main" className={classes.root} >
+        <Container component="main" maxWidth="sm"  className={classes.root} >
             <CssBaseline />
             <div className={classes.paper}>
                 <AppBar position="static" color="default">

@@ -40,10 +40,12 @@ const useStyles = makeStyles((theme) => ({
   },
   form: {
     width: '100%', // Fix IE 11 issue.
+    height: '100%',
     marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    width: '60%'
   },
   link: {
     color: "white",
@@ -93,11 +95,13 @@ export default function SignInSide() {
               align="center"
               variant="contained"
               color="primary"
+              fullWidth
               className={classes.submit}
             >
               Iniciar
             </Button>
           </div>
+          
             <br></br>
             <br></br>
             <Box mt={5}>

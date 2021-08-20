@@ -13,16 +13,16 @@ import InputLabel from '@material-ui/core/InputLabel';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Box from '@material-ui/core/Box';
 import { navigate } from '@reach/router';
-import orgService from '../server/org.service';
-import { ADMIN } from '../constantes/constantes_roles';
+import orgService from '../../server/org.service';
+import { ADMIN } from '../../constantes/constantes_roles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { green } from '@material-ui/core/colors';
 
-import Copyright from './footer';
+import Copyright from '../footer';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -40,10 +40,11 @@ const useStyles = makeStyles((theme) => ({
         //alignItems: 'center',
     },
     submit: {
-        margin: theme.spacing(3, 0, 2),
+        margin: theme.spacing(3, 0, 1),
+        marginInline: -1,
     },
     formControl: {
-        margin: theme.spacing(3, 0, 2),
+        margin: theme.spacing(3, 0, 0),
         minWidth: '100%',
     },
     grid: {

@@ -27,7 +27,7 @@ import Copyright from '../footer';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -45,15 +45,9 @@ const useStyles = makeStyles((theme) => ({
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
-        //width: '70%',
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 180,
     },
     root: {
-        //display: 'flex',
-        width: 400,
+        width: '100%',
         marginTop: theme.spacing(5),
     },
     search: {
@@ -173,7 +167,7 @@ export default function SignUp() {
     }, [])
 
     return (
-        <Container component="main">
+        <Container component="main" maxWidth="sm">
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -186,7 +180,7 @@ export default function SignUp() {
                             <SearchIcon />
                         </div>
                         <InputBase
-                            placeholder="Search…"
+                            placeholder="Buscar..."
                             classes={{
                                 root: classes.inputRoot,
                                 input: classes.inputInput,

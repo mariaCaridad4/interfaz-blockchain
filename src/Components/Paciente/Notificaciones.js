@@ -20,7 +20,7 @@ import Copyright from '../footer';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

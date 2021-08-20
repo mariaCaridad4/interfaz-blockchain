@@ -19,7 +19,7 @@ import Copyright from '../footer';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(1),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(2),
     },
     form: {
-        width: '70%',
+        width: '100%',
         marginTop: theme.spacing(3),
     },
     submit: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 180,
+        minWidth: '100%',
     },
     buttonProgress: {
         color: green[500],
@@ -154,7 +154,7 @@ export default function SignUp() {
     }, [])
     return (
         <>
-        <Container component="main" maxWidth="sm" >
+        <Container component="main" maxWidth="xs" >
             <CssBaseline />
             <div className={classes.paper} align="center">
                 <Avatar className={classes.avatar}>
@@ -212,10 +212,9 @@ export default function SignUp() {
                         </Grid>
 
                     </Grid>
-                    <div align="center">
                         <Button
                             type="submit"
-                            //fullWidth
+                            fullWidth
                             variant="contained"
                             color="primary"
                             className={classes.submit}
@@ -224,7 +223,6 @@ export default function SignUp() {
                             Crear politica
                         </Button>
                         {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                    </div>
 
                 </form>
             </div>

@@ -28,7 +28,7 @@ import Copyright from '../footer';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -49,11 +49,11 @@ const useStyles = makeStyles((theme) => ({
     },
     formControl: {
         margin: theme.spacing(1),
-        minWidth: 180,
+        minWidth: '100%',
     },
     root: {
         //display: 'flex',
-        width: 400,
+        width: '100%',
         marginTop: theme.spacing(5),
     },
 
@@ -176,7 +176,7 @@ export default function SignUp() {
                 politica: [newPolitica]
             })
         }
-        e.preventDefault();
+        //e.preventDefault();
     }
 
 
@@ -210,7 +210,7 @@ export default function SignUp() {
       };
 
     return (
-        <Container component="main" >
+        <Container component="main" maxWidth="sm">
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>

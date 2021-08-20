@@ -154,6 +154,7 @@ export default function SignIn() {
                         type="submit"
                         variant="contained"
                         color="primary"
+                        fullWidth
                         onClick={handleClick}
                     >
                         Ver Información

@@ -10,27 +10,22 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import Card from '@material-ui/core/Card';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-  
-import EHR from './EHR';
+
 
 import medService from '../../server/med.service';
 import orgService from '../../server/org.service';
 
 import Copyright from '../footer';
 
-  const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -43,7 +38,6 @@ import Copyright from '../footer';
         marginBottom: theme.spacing(2),
     },
     root: {
-        //display: 'flex',
         width: 600,
         marginTop: theme.spacing(5),
     },
@@ -53,9 +47,7 @@ import Copyright from '../footer';
     },
     buttons: {
         display: 'flex',
-        width: 100,
-        paddingLeft: theme.spacing(7),
-        paddingRight: theme.spacing(-7),
+        //width: '100%',
     },
     submit: {
         margin: theme.spacing(3, 0, 0),
@@ -92,7 +84,6 @@ import Copyright from '../footer';
     },
     inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
         transition: theme.transitions.create('width'),
         width: '100%',
@@ -115,11 +106,11 @@ import Copyright from '../footer';
 }));
 
 const datos = [
-    
+
 ]
 
 const solicitudes = [
-   
+
 ]
 
 const paciente = [
@@ -184,12 +175,12 @@ export default function SignIn() {
         console.log(pol.politica);
     };
 
-    let onClick = async (id,nombre) => {
+    let onClick = async (id, nombre) => {
         console.log(id);
         const user = JSON.parse(String(sessionStorage.getItem("user")));
 
-        let resu = await medService.solicitarAcceso({paciente:id, medico:user.sub})
-        if(resu.data.success){
+        let resu = await medService.solicitarAcceso({ paciente: id, medico: user.sub })
+        if (resu.data.success) {
             alert("Solicitud de acceso enviada!");
 
         }
@@ -229,7 +220,7 @@ export default function SignIn() {
                 })
             };
         }
-        if (si && e.target.value!=='') {
+        if (si && e.target.value !== '') {
             alert("Paciente no encontrado.");
             const newPaciente = {
                 person: '/public/logo192.png',
@@ -243,33 +234,33 @@ export default function SignIn() {
         e.preventDefault();
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         try {
             const user = JSON.parse(String(sessionStorage.getItem("user")));
             console.log(user)
             medService.obtenerNotificaciones(user.sub)
-            .then(response =>{
-                // console.log(response)
-                if(response.status == 200){
-                    // console.log(response.data.msg)
-                    setSoli({solicitudes: response.data.msg})
-                    setState(response.data.msg)
-                }
-            })
+                .then(response => {
+                    // console.log(response)
+                    if (response.status == 200) {
+                        // console.log(response.data.msg)
+                        setSoli({ solicitudes: response.data.msg })
+                        setState(response.data.msg)
+                    }
+                })
             orgService.obtenerTipo(1).
-            then(response =>{
-              if(response.status == 200){
-                  setPac({paciente:response.data.msg})
-                //   console.log(response.data.msg)
-              }  
-            })
+                then(response => {
+                    if (response.status == 200) {
+                        setPac({ paciente: response.data.msg })
+                        //   console.log(response.data.msg)
+                    }
+                })
         } catch (error) {
-            
+
         }
-    },[])
+    }, [])
 
     return (
-        <Container component="main">
+        <Container component="main" maxWidth="ms">
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -293,7 +284,7 @@ export default function SignIn() {
                     </div>
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
-                            {pac.paciente.map(({ person, cedula, nombre,fecha }) => (
+                            {pac.paciente.map(({ person, cedula, nombre, fecha }) => (
                                 <React.Fragment key={cedula}>
                                     <div className={classes.demo}>
                                         <List>
@@ -302,49 +293,21 @@ export default function SignIn() {
                                                     <Avatar alt="Remy Sharp" src={person} className={classes.large} />
                                                 </ListItemAvatar>
                                                 <ListItemText primary={nombre} secondary={cedula} />
-                                                <ListItemSecondaryAction>
-                                                <form className={classes.form} noValidate>
-                                                        <Grid container>
-                                                            <Grid item ms={12}>
-                                                                <FormControl variant="outlined" className={classes.formContnivelacceso}>
-                                                                    <InputLabel htmlFor="outlined-age-native-simple">Nivel de Acceso</InputLabel>
-                                                                    <Select
-                                                                        native
-                                                                        fullWidth
-                                                                        value={nivelacceso.nivelacceso}
-                                                                        onChange={handleChange1}
-                                                                        label="Nivel de Acceso"
-                                                                        inputProps={{
-                                                                            name: 'nivelacceso',
-                                                                            id: 'outlined-age-native-simple',
-                                                                        }}
-                                                                    >
-                                                                        <option aria-label="None" value="" />
-                                                                        <option value={10}>Nivel 1</option>
-                                                                        <option value={20}>Nivel 2</option>
-                                                                        <option value={30}>Nivel 3</option>
-                                                                        <option value={40}>...</option>
-                                                                    </Select>
-                                                                </FormControl>
-                                                            </Grid>
-                                                        </Grid>
-                                                    </form>
-                                                </ListItemSecondaryAction>
                                             </ListItem>
                                             <ListItem >
-                                            <ListItemText>
-                                                <Button
+                                                <ListItemText className={classes.buttons} >
+                                                    <Button
                                                         type="submit"
-                                                        //fullWidth
+                                                        fullWidth
                                                         variant="contained"
                                                         color="primary"
                                                         className={classes.submit}
                                                         onClick={() => onClick(cedula, nombre)}
                                                     > Solicitar Acceso
-                                                </Button>
+                                                    </Button>
                                                 </ListItemText>
                                             </ListItem>
-                                        <br></br>                                   
+                                            <br></br>
                                         </List>
                                     </div>
                                 </React.Fragment>
@@ -355,8 +318,8 @@ export default function SignIn() {
 
             </div>
             <Box mt={8}>
-        <Copyright />
-      </Box>
+                <Copyright />
+            </Box>
         </Container>
     );
 }
