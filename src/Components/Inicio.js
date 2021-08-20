@@ -66,7 +66,7 @@ export default function SignInSide() {
   return (
     <>
     <Navigation></Navigation>
-    <Grid container component="main">
+    <Grid container component="main" maxWidth="ms">
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
