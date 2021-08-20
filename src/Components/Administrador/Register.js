@@ -81,9 +81,9 @@ const Register = () => {
             [name]: event.target.value,
         });
         console.log(event.target.value)
-        if (event.target.value === 20) {
+        if (event.target.value == 20) {
             setRol1(PACIENTE);
-        } else if(event.target.value === 10){
+        } else if(event.target.value == 10){
             setRol1(MEDICO);
         }else{
             setRol1(-1);
