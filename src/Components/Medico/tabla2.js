@@ -11,16 +11,16 @@ import TableRow from '@material-ui/core/TableRow';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-
-function createData(name, attribute) {
-  return { name, attribute };
-}
 
 const rows = [
-  createData('Corto y largo plazo', ''),
-  createData('Px: cáncer, EC, EPC, EG, EH, DM, Dislipidemia, ER', ''),
+  {
+    name: 'Corto y largo plazo',
+    attribute: 'Paciente 1',
+  },
+  {
+    name: 'Px: cáncer, EC, EPC, EG, EH, DM, Dislipidemia, ER',
+    attribute: '23',
+  },
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -137,7 +137,6 @@ export default function EnhancedTable() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -156,9 +155,6 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
@@ -170,7 +166,7 @@ export default function EnhancedTable() {
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size={'small'}
             aria-label="enhanced table"
           >
             <EnhancedTableHead
@@ -200,7 +196,7 @@ export default function EnhancedTable() {
                   );
                 })}
               {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                <TableRow style={{ height: (53) * emptyRows }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -217,10 +213,7 @@ export default function EnhancedTable() {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
+    
     </div>
   );
 }

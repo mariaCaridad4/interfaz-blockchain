@@ -11,25 +11,50 @@ import TableRow from '@material-ui/core/TableRow';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-
-function createData(name, attribute) {
-  return { name, attribute };
-}
 
 const rows = [
-  createData('Nombre', 'María Caridad Cáceres Salamea'),
-  createData('Edad', '22'),
-  createData('Ocupación', 'Ingeniera de Sistemas'),
-  createData('Estado Civil', 'Soltera'),
-  createData('Escolaridad', 'Tercer Nivel'),
-  createData('Consumo de alcohol', ''),
-  createData('Tabavo', ''),
-  createData('Drogas', ''),
-  createData('Actividad habitual', ''),
-  createData('Ejercicio físico', ''),
+  {
+    name: 'Nombre',
+    attribute: 'Paciente 1',
+  },
+  {
+    name: 'Edad',
+    attribute: '23',
+  },
+  {
+    name: 'Ocupación',
+    attribute: 'Ingeniero',
+  },
+  {
+    name: 'Estado Civil',
+    attribute: 'Soltero',
+  },
+  {
+    name: 'Escolaridad',
+    attribute: 'Tercer Nivel',
+  },
+  {
+    name: 'Consumo de alcohol',
+    attribute: '',
+  },
+  {
+    name: 'Tabaco',
+    attribute: '',
+  },
+  {
+    name: 'Drogas',
+    attribute: '',
+  },
+  {
+    name: 'Actividad habitual',
+    attribute: '',
+  },
+  {
+    name: 'Ejercicio físico',
+    attribute: '',
+  },
 ];
+
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -148,7 +173,6 @@ export default function EnhancedTable() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const handleRequestSort = (event, property) => {
@@ -167,10 +191,6 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
-
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   return (
@@ -181,7 +201,7 @@ export default function EnhancedTable() {
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size='small'
             aria-label="enhanced table"
           >
             <EnhancedTableHead
@@ -211,7 +231,7 @@ export default function EnhancedTable() {
                   );
                 })}
               {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                <TableRow style={{ height: (53) * emptyRows }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -228,10 +248,7 @@ export default function EnhancedTable() {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
+     
     </div>
   );
 }

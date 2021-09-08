@@ -16,20 +16,31 @@ import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
 
-function createData(id, nivel, nombre) {
-  return { id, nivel, nombre };
-}
 
 const rows = [
-  createData(1,'Nivel 1', 'Informacion Basica'),
-  createData(2,'Nivel 2', 'Informacion de Emergencia'),
-  createData(3,'Nivel 3', 'Informacion Cronica'),
-];
+  {
+    id: 1,
+    nivel: 'Nivel 1',
+    nombre: 'Informacion Basica',
+  },
+  {
+    id: 2,
+    nivel: 'Nivel 2',
+    nombre: 'Informacion de Emergencia',
+  },
+  {
+      id: 3,
+      nivel: 'Nivel 3',
+      nombre: 'Informacion Cronica',
+  },
+  {
+    id: 4,
+    nivel: 'Nivel 4',
+    nombre: 'Informacion de Ejemplo',
+  },
+]
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {

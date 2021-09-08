@@ -22,25 +22,30 @@ import polservice from '../../server/pol.service';
 
 
 
-const politica = [
+const rows = [
   {
-      id: '1',
-      nombre: 'Descripcion',
-      nivel_acceso: '',
+      id: '3',
+      nombre: 'Informacion Cronica',
+      nivel_acceso: 'Nivel 3',
+  },
+  {
+    id: '1',
+    nombre: 'Informacion Basica',
+    nivel_acceso: 'Nivel 1',
+  },
+  {
+    id: '2',
+    nombre: 'Informacion de Emergencia',
+    nivel_acceso: 'Nivel 2',
+  },
+  {
+    id: '4',
+    nombre: 'Informacion de Ejemplo',
+    nivel_acceso: 'Nivel 2',
   },
 ]
 
 
-
-function createData(id, nivel, nombre) {
-  return { id, nivel, nombre };
-}
-
-const rows = [
-  createData('1','Informacion Basica','Nivel 1'),
-  createData('2','Informacion de Emergencia','Nivel 2'),
-  createData('3','Informacion Cronica','Nivel 3', ),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -212,10 +217,10 @@ export default function EnhancedTable() {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  let [pol, setPol] = React.useState({//cambiar por rows con los datos correctos
+/*
+  let [row, setRows] = React.useState({//cambiar por rows con los datos correctos
     politica: politica
-});
+  });*/
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -270,7 +275,7 @@ export default function EnhancedTable() {
             if(response.status === 200){
                 console.log(response.data.msg)
                 // setAtributos(response.data.msg)
-                setPol({politica: response.data.msg})
+                //setPol({politica: response.data.msg})
             }
         })
 

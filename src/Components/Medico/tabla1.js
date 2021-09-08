@@ -11,23 +11,44 @@ import TableRow from '@material-ui/core/TableRow';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 
-function createData(name, attribute) {
-  return { name, attribute };
-}
+
 
 const rows = [
-  createData('Afección por alguna endermedad', ''),
-  createData('Lesión en curso', ''),
-  createData('Estado de hidratación', ''),
-  createData('Infecciones', ''),
-  createData('Fiebre', 'Tercer '),
-  createData('Heridas abiertas', ''),
-  createData('Fístulas', ''),
-  createData('Peso habitual, mínimo, máximo', ''),
+  {
+    name: 'Afección por alguna endermedad',
+    attribute: '',
+  },
+  {
+    name: 'Lesión en curso',
+    attribute: '',
+  },
+  {
+    name: 'Estado de hidrataciónd',
+    attribute: '',
+  },
+  {
+    name: 'Infecciones',
+    attribute: '',
+  },
+  {
+    name: 'Fiebre',
+    attribute: 'Tercer',
+  },
+  {
+    name: 'Heridas abiertas',
+    attribute: '',
+  },
+  {
+    name: 'Fístulas',
+    attribute: '',
+  },
+  {
+    name: 'Peso habitual, mínimo, máximo',
+    attribute: '',
+  },
 ];
+
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -54,14 +75,11 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
-
-
 function EnhancedTableHead(props) {
   const { onRequestSort } = props;
 
   return (<br></br>);
 }
-
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
   numSelected: PropTypes.number.isRequired,
@@ -71,6 +89,7 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
+
 
 const useToolbarStyles = makeStyles((theme) => ({
   root: {
@@ -121,9 +140,6 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginBottom: theme.spacing(2),
   },
-  table: {
-    //minWidth: 150,
-  },
   visuallyHidden: {
     border: 0,
     clip: 'rect(0 0 0 0)',
@@ -142,15 +158,15 @@ export default function EnhancedTable() {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-
+  
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -161,9 +177,6 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
-  };
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
@@ -175,7 +188,7 @@ export default function EnhancedTable() {
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size='small'
             aria-label="enhanced table"
           >
             <EnhancedTableHead
@@ -189,8 +202,7 @@ export default function EnhancedTable() {
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-
-                  return (
+                   return (
                     <TableRow
                       hover
                       tabIndex={-1}
@@ -202,10 +214,10 @@ export default function EnhancedTable() {
                       </TableCell>
                       <TableCell align="left">{row.attribute}</TableCell>
                     </TableRow>
-                  );
+                   );
                 })}
               {emptyRows > 0 && (
-                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                <TableRow style={{ height: (53) * emptyRows }}>
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
@@ -222,10 +234,6 @@ export default function EnhancedTable() {
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
     </div>
   );
 }
