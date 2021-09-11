@@ -13,12 +13,12 @@ const obtenerNotificaciones = async (id)=>{
  * @returns 
  */
 const solicitarAcceso = async (datos)=>{
-    return  await HttpClient.post("/medico//solicitarAcceso", datos)
+    return  await HttpClient.post("/medico/solicitarAcceso", datos)
 }
 
 
 const consumirAcceso= async (datos)=>{
-    return  await HttpClient.post("/medico//consumirAcceso", datos)
+    return  await HttpClient.post("/medico/consumirAcceso", datos)
 }
 
 

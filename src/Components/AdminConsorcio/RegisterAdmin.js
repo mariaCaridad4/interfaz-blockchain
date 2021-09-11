@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
         left: '50%',
         marginTop: -12,
         marginLeft: -12,
-      },
+    },
 }));
 
 
@@ -84,8 +84,8 @@ const RegisterAdmin = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        if (cedula !== "" && email !== ""      && orgSelect !== -1) {
-         
+        if (cedula !== "" && email !== "" && orgSelect !== -1) {
+
             const newUsuario = {
                 cedula: cedula,
                 correo: email,
@@ -95,102 +95,70 @@ const RegisterAdmin = () => {
             console.log(newUsuario);
             try {
                 orgService.crearAdmin(newUsuario)
-                .then( (response)=>{
-                    
-                    if(response.status === 201){
-                        setCedula("")
-                        setEmail("")
-                        setOrgSelect(-1)
-                        alert("Administrador creado correctamente!");
-                        
-                        // setOrganizaciones(response.data.msg)
-                    }else{
+                    .then((response) => {
 
-                        alert(response.data.msg)
-                    }
-                })
+                        if (response.status === 201) {
+                            setCedula("")
+                            setEmail("")
+                            setOrgSelect(-1)
+                            alert("Administrador creado correctamente!");
+
+                            // setOrganizaciones(response.data.msg)
+                        } else {
+
+                            alert(response.data.msg)
+                        }
+                    })
             } catch (error) {
-                
-                    // console.log(result.message);
-                    // navigate('/');
-                // } else {
-                    console.log(error);
-                // }
+                console.log(error);
             }
         } else {
             alert("Ningún campo debe estar vacío. Verifique su información.");
         }
-     
-
-        // const result = await (await fetch('http://localhost:4000/register', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         email: email,
-        //         password: password,
-        //     }),
-        // })).json();
-
-       
 
     };
 
     const handleChange = e => {
         if (e.currentTarget.name === 'email') {
             setEmail(e.currentTarget.value);
-        }else if (e.currentTarget.name === 'firstName') {
+        } else if (e.currentTarget.name === 'firstName') {
             setCedula(e.currentTarget.value);
         }
     };
 
     const handleChange2 = (event) => {
         const name = event.target.name;
+        console.log("here", name)
         setOrgSelect(event.target.value)
     };
 
-
-    // const handleChange1 = (event) => {
-    //     const name = event.target.name;
-    //     setRol({
-    //         ...rol,
-    //         [name]: event.target.value,
-    //     });
-    //     if (event.target.value === 20) {
-    //         setRol1('paciente');
-    //     } else {
-    //         setRol1('medico');
-    //     }
-    // };
-    
-    useEffect( () =>{
-        console.log('AQUIII USE EFECT adflaf')
+    useEffect(() => {
         try {
             orgService.obtenerOrganizaciones()
-            .then( (response)=>{
-                if(response.status === 200){
-                    setOrganizaciones(response.data.msg)
-                }
-            })
+                .then((response) => {
+                    if (response.status === 200) {
+                        console.log("here", response.data.msg)
+                        setOrganizaciones(response.data.msg)
+                    }
+                })
         } catch (error) {
-            
+
         }
         return () => {
             clearTimeout(timer.current);
-          };    
+        };
     }, [])
 
     const handleButtonClick = () => {
         if (!loading) {
-          setSuccess(false);
-          setLoading(true);
-          timer.current = window.setTimeout(() => {
-            setSuccess(true);
-            setLoading(false);
-          }, 2000);
+            setSuccess(false);
+            setLoading(true);
+            timer.current = window.setTimeout(() => {
+                setSuccess(true);
+                setLoading(false);
+            }, 2000);
         }
-      };
+    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -232,7 +200,6 @@ const RegisterAdmin = () => {
                             <InputLabel htmlFor="outlined-age-native-simple">Organización</InputLabel>
                             <Select
                                 native
-                                
                                 name="org"
                                 onChange={handleChange2}
                                 label="Organización"
@@ -242,11 +209,8 @@ const RegisterAdmin = () => {
                                 }}
                             >
                                 <option aria-label="None" value="-1" />
-                                {orgaizaciones.map( org =>{
-                                    return(
-                                        <option value={org.id}>{org.name}</option>
-
-                                    )
+                                {orgaizaciones.map(org => {
+                                    return (<option value={org.name}>{org.name}</option>)
                                 })}
                             </Select>
                         </FormControl>
@@ -261,11 +225,8 @@ const RegisterAdmin = () => {
                                 Crear
                             </Button>
                         </div>
-
-
                     </div>
                 </form>
-
             </div >
             <Box mt={8}>
                 <Copyright />
