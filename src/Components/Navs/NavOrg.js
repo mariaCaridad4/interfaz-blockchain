@@ -11,7 +11,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Navigation from '../Navigation';
 
-
+import CrearUsuario from '../AdminConsorcio/Register';
 import CrearNvlAcc from '../AdminConsorcio/CrearNvlAcc';
 import EliminarNvlAcc from '../AdminConsorcio/ActualziarNvlAcc';
 import ActualizarOrg from '../AdminConsorcio/ActualizarOrg';
@@ -97,7 +97,8 @@ export default function FullWidthTabs2() {
                         <Tab label="Crear Nivel de Acceso" {...a11yProps(0)} />
                         <Tab label="Actualizar Nivel de Acceso" {...a11yProps(1)} />
                         <Tab label="Actualizar Organización" {...a11yProps(2)} />
-                        <Tab label="Registrar Administrador" {...a11yProps(3)} />
+                        <Tab label="Crear Usuarios" {...a11yProps(3)} />
+                        <Tab label="Registrar Administrador" {...a11yProps(4)} />
                     </Tabs>
                 </AppBar>
                 <SwipeableViews
@@ -105,6 +106,7 @@ export default function FullWidthTabs2() {
                     index={value}
                     onChangeIndex={() =>{}}
                 >
+                   
                     <TabPanel value={value} index={0} dir={theme.direction}>
                         <CrearNvlAcc />
                     </TabPanel>
@@ -115,6 +117,9 @@ export default function FullWidthTabs2() {
                         <ActualizarOrg />
                     </TabPanel>
                     <TabPanel value={value} index={3} dir={theme.direction}>
+                        <CrearUsuario />
+                    </TabPanel>
+                    <TabPanel value={value} index={4} dir={theme.direction}>
                         <RegisterAdmin/>
                     </TabPanel>
                 </SwipeableViews>
