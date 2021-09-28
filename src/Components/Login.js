@@ -32,7 +32,7 @@ const clientId =
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(10),
   },
   google: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1.5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -184,7 +184,7 @@ const Login = (props) => {
       } else if (logoneado && user.role === ADMIN_ORGANIZACION) {
         history.push("/organizacion")
       } else {
-        history.push("/")
+        history.push("/paciente")
       }
     }
   };
