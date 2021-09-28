@@ -20,15 +20,15 @@ import { clearMessage } from "../actions/message";
 import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT,
-  SET_MESSAGE
 } from '../actions/types';
 
 import { GoogleLogin } from 'react-google-login';
 
 const { ADMIN, ADMIN_ORGANIZACION, PACIENTE, MEDICO } = require("../constantes/constantes_roles")
 const clientId =
-  '707788443358-u05p46nssla3l8tmn58tpo9r5sommgks.apps.googleusercontent.com';
+  '258755524897-vl9heiaun32raqjf38g4s5q45tdmqcok.apps.googleusercontent.com';
+
+/*clave: tCFa3DZOAyWdmD0IJ2YC7DHD*/
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -165,26 +165,22 @@ const Login = (props) => {
     );
     //refreshTokenSetup(res);
     setIsLoggedIn(true)
-    const user = JSON.parse(String(sessionStorage.getItem("user")));
+    const google_id = res.profileObj.googleId;
 
-    let logoneado = false
-    if (user) {
+    console.log(google_id);
+    if (google_id) {
+      console.log({ isLoggedIn, user });
+
       setIsLoggedIn(true)
-      logoneado = true;
 
-      console.log(user);
-      console.log(user.role === ADMIN);
-      console.log(logoneado && user.role === ADMIN);
-      if (logoneado && user.role === PACIENTE) {
+      console.log(google_id == "109641332530665051867")
+
+      if ( google_id == "109641332530665051867") {
         history.push("/paciente")
-      } else if (logoneado && user.role === MEDICO) {
-        history.push("/medico")
-      } else if (logoneado && user.role === ADMIN) {
-        history.push("/administrador")
-      } else if (logoneado && user.role === ADMIN_ORGANIZACION) {
-        history.push("/organizacion")
       } else {
-        history.push("/paciente")
+        history.push("/medico")
+        //history.push("/administrador")
+        //history.push("/organizacion")
       }
     }
   };
