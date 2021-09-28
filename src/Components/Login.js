@@ -23,8 +23,12 @@ import {
   LOGOUT,
   SET_MESSAGE
 } from '../actions/types';
-const { ADMIN, ADMIN_ORGANIZACION, PACIENTE, MEDICO } = require("../constantes/constantes_roles")
 
+import { GoogleLogin } from 'react-google-login';
+
+const { ADMIN, ADMIN_ORGANIZACION, PACIENTE, MEDICO } = require("../constantes/constantes_roles")
+const clientId =
+  '707788443358-u05p46nssla3l8tmn58tpo9r5sommgks.apps.googleusercontent.com';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -53,7 +57,13 @@ const useStyles = makeStyles((theme) => ({
   },
   footer: {
     marginTop: theme.spacing(10),
-  }
+  },
+  google: {
+    marginTop: theme.spacing(2),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
 }));
 
 
@@ -97,6 +107,7 @@ const Login = (props) => {
       let respuesta = await login(data.cedula, data.password)
       console.log("AQUIII para la respuesta")
       console.log(respuesta)
+      // eslint-disable-next-line default-case
       switch (respuesta.type) {
         case LOGIN_FAIL:
           setIsLoggedIn(false)
@@ -145,6 +156,42 @@ const Login = (props) => {
     } else {
       setPassword(e.currentTarget.value);
     }
+  };
+
+  const onSuccess = (res) => {
+    console.log('Login Success: currentUser:', res.profileObj);
+    alert(
+      `Bienvenido ${res.profileObj.name}.`
+    );
+    //refreshTokenSetup(res);
+    setIsLoggedIn(true)
+    const user = JSON.parse(String(sessionStorage.getItem("user")));
+
+    let logoneado = false
+    if (user) {
+      setIsLoggedIn(true)
+      logoneado = true;
+
+      console.log(user);
+      console.log(user.role === ADMIN);
+      console.log(logoneado && user.role === ADMIN);
+      if (logoneado && user.role === PACIENTE) {
+        history.push("/paciente")
+      } else if (logoneado && user.role === MEDICO) {
+        history.push("/medico")
+      } else if (logoneado && user.role === ADMIN) {
+        history.push("/administrador")
+      } else if (logoneado && user.role === ADMIN_ORGANIZACION) {
+        history.push("/organizacion")
+      } else {
+        history.push("/")
+      }
+    }
+  };
+
+  const onFailure = (res) => {
+    console.log('Login failed: res:', res);
+    alert('El usuario o contraseña no son los correrctos.')
   };
 
 
@@ -201,6 +248,27 @@ const Login = (props) => {
 
             </div>
           </form>
+        </div>
+
+        <div className={classes.google}>
+          <Typography component="h7" variant="h7">
+            O
+          </Typography>
+          <Typography component="h7" variant="h7">
+            Inicie Sesión con:
+          </Typography>
+        </div>
+
+        <div className={classes.google}>
+          <GoogleLogin
+            clientId={clientId}
+            buttonText="Gmail"
+            onSuccess={onSuccess}
+            onFailure={onFailure}
+            cookiePolicy={'single_host_origin'}
+            style={{ marginTop: '100px' }}
+            isSignedIn={true}
+          />
         </div>
         <Box mt={8} className={classes.paper}>
           <Copyright />
