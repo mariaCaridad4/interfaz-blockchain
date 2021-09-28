@@ -17,7 +17,7 @@ const obtenerUnaOrg = async (id)=>{
 
 /**
  * 
- * @param {datos} datos Tiene datos.organizacion se diferencia del otro
+ * @param {datos} datos Tiene datos organizacion se diferencia del otro
  * @returns 
  */
 const crearAdmin = async (datos)=>{

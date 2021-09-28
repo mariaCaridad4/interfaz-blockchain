@@ -105,7 +105,6 @@ const Register = () => {
             try {
                 orgService.crearAdmin(newUsuario)
                 .then( (response)=>{
-                    setLoading(false);
                     if(response.status === 201){
                         setCedula("")
                         setEmail("")
@@ -119,7 +118,8 @@ const Register = () => {
                         
                         // setOrganizaciones(response.data.msg)
                     }else{
-                        
+                        setLoading(false);
+                        console.log("here error", response)
                         alert(response.data.msg)
                     }
                 })

@@ -75,7 +75,7 @@ const RegisterAdmin = () => {
     });
 
     const [cedula, setCedula] = useState("");
-
+    const [password, setPassword] = useState("")
 
     const [orgSelect, setOrgSelect] = useState(-1);
 
@@ -85,33 +85,38 @@ const RegisterAdmin = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         if (cedula !== "" && email !== "" && orgSelect !== -1) {
-
+            if (!loading) {
+                setSuccess(false);
+                setLoading(true);
+            }
             const newUsuario = {
                 cedula: cedula,
                 correo: email,
                 id_tipo: ADMIN,
-                organizacion: orgSelect
+                organizacion: orgSelect,
+                password: password
             }
             console.log(newUsuario);
             try {
                 orgService.crearAdmin(newUsuario)
                     .then((response) => {
-
                         if (response.status === 201) {
                             setCedula("")
                             setEmail("")
+                            setPassword("")
                             setOrgSelect(-1)
                             alert("Administrador creado correctamente!");
-
-                            // setOrganizaciones(response.data.msg)
                         } else {
-
                             alert(response.data.msg)
                         }
+                        setSuccess(true);
+                        setLoading(false);
                     })
             } catch (error) {
                 console.log(error);
-            }
+                setSuccess(true);
+                setLoading(false);
+            } 
         } else {
             alert("Ningún campo debe estar vacío. Verifique su información.");
         }
@@ -123,12 +128,13 @@ const RegisterAdmin = () => {
             setEmail(e.currentTarget.value);
         } else if (e.currentTarget.name === 'firstName') {
             setCedula(e.currentTarget.value);
+        } else if (e.currentTarget.name === 'password') {
+            setPassword(e.currentTarget.value);
         }
     };
 
     const handleChange2 = (event) => {
         const name = event.target.name;
-        console.log("here", name)
         setOrgSelect(event.target.value)
     };
 
@@ -137,7 +143,6 @@ const RegisterAdmin = () => {
             orgService.obtenerOrganizaciones()
                 .then((response) => {
                     if (response.status === 200) {
-                        console.log("here", response.data.msg)
                         setOrganizaciones(response.data.msg)
                     }
                 })
@@ -148,17 +153,6 @@ const RegisterAdmin = () => {
             clearTimeout(timer.current);
         };
     }, [])
-
-    const handleButtonClick = () => {
-        if (!loading) {
-            setSuccess(false);
-            setLoading(true);
-            timer.current = window.setTimeout(() => {
-                setSuccess(true);
-                setLoading(false);
-            }, 2000);
-        }
-    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -196,6 +190,20 @@ const RegisterAdmin = () => {
                             autoComplete="email"
                             autoFocus
                         />
+
+                        <TextField
+                            value={password}
+                            onChange={handleChange}
+                            type="password"
+                            label="Password"
+                            variant="outlined"
+                            margin="normal"
+                            name="password"
+                            required
+                            fullWidth
+                            autoComplete="password"
+                            autoFocus
+                        />
                         <FormControl variant="outlined" className={classes.formControl}>
                             <InputLabel htmlFor="outlined-age-native-simple">Organización</InputLabel>
                             <Select
@@ -210,7 +218,7 @@ const RegisterAdmin = () => {
                             >
                                 <option aria-label="None" value="-1" />
                                 {orgaizaciones.map(org => {
-                                    return (<option value={org.name}>{org.name}</option>)
+                                    return (<option value={org.id}>{org.name}</option>)
                                 })}
                             </Select>
                         </FormControl>
