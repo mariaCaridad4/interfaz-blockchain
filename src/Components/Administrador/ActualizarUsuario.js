@@ -95,6 +95,7 @@ export default function SignUp() {
 
 
     const Baja = (cedula) => {
+        console.log(cedula.cedula)
         if (!loading) {
             setSuccess(false);
             setLoading(true);
@@ -102,21 +103,24 @@ export default function SignUp() {
             if (cedula) {
                 console.log()
                 try {
-                    orgService.eliminarUsuario(cedula)
+                    orgService.eliminarUsuario(cedula.cedula)
                         .then((response) => {
                             if (response.status === 201) {
                                 try {
                                     orgService.obtenerUsuario()
                                         .then((response) => {
+                                            setLoading(false);
                                             if (response.status === 200) {
                                                 setPac({ paciente: response.data.msg })
                                             }
+                                        }).catch( error =>{
+                                            console.log("error delet3", error)
                                         })
                                 } catch (error) {
-
+                                    setLoading(false);
+                                    console.log("error delet3", error)
                                 }
                                 alert('Usuario dado de baja correctamente.');
-                                setLoading(false); setLoading(false);
                             } else {
                                 setLoading(false);
                                 console.log("here error", response)
@@ -127,6 +131,8 @@ export default function SignUp() {
                     console.log(error);
                 }
             }
+            setLoading(false);
+
         }
         setLoading(true);
     };
@@ -162,16 +168,17 @@ export default function SignUp() {
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
                             {pac.paciente.map(({ cedula, nombre, rolusuario }) => (
+
                                 <React.Fragment key={cedula}>
                                     <div className={classes.demo}>
                                         <List>
                                             <ListItem>
-                                                <ListItemText 
-                                                primary={nombre} 
-                                                secondary={cedula} />
+                                                <ListItemText
+                                                    primary={nombre}
+                                                    secondary={cedula} />
                                                 <ListItemSecondaryAction>
                                                     <Button
-                                                        onClick={Baja({cedula})}
+                                                        onClick={() => Baja({ cedula })}
                                                         type="submit"
                                                         fullWidth
                                                         variant="contained"

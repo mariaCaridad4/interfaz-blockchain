@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -14,10 +14,11 @@ import Box from '@material-ui/core/Box';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import Button from '@material-ui/core/Button';
 
+import orgService from '../../server/org.service';
+
+
 import datos from '../datos/medicos.json';
 import Tabla from '../Medico/tabla';
-import Tabla1 from '../Medico/tabla1';
-import Tabla2 from '../Medico/tabla2';
 
 import Copyright from '../footer';
 
@@ -73,6 +74,8 @@ export default function SignIn() {
         datos: datos
     });
 
+    let [pac, setPac] = useState();
+
     const [mostrar1, setMostrar1] = useState(false);
     const [mostrar2, setMostrar2] = useState(false);
     const [mostrar3, setMostrar3] = useState(false);
@@ -97,19 +100,19 @@ export default function SignIn() {
             };
         }
 
-        console.log(nivelacceso==="3");
+        console.log(nivelacceso === "3");
         if (nivelacceso === "3") {
             console.log('se cumlpe 3');
             setMostrar3(true);
             setMostrar2(true);
             setMostrar1(true);
-            
-        }else if (nivelacceso === "2") {
+
+        } else if (nivelacceso === "2") {
             console.log('se cumlpe 2');
             setMostrar3(false);
             setMostrar2(true);
             setMostrar1(true);
-        }else if (nivelacceso === "1") {
+        } else if (nivelacceso === "1") {
             console.log('se cumlpe 1');
             setMostrar3(false);
             setMostrar2(false);
@@ -121,6 +124,22 @@ export default function SignIn() {
             setMostrar1(false);
         }
     };
+
+
+    useEffect(() => {
+        try {
+
+            orgService.obtenerTipo(1)
+                .then(response => {
+                    if (response.status == 200) {
+                        setPac({ paciente: response.data.msg })
+                        //   console.log(response.data.msg)
+                    }
+                })
+        } catch (error) {
+
+        }
+    }, [])
 
 
     return (
@@ -163,9 +182,9 @@ export default function SignIn() {
 
                 <Card className={classes.root}>
                     {mostrar1 && <h1 align="center">Historial Clínico Unificado</h1>}
-                    {mostrar1 && <Tabla/>}<br></br><br></br>
-                    {mostrar2 && <Tabla1 />}<br></br><br></br>
-                    {mostrar3 && <Tabla2 />}<br></br><br></br>
+                    {mostrar1 && <Tabla titulo={"Datos del Paciente y Motivos de la Consulta"} rows={rows} />}<br></br><br></br>
+                    {mostrar2 && <Tabla titulo={"Estado actual de salud"} rows={rows1} />}<br></br><br></br>
+                    {mostrar3 && <Tabla titulo={"Enfermedades Crónicas"} rows={rows2} />}<br></br><br></br>
                 </Card>
             </div>
             <Box mt={8}>
@@ -176,3 +195,92 @@ export default function SignIn() {
 }
 
 
+const rows = [
+    {
+        name: 'Nombre',
+        attribute: 'Paciente 1',
+    },
+    {
+        name: 'Edad',
+        attribute: '23',
+    },
+    {
+        name: 'Ocupación',
+        attribute: 'Ingeniero',
+    },
+    {
+        name: 'Estado Civil',
+        attribute: 'Soltero',
+    },
+    {
+        name: 'Escolaridad',
+        attribute: 'Tercer Nivel',
+    },
+    {
+        name: 'Consumo de alcohol',
+        attribute: '',
+    },
+    {
+        name: 'Tabaco',
+        attribute: '',
+    },
+    {
+        name: 'Drogas',
+        attribute: '',
+    },
+    {
+        name: 'Actividad habitual',
+        attribute: '',
+    },
+    {
+        name: 'Ejercicio físico',
+        attribute: '',
+    },
+];
+
+const rows1 = [
+    {
+        name: 'Afección por alguna endermedad',
+        attribute: '',
+    },
+    {
+        name: 'Lesión en curso',
+        attribute: '',
+    },
+    {
+        name: 'Estado de hidrataciónd',
+        attribute: '',
+    },
+    {
+        name: 'Infecciones',
+        attribute: '',
+    },
+    {
+        name: 'Fiebre',
+        attribute: 'Tercer',
+    },
+    {
+        name: 'Heridas abiertas',
+        attribute: '',
+    },
+    {
+        name: 'Fístulas',
+        attribute: '',
+    },
+    {
+        name: 'Peso habitual, mínimo, máximo',
+        attribute: '',
+    },
+];
+
+
+const rows2 = [
+    {
+        name: 'Corto y largo plazo',
+        attribute: 'Paciente 1',
+    },
+    {
+        name: 'Px: cáncer, EC, EPC, EG, EH, DM, Dislipidemia, ER',
+        attribute: '23',
+    },
+];

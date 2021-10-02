@@ -20,7 +20,7 @@ const obtenerNivelAcceso = async ()=>{
 }
 
 const eliminarUsuario = async (id)=>{
-    return  await HttpClient.get(`/registro/user/eliminar/${id}`)
+    return  await HttpClient.remove(`/registro/user/eliminar/${id}`)
 }
 
 
@@ -38,6 +38,10 @@ const crearMedEmergencia = async (datos)=>{
     return  await HttpClient.get("/medico/medico_emergencia/nuevo", datos)
 }
 
+const crearNivelAcceso = async (datos)=>{
+    return  await HttpClient.post("/nivel_acceso/nuevo", datos)
+}
+
 export default {
     obtenerOrganizaciones,
     crearAdmin,
@@ -47,5 +51,6 @@ export default {
     obtenerNivelAcceso,
     eliminarUsuario,
     crearMedEmergencia,
+    crearNivelAcceso
     
 }

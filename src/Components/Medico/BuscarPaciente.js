@@ -180,6 +180,7 @@ export default function SignIn() {
             setLoading(true);
 
             console.log(id);
+            console.log('AQUI');
             const user = JSON.parse(String(sessionStorage.getItem("user")));
 
             let resu = await medService.solicitarAcceso({ paciente: id, medico: user.sub })
@@ -188,7 +189,11 @@ export default function SignIn() {
                 //QUITAR PACIENTE DE LA LISTA
                 setLoading(false);
 
+            }else{
+                alert("Error al enviar la solicitud!");
+                console.log(resu)
             }
+            
         }
         setLoading(false);
 
@@ -285,12 +290,11 @@ export default function SignIn() {
                                                     <Avatar alt="Remy Sharp" src={person} className={classes.large} />
                                                 </ListItemAvatar>
                                                 <ListItemText primary={nombre} secondary={cedula} />
-                                            </ListItem>
-                                            <ListItem >
+                                                <ListItemText></ListItemText>
                                                 <ListItemText className={classes.buttons} >
                                                     <Button
                                                         type="submit"
-                                                        fullWidth
+                                                        //fullWidth
                                                         variant="contained"
                                                         color="primary"
                                                         className={classes.submit}
@@ -299,6 +303,7 @@ export default function SignIn() {
                                                     </Button>
                                                 </ListItemText>
                                             </ListItem>
+                                           
                                             <br></br>
                                         </List>
                                     </div>

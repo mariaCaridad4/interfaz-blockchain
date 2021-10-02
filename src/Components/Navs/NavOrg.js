@@ -15,7 +15,6 @@ import CrearUsuario from '../AdminConsorcio/Register';
 import CrearNvlAcc from '../AdminConsorcio/CrearNvlAcc';
 import EliminarNvlAcc from '../AdminConsorcio/ActualziarNvlAcc';
 import ActualizarOrg from '../AdminConsorcio/ActualizarOrg';
-import RegisterAdmin from '../AdminConsorcio/RegisterAdmin';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -70,10 +69,6 @@ export default function FullWidthTabs2() {
         setValue(newValue);
     };
 
-    const handleChangeIndex = (index) => {
-        console.log(index)
-        setValue(index);
-    };
 
     useEffect( () =>{
         console.log('AQUIII USE EFECT')
@@ -98,7 +93,6 @@ export default function FullWidthTabs2() {
                         <Tab label="Actualizar Nivel de Acceso" {...a11yProps(1)} />
                         <Tab label="Ver Organización" {...a11yProps(2)} />
                         <Tab label="Crear Usuarios" {...a11yProps(3)} />
-                        <Tab label="Registrar Administrador" {...a11yProps(4)} />
                     </Tabs>
                 </AppBar>
                 <SwipeableViews
@@ -118,9 +112,6 @@ export default function FullWidthTabs2() {
                     </TabPanel>
                     <TabPanel value={value} index={3} dir={theme.direction}>
                         <CrearUsuario />
-                    </TabPanel>
-                    <TabPanel value={value} index={4} dir={theme.direction}>
-                        <RegisterAdmin/>
                     </TabPanel>
                 </SwipeableViews>
             </div>

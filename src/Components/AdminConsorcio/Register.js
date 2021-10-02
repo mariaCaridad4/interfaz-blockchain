@@ -12,7 +12,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Box from '@material-ui/core/Box';
 import orgService from '../../server/org.service';
-import { MEDICO, PACIENTE } from '../../constantes/constantes_roles';
+import { MEDICO, PACIENTE, ADMIN } from '../../constantes/constantes_roles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Copyright from '../footer';
 
@@ -64,6 +64,8 @@ const Register = () => {
     const [email, setEmail] = useState('');
     // const [password, setPassword] = useState('');
 
+    const [orgaizaciones, setOrganizaciones] = useState([]);
+    const [orgSelect, setOrgSelect] = useState(-1);
 
     const handleChange = e => {
         if (e.currentTarget.name === 'email') {
@@ -85,11 +87,16 @@ const Register = () => {
             setRol1(PACIENTE);
         } else if (event.target.value == 10) {
             setRol1(MEDICO);
-        } else {
-            setRol1(-1);
+        } else if (event.target.value == 30){
+            setRol1(ADMIN);
 
         }
         console.log(rol1)
+    };
+
+    const handleChange2 = (event) => {
+        const name = event.target.name;
+        setOrgSelect(event.target.value)
     };
 
     const handleButtonClick = () => {
@@ -100,6 +107,7 @@ const Register = () => {
                     cedula: cedula,
                     correo: email,
                     id_tipo: rol1,
+                    organizacion: orgSelect,
                 }
                 console.log(newUsuario);
                 try {
@@ -109,6 +117,7 @@ const Register = () => {
                                 setCedula("")
                                 setEmail("")
                                 setRol1(-1)
+                                setOrgSelect(-1)
                                 setRol({
                                     rol: '',
                                     name: '',
@@ -150,6 +159,16 @@ const Register = () => {
         })
         // console.log(user.org)
         setOrg1(user.org)
+        try {
+            orgService.obtenerOrganizaciones()
+                .then((response) => {
+                    if (response.status === 200) {
+                        setOrganizaciones(response.data.msg)
+                    }
+                })
+        } catch (error) {
+
+        }
         return () => {
             // eslint-disable-next-line react-hooks/exhaustive-deps
             clearTimeout(timer.current);
@@ -213,6 +232,25 @@ const Register = () => {
                                 <option aria-label="None" value="" />
                                 <option value={10}>Médico</option>
                                 <option value={20}>Paciente</option>
+                                <option value={30}>Administrador</option>
+                            </Select>
+                        </FormControl>
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel htmlFor="outlined-age-native-simple">Organización</InputLabel>
+                            <Select
+                                native
+                                name="org"
+                                onChange={handleChange2}
+                                label="Organización"
+                                inputProps={{
+                                    name: 'organizacion',
+                                    id: 'org',
+                                }}
+                            >
+                                <option aria-label="None" value="-1" />
+                                {orgaizaciones.map(org => {
+                                    return (<option value={org.id}>{org.name}</option>)
+                                })}
                             </Select>
                         </FormControl>
 

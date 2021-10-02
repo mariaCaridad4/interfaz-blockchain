@@ -7,7 +7,7 @@ import React, { Component } from 'react';
 
 // import axios from 'axios';
 
-import Navigation from './Components/Navigation';
+//import Navigation from './Components/Navigation';
 // import Login from './Components/Login';
 // import Register from './Components/Register';
 // import Content from './Components/Content';
@@ -36,9 +36,9 @@ class App extends Component {
   //         }
   //     )
   // }
-  constructor(props) {
-    super(props);
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
   render() {
     return (
       <ThemeProvider theme={theme}>

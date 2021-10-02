@@ -12,7 +12,10 @@ import InputLabel from '@material-ui/core/InputLabel';
 import GavelIcon from '@material-ui/icons/Gavel';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
+
 import polservice from '../../server/pol.service';
+import orgservice from '../../server/org.service';
+
 import { green } from '@material-ui/core/colors';
 
 import Copyright from '../footer';
@@ -75,7 +78,8 @@ export default function SignUp() {
     const [id, setId] = React.useState(null);
     const [atributos, setAtributos] = React.useState([]);
     const [atributo, setAtributo] = React.useState(null);
-    const [na, setNA] = React.useState(null);
+    const [na, setNA] = React.useState([]);
+    const [nivel_acceso, setNivelAcceso] = React.useState(null);
 
 
     const handleChange1 = (event) => {
@@ -85,7 +89,7 @@ export default function SignUp() {
             ...rol,
             [name]: event.target.value,
         });
-        setNA(event.target.value);
+        setNivelAcceso(event.target.value);
     };
 
     const handleChange2 = (event) => {
@@ -98,20 +102,19 @@ export default function SignUp() {
         setAtributo(event.target.value)
     };
     let onSubmit = (e) => {
-        if (atributo !== null && na !== null) {
+        if (atributo !== null && nivel_acceso !== null) {
             const newUsuario = {
-                nivel_acceso: na,
+                nivel_acceso: nivel_acceso,
                 atributo: atributo,
-                
             }
             console.log(newUsuario);
             polservice.crearPolitica(newUsuario) 
             .then( (response)=>{
                 console.log(response)
-                if(response.status == 201){
+                if(response.status === 201){
                     alert("Política creada correctamente!");
                     setAtributo(null)
-                    setNA(null)
+                    setNivelAcceso(null)
                 }else{
                     alert("Hubo un incoveniente")
                 }
@@ -135,8 +138,7 @@ export default function SignUp() {
       };
 
     
-    useEffect( () =>{
-        
+    useEffect( () =>{     
         try {
             polservice.obtenerAtributos()
             .then( (response)=>{
@@ -145,7 +147,7 @@ export default function SignUp() {
                     setAtributos(response.data.msg)
                 }
             })
-            polservice.obtenerNivelAcceso()
+            orgservice.obtenerNivelAcceso()
             .then( (response)=>{
                 if(response.status === 200){
                     console.log(response.data.msg)
@@ -187,11 +189,11 @@ export default function SignUp() {
                                     }}
                                 >
                                     <option aria-label="None" value="" />
-                                    {/* {na.map( (atrcosaibuto) =>{
+                                    {na.map( (atrcosaibuto) =>{
                                         return(
                                         <option value={atrcosaibuto}>{atrcosaibuto}</option>
                                         )
-                                    })}  */}
+                                    })} 
                                 </Select>
                             </FormControl>
                         </Grid>

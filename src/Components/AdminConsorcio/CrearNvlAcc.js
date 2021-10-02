@@ -51,7 +51,6 @@ export default function SignUp() {
     const classes = useStyles();
 
     const [loading, setLoading] = React.useState(false);
-    const [success, setSuccess] = React.useState(false);
     const timer = React.useRef();
 
 
@@ -79,22 +78,23 @@ export default function SignUp() {
     // };
 
     let onSubmit = (e) => {
+        e.preventDefault();
         if (!loading) {
-            setSuccess(false);
             setLoading(true);
+            console.log("newNivel");
             if (id !== null && name !== null) {
                 const newNivel = {
-                    id: id,
-                    na: name,
+                    nivel_acceso: id,
                 }
-                console.log(newNivel);
                 try {
-                    orgService.obtenerNivelAcceso(newNivel)
+                    orgService.crearNivelAcceso(newNivel)
                         .then((response) => {
-                            if (response.status === 201) {
+                            console.log(response);
+                            if (response.status === 200) {
                                 setId("")
                                 setNA("")
                                 alert("Nivel de Acceso creado correctamente.");
+                                setLoading(false);
                             } else {
                                 setLoading(false);
                                 console.log("here error", response)
@@ -109,7 +109,7 @@ export default function SignUp() {
             }
         }
 
-        // e.preventDefault();
+        
     }
 
     return (
@@ -125,6 +125,7 @@ export default function SignUp() {
                 <form onSubmit={onSubmit} className={classes.form} noValidate>
                     <TextField
                         variant="outlined"
+                        value={id}
                         margin="normal"
                         required
                         fullWidth
@@ -138,6 +139,7 @@ export default function SignUp() {
                     <TextField
                         variant="outlined"
                         margin="normal"
+                        value={name}
                         required
                         fullWidth
                         name="name"

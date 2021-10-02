@@ -69,7 +69,7 @@ export default function SignUp() {
     let [pac, setPac] = React.useState({
         paciente: paciente
     });
-    let [emer, setEmer] = React.useState();
+    let [emer, setEmer] = React.useState([]);
 
 
     let Agregar = (cedula_emr) => {
@@ -135,18 +135,21 @@ export default function SignUp() {
         try {
             medService.obtenerMedico()
             .then( (response)=>{
+                console.log("medicos", response)
                 if(response.status === 200){
+
                     setPac({paciente: response.data.msg})
                 }
             })
             usuService.obtenerMedicosConfianza()
             .then( (response)=>{
+                console.log("AQUI2", response)
                 if(response.status === 200){
                     setEmer(response.data.msg)
                 }
             })
         } catch (error) {
-            
+            console.log("here", error)
         }
     }, [])
 
@@ -169,12 +172,13 @@ export default function SignUp() {
                             {pac.paciente.map(({ cedula, nombre, rolusuario }) => (
                                 <React.Fragment key={cedula}>
                                     <div className={classes.demo}>
+                                        
                                         <List>
                                             <ListItem>
                                                 <ListItemText primary={nombre} secondary={cedula} />
                                                 <ListItemSecondaryAction>
                                                     <Button
-                                                        onClick={Agregar({cedula})}
+                                                        onClick={()=>Agregar({cedula})}
                                                         type="submit"
                                                         fullWidth
                                                         variant="contained"
