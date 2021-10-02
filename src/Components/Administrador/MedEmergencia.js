@@ -66,19 +66,17 @@ export default function SignUp() {
     const [loading, setLoading] = React.useState(false);
 
 
-    let [pac, setPac] = React.useState({
-        paciente: paciente
-    });
+    let [pac, setPac] = React.useState([]);
     let [emer, setEmer] = React.useState([]);
 
 
-    let Agregar = (cedula_emr) => {
+    let Agregar = (cedulaemr) => {
         if (!loading) {
             setLoading(true);
-            if (cedula_emr !== '') {
-                console.log(cedula_emr)
+            if (cedulaemr !== '') {
+                console.log(cedulaemr)
                 try {
-                    usuService.agregarMedicoConfianza(cedula_emr)
+                    usuService.agregarMedicoConfianza(cedulaemr)
                         .then((response) => {
                             if (response.status === 201) {
                                  //PONER LISTA SIN MEDICOS DE EMERGENCIA                        
@@ -137,8 +135,7 @@ export default function SignUp() {
             .then( (response)=>{
                 console.log("medicos", response)
                 if(response.status === 200){
-
-                    setPac({paciente: response.data.msg})
+                    setPac(response.data.msg)
                 }
             })
             usuService.obtenerMedicosConfianza()
@@ -169,16 +166,16 @@ export default function SignUp() {
                 <Card className={classes.root}>
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
-                            {pac.paciente.map(({ cedula, nombre, rolusuario }) => (
-                                <React.Fragment key={cedula}>
+                            {pac.paciente.map((medico) => (
+                                <React.Fragment key={medico.cedula}>
                                     <div className={classes.demo}>
                                         
                                         <List>
                                             <ListItem>
-                                                <ListItemText primary={nombre} secondary={cedula} />
+                                                <ListItemText primary={medico.nombre} secondary={medico.cedula} />
                                                 <ListItemSecondaryAction>
                                                     <Button
-                                                        onClick={()=>Agregar({cedula})}
+                                                        onClick={()=>Agregar(medico.cedula)}
                                                         type="submit"
                                                         fullWidth
                                                         variant="contained"
@@ -189,7 +186,7 @@ export default function SignUp() {
                                                 </ListItemSecondaryAction>
                                             </ListItem>
                                             <ListItem>
-                                                <ListItemText secondary={rolusuario} />
+                                                <ListItemText secondary={medico.rolusuario} />
                                             </ListItem>
                                         </List>
                                        

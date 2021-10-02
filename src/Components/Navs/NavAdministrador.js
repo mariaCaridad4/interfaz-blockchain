@@ -122,7 +122,7 @@ export default function FullWidthTabs() {
                         <ActualizarPolitica />
                     </TabPanel>
                     <TabPanel value={value} index={4} dir={theme.direction}>
-                        <MedicoConfianza />
+                        {/* <MedicoConfianza /> */}
                     </TabPanel>
                     
                 </SwipeableViews>

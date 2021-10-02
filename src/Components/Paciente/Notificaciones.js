@@ -77,7 +77,7 @@ export default function Notificaciones() {
         const user = JSON.parse(String(sessionStorage.getItem("user")));
         usuService.obtenerNotificaciones(user.sub)
         .then(response =>{
-            if(response.status == 200){
+            if(response.status === 200){
                 setState(response.data.msg)
             }
         })
