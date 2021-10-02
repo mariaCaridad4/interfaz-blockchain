@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -10,12 +9,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import Card from '@material-ui/core/Card';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 import medService from '../../server/med.service';
@@ -132,6 +130,8 @@ const politica = [
 
 export default function SignIn() {
     const classes = useStyles();
+    const [loading, setLoading] = React.useState(false);
+
     let [state, setState] = useState({
         datos: datos
     });
@@ -176,63 +176,52 @@ export default function SignIn() {
     };
 
     let onClick = async (id, nombre) => {
-        console.log(id);
-        const user = JSON.parse(String(sessionStorage.getItem("user")));
+        if (!loading) {
+            setLoading(true);
 
-        let resu = await medService.solicitarAcceso({ paciente: id, medico: user.sub })
-        if (resu.data.success) {
-            alert("Solicitud de acceso enviada!");
+            console.log(id);
+            const user = JSON.parse(String(sessionStorage.getItem("user")));
 
+            let resu = await medService.solicitarAcceso({ paciente: id, medico: user.sub })
+            if (resu.data.success) {
+                alert("Solicitud de acceso enviada!");
+                //QUITAR PACIENTE DE LA LISTA
+                setLoading(false);
+
+            }
         }
-        // const newPaciente = {
-        //     person: '/public/logo192.png',
-        //     cedula: '',
-        //     nombre: ''
-        // };
-        // setPac({
-        //     paciente: [newPaciente]
-        // })
-        // const current = new Date();
-        // const newSolicitud = {
-        //     cedula: id,
-        //     nombre: nombre,
-        //     estado: "Pendiente",
-        //     ver: false,
-        //     fecha: `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`,
-        // };
-        // setSoli({
-        //     solicitudes: [...soli.solicitudes, newSolicitud]
-        // })
+        setLoading(false);
+
     }
 
-    let onSubmit = e => {
-        let si = true;
-        for (let i in state.datos) {
-            if (e.target.value === state.datos[i].cedula) {
-                const newPaciente = {
-                    person: '/public/logo192.png',
-                    cedula: e.target.value,
-                    nombre: state.datos[i].nombre
-                };
-                si = false;
-                setPac({
-                    paciente: [newPaciente]
-                })
-            };
-        }
-        if (si && e.target.value !== '') {
-            alert("Paciente no encontrado.");
-            const newPaciente = {
-                person: '/public/logo192.png',
-                cedula: '',
-                nombre: ''
-            };
-            setPac({
-                paciente: [newPaciente]
-            })
-        }
-        e.preventDefault();
-    }
+    // let onSubmit = e => {
+    //     let si = true;
+    //     for (let i in state.datos) {
+    //         if (e.target.value === state.datos[i].cedula) {
+    //             const newPaciente = {
+    //                 person: '/public/logo192.png',
+    //                 cedula: e.target.value,
+    //                 nombre: state.datos[i].nombre
+    //             };
+    //             si = false;
+    //             setPac({
+    //                 paciente: [newPaciente]
+    //             })
+    //         };
+    //     }
+    //     if (si && e.target.value !== '') {
+    //         alert("Paciente no encontrado.");
+    //         const newPaciente = {
+    //             person: '/public/logo192.png',
+    //             cedula: '',
+    //             nombre: ''
+    //         };
+    //         setPac({
+    //             paciente: [newPaciente]
+    //         })
+    //     }
+    //     e.preventDefault();
+    // }
 
     useEffect(() => {
         try {
@@ -247,8 +236,8 @@ export default function SignIn() {
                         setState(response.data.msg)
                     }
                 })
-            orgService.obtenerTipo(1).
-                then(response => {
+            orgService.obtenerTipo(1)
+                .then(response => {
                     if (response.status == 200) {
                         setPac({ paciente: response.data.msg })
                         //   console.log(response.data.msg)
@@ -267,8 +256,10 @@ export default function SignIn() {
                     <AssignmentIndIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">Buscar Paciente</Typography>
+                <br></br>
+                {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                 <Card className={classes.root}>
-                    <div onClick={onSubmit} className={classes.search} >
+                    {/* <div onClick={onSubmit} className={classes.search} >
                         <div className={classes.searchIcon}>
                             <SearchIcon />
                         </div>
@@ -281,7 +272,8 @@ export default function SignIn() {
                             name="buscar"
                             inputProps={{ 'aria-label': 'search' }}
                         ></InputBase>
-                    </div>
+                    </div> */}
+                    
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
                             {pac.paciente.map(({ person, cedula, nombre, fecha }) => (

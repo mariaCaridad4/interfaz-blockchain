@@ -3,13 +3,13 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import GavelIcon from '@material-ui/icons/Gavel';
 import Box from '@material-ui/core/Box';
 import polservice from '../../server/pol.service';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Copyright from '../footer';
 
@@ -38,99 +38,44 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
     const classes = useStyles();
-
-    const [rol, setRol] = React.useState({
-        rol: '',
-        name: '',
-    });
-    const [rol2, setRol2] = React.useState({
-        rol: '',
-        name: '',
-    });
-
-    const [org, setOrg] = React.useState({
-        org: '',
-        name: '',
-    });
+    const [loading, setLoading] = React.useState(false);
 
     const [id, setId] = React.useState(null);
     const [atributos, setAtributos] = React.useState([]);
-    const [atributo, setAtributo] = React.useState(null);
-    const [na, setNA] = React.useState(null);
 
     const handleChange = (e) => {
-        setId(e.target.value);
-    }
-
-
-    const handleChange1 = (event) => {
-        const name = event.target.name;
-        console.log(event.target.value)
-        setRol({
-            ...rol,
-            [name]: event.target.value,
-        });
-        setNA(event.target.value);
-    };
-
-    const handleChange2 = (event) => {
-        const name = event.target.name;
-        // console.log(event.target.value)
-        setRol2({
-            ...rol,
-            [name]: event.target.value,
-        });
-        setAtributo(event.target.value)
-    };
-    let onSubmit = (e) => {
-        if (atributo !== null && na !== null) {
-            const newUsuario = {
-                nivel_acceso: na,
-                atributo: atributo,
-
-            }
-            console.log(newUsuario);
-            polservice.crearPolitica(newUsuario)
-                .then((response) => {
-                    console.log(response)
-                    if (response.status == 201) {
-                        alert("Política creada correctamente!");
-                        setAtributo(null)
-                        setNA(null)
-                    } else {
-                        alert("Hubo un incoveniente")
-                    }
-
-                })
-        } else {
-            alert("Ningún campo debe estar vacío. Verifique su información.");
-        }
-        e.preventDefault();
+        setId(e.currentTarget.value);
     }
 
 
     let onSubmit2 = (e) => {
-        if (id !== null || id !== "") {
-            const newUsuario = {
-                atributo: id,
-            }
-            // console.log(newUsuario);
-            polservice.crearAtributo(newUsuario)
-                .then((response) => {
-                    console.log(response)
-                    if (response.status == 201) {
-                        alert("Atributo creado correctamente!");
+        if (!loading) {
+            setLoading(true);
+            if (id !== null || id !== "") {
+                const newUsuario = {
+                    atributo: id,
+                }
+                // console.log(newUsuario);
+                polservice.crearAtributo(newUsuario)
+                    .then((response) => {
+                        console.log(response)
+                        if (response.status == 201) {
+                            alert("Atributo creado correctamente!");
+                            setId("")
+                        } else {
+                            alert("Hubo un incoveniente")
+                        }
                         setId("")
-                    } else {
-                        alert("Hubo un incoveniente")
-                    }
-
-                })
-        } else {
-            alert("Ningún campo debe estar vacío. Verifique su información.");
+                        setLoading(false);
+                    })
+            } else {
+                alert("Ningún campo debe estar vacío. Verifique su información.");
+                setLoading(false);
+            }
+            e.preventDefault();
         }
-        e.preventDefault();
     }
+
     useEffect(() => {
         try {
             polservice.obtenerAtributos()
@@ -159,12 +104,11 @@ export default function SignUp() {
                     <br></br>
                     <form onSubmit={onSubmit2} className={classes.form} noValidate>
                         <TextField
-                            autoComplete="fname"
-                            name="firstName"
+                            value={id}
+                            name="id"
                             variant="outlined"
                             required
                             fullWidth
-                            id="firstName"
                             label="Id"
                             autoFocus
                             onChange={handleChange}
@@ -182,6 +126,8 @@ export default function SignUp() {
                         </Button>
 
                     </form>
+                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+
                 </div>
                 <Box mt={8}>
                     <Copyright />

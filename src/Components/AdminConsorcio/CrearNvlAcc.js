@@ -11,6 +11,8 @@ import Container from '@material-ui/core/Container';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { green } from '@material-ui/core/colors';
 
+import orgService from '../../server/org.service';
+
 import Copyright from '../footer';
 
 const useStyles = makeStyles((theme) => ({
@@ -56,44 +58,58 @@ export default function SignUp() {
     const [id, setId] = React.useState(null);
     const [name, setNA] = React.useState(null);
 
-    const handleChange1 = (e) => {
-        setId(e.target.value);
+    const handleChange = (e) => {
+        if (e.currentTarget.name === 'id') {
+            setId(e.currentTarget.value);
+        } else if (e.currentTarget.name === 'name') {
+            setNA(e.currentTarget.value);
+        }
+      
     }
-    const handleChange2 = (e) => {
-        setNA(e.target.value);
-    }
+
 
     React.useEffect(() => {
         return () => {
-          clearTimeout(timer.current);
+            clearTimeout(timer.current);
         };
-      }, []);
-    
-      const handleButtonClick = () => {
-        if (!loading) {
-          setSuccess(false);
-          setLoading(true);
-          timer.current = window.setTimeout(() => {
-            setSuccess(true);
-            setLoading(false);
-          }, 2000);
-        }
-      };
+    }, []);
 
-      let onSubmit = (e) => {
+    // const handleButtonClick = () => {
         
-        if (id !== null && name !== null) {
-            
-            const newUsuario = {
-                id: id,
-                na: name,
+    // };
+
+    let onSubmit = (e) => {
+        if (!loading) {
+            setSuccess(false);
+            setLoading(true);
+            if (id !== null && name !== null) {
+                const newNivel = {
+                    id: id,
+                    na: name,
+                }
+                console.log(newNivel);
+                try {
+                    orgService.obtenerNivelAcceso(newNivel)
+                        .then((response) => {
+                            if (response.status === 201) {
+                                setId("")
+                                setNA("")
+                                alert("Nivel de Acceso creado correctamente.");
+                            } else {
+                                setLoading(false);
+                                console.log("here error", response)
+                                alert(response.data.msg)
+                            }
+                        })
+                } catch (error) {
+                    console.log("no llama a la funci'on");
+                }
+            } else {
+                alert("Ningún campo debe estar vacío. Verifique su información.");
             }
-            console.log(newUsuario);
-            alert("Nivel de Acceso creado correctamente!");
-        }else{
-            alert("Ningún campo debe estar vacío. Verifique su información.");
         }
-       // e.preventDefault();
+
+        // e.preventDefault();
     }
 
     return (
@@ -104,7 +120,7 @@ export default function SignUp() {
                     <LockOpenIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                Crear Nivel de Acceso
+                    Crear Nivel de Acceso
                 </Typography>
                 <form onSubmit={onSubmit} className={classes.form} noValidate>
                     <TextField
@@ -117,7 +133,7 @@ export default function SignUp() {
                         name="id"
                         autoComplete="id"
                         autoFocus
-                        onChange={handleChange1}
+                        onChange={handleChange}
                     />
                     <TextField
                         variant="outlined"
@@ -128,7 +144,7 @@ export default function SignUp() {
                         label="Nombre"
                         id="name"
                         autoComplete="Nombre"
-                        onChange={handleChange2}
+                        onChange={handleChange}
                     />
                     <Button
                         type="submit"
@@ -136,9 +152,9 @@ export default function SignUp() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={handleButtonClick}
+                        //onClick={handleButtonClick}
                     >
-                       Crear
+                        Crear
                     </Button>
                     {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
 

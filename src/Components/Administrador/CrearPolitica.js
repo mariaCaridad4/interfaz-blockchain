@@ -136,12 +136,20 @@ export default function SignUp() {
 
     
     useEffect( () =>{
+        
         try {
             polservice.obtenerAtributos()
             .then( (response)=>{
                 if(response.status === 200){
                     console.log(response.data.msg)
                     setAtributos(response.data.msg)
+                }
+            })
+            polservice.obtenerNivelAcceso()
+            .then( (response)=>{
+                if(response.status === 200){
+                    console.log(response.data.msg)
+                    setNA(response.data.msg)
                 }
             })
             
@@ -179,10 +187,11 @@ export default function SignUp() {
                                     }}
                                 >
                                     <option aria-label="None" value="" />
-                                    <option value={1}>Nivel 1</option>
-                                    <option value={2}>Nivel 2</option>
-                               
-                                    <option value={-1}>...</option>
+                                    {/* {na.map( (atrcosaibuto) =>{
+                                        return(
+                                        <option value={atrcosaibuto}>{atrcosaibuto}</option>
+                                        )
+                                    })}  */}
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -193,7 +202,7 @@ export default function SignUp() {
                                     native
                                     value={rol2.rol}
                                     onChange={handleChange2}
-                                    label="Nivel de Acceso"
+                                    label="Atributo"
                                     inputProps={{
                                         name: 'rol',
                                         id: 'outlined-age-native-simple',

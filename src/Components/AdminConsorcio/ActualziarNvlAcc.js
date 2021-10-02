@@ -52,6 +52,30 @@ const nivel = [
     },
 ]
 
+const lista = [
+    {
+        id: '3',
+        nombre: 'Informacion Cronica',
+        nivel: 'Nivel 3',
+    },
+    {
+      id: '1',
+      nombre: 'Informacion Basica',
+      nivel: 'Nivel 1',
+    },
+    {
+      id: '2',
+      nombre: 'Informacion de Emergencia',
+      nivel: 'Nivel 2',
+    },
+    {
+      id: '4',
+      nombre: 'Informacion de Ejemplo',
+      nivel: 'Nivel 2',
+    },
+  ]
+  
+
 export default function SignUp() {
     const classes = useStyles();
 
@@ -77,8 +101,7 @@ export default function SignUp() {
 
                 <Card className={classes.root}>
                     <div className={classes.details}>
-                        <Tabla />
-                        
+                        <Tabla rows={lista}/>
                     </div>
                 </Card>
             </div>

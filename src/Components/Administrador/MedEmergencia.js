@@ -7,20 +7,18 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Card from '@material-ui/core/Card';
-import SearchIcon from '@material-ui/icons/Search';
-import InputBase from '@material-ui/core/InputBase';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import CardContent from '@material-ui/core/CardContent';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import orgService from '../../server/org.service';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import usuService from '../../server/usu.service';
+import medService from '../../server/med.service';
 
-import datos from '../datos/usuarios.json';
 
 import Copyright from '../footer';
 
@@ -50,38 +48,6 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         marginTop: theme.spacing(5),
     },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        backgroundColor: '#ECE0F8',
-        [theme.breakpoints.up('sm')]: {
-            width: 'auto',
-        },
-    },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    inputRoot: {
-        color: 'inherit',
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
-    },
 }));
 
 const paciente = [
@@ -92,73 +58,91 @@ const paciente = [
     },
 ]
 
+
 export default function SignUp() {
     const classes = useStyles();
     const current = new Date();
     const date  = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+    const [loading, setLoading] = React.useState(false);
 
-    let [state, setState] = React.useState({
-        datos: datos
-    });
 
     let [pac, setPac] = React.useState({
         paciente: paciente
     });
+    let [emer, setEmer] = React.useState();
 
 
-    let Baja = (e) => {
-        const newPaciente = {
-            cedula: 'Cédula',
-            nombre: 'Usuario',
-            rolusuario: '',
-        };
-        setPac({
-            paciente: [newPaciente]
-        })
-        alert('Médico agregado correctamente a la lista.');    
+    let Agregar = (cedula_emr) => {
+        if (!loading) {
+            setLoading(true);
+            if (cedula_emr !== '') {
+                console.log(cedula_emr)
+                try {
+                    usuService.agregarMedicoConfianza(cedula_emr)
+                        .then((response) => {
+                            if (response.status === 201) {
+                                 //PONER LISTA SIN MEDICOS DE EMERGENCIA                        
+                                alert('Médico agregado correctamente a la lista.');   
+                                setLoading(false);
+                            } else {
+                                setLoading(false);
+                                console.log("here error", response)
+                                alert(response.data.msg)
+                            }
+                        })
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
     };
 
     let onClick = (id,fecha) => {
-        alert("El médico ya no se encuentra en su lista de Médicos de Confianza!");
-        console.log(id,fecha);
-        setState({datos: state.datos.filter(item => item.id !== id)});
+        if (!loading) {
+            setLoading(true);
+            try {
+                usuService.eliminarMedicoConfianza(id)
+                    .then((response) => {
+                        if (response.status === 201) {
+                            try {
+                                usuService.obtenerMedEmergencia()
+                                .then( (response)=>{
+                                    if(response.status === 200){
+                                        setEmer(response.data.msg)
+                                    }
+                                })
+                            } catch (error) {
+                                
+                            }        
+                            alert("El médico ya no se encuentra en su lista de Médicos de Emergencia!");
+                            setLoading(false);
+                        } else {
+                            setLoading(false);
+                            console.log("here error", response)
+                            alert(response.data.msg)
+                        }
+                    })
+            } catch (error) {
+                console.log(error);
+            }
+        }
     }
 
 
-    let onSubmit = e => {
-        let si = true;
-        for (let i in state.datos) {
-            if (e.target.value === state.datos[i].cedula) {
-                const newPaciente = {
-                    cedula: e.target.value,
-                    nombre: state.datos[i].nombre,
-                    rolusuario: state.datos[i].rolusuario,
-                };
-                si = false;
-                setPac({
-                    paciente: [newPaciente]
-                })
-            };
-        }
-        if (si && e.target.value !== '') {
-            alert("Médico no encontrador");
-            const newPaciente = {
-                cedula: 'Cédula',
-                nombre: 'Usuario',
-                rolusuario: '',
-            };
-            setPac({
-                paciente: [newPaciente]
-            })
-        }
-        e.preventDefault();
-    }
+    
+
     useEffect( () =>{
         try {
-            orgService.obtenerUsuario()
+            medService.obtenerMedico()
             .then( (response)=>{
                 if(response.status === 200){
                     setPac({paciente: response.data.msg})
+                }
+            })
+            usuService.obtenerMedicosConfianza()
+            .then( (response)=>{
+                if(response.status === 200){
+                    setEmer(response.data.msg)
                 }
             })
         } catch (error) {
@@ -174,22 +158,11 @@ export default function SignUp() {
                     <PersonAddIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">Médicos de Emergencia </Typography>
-                <Card className={classes.root}>
-                    <div onClick={onSubmit} className={classes.search} >
-                        <div className={classes.searchIcon}>
-                            <SearchIcon />
-                        </div>
-                        <InputBase
-                            placeholder="Buscar..."
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            name="buscar"
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </div>
-                </Card>
+                
+                <br></br>
+                <br></br>
+                <br></br>
+                <Typography component="h6" variant="h6">Médicos para agregar a la lista</Typography>
                 <Card className={classes.root}>
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
@@ -201,7 +174,7 @@ export default function SignUp() {
                                                 <ListItemText primary={nombre} secondary={cedula} />
                                                 <ListItemSecondaryAction>
                                                     <Button
-                                                        onClick={Baja}
+                                                        onClick={Agregar({cedula})}
                                                         type="submit"
                                                         fullWidth
                                                         variant="contained"
@@ -222,19 +195,23 @@ export default function SignUp() {
                         </CardContent>
                     </div>
                 </Card>
-
+                
+                <br></br>
+                <br></br>
+                <br></br>
+                <Typography component="h6" variant="h6">Médicos para eliminar de la lista</Typography>
                 <Card className={classes.root} >
-                    {pac.paciente.map(({ cedula, nombre, rolusuario }) => (
-                        <React.Fragment key={cedula}>
+                    {emer.map((medico) => (
+                        <React.Fragment key={medico.cedula}>
                             <div className={classes.details}>
                                 <div className={classes.demo}>
                                     <List>
                                         <ListItem>
-                                            <ListItemText primary={cedula} secondary={date} />
-                                            <ListItemText primary={rolusuario}/>
+                                            <ListItemText primary={medico.cedula} secondary={date} />
+                                            <ListItemText primary={medico.rolusuario}/>
                                             <ListItemText primary="Nivel de acceso"/>
                                             <ListItemSecondaryAction>
-                                                <IconButton edge="end" aria-label="delete" onClick={() => onClick(cedula, date)}>
+                                                <IconButton edge="end" aria-label="delete" onClick={() => onClick(medico.cedula, date)}>
                                                     <DeleteIcon />
                                                 </IconButton>
                                             </ListItemSecondaryAction>

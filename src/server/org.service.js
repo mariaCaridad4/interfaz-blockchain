@@ -15,6 +15,16 @@ const obtenerUnaOrg = async (id)=>{
     return  await HttpClient.get(`/registro/organizacion/obtener/${id}`)
 }
 
+const obtenerNivelAcceso = async ()=>{
+    return  await HttpClient.get("/nivel_acceso/obtener")
+}
+
+const eliminarUsuario = async (id)=>{
+    return  await HttpClient.get(`/registro/user/eliminar/${id}`)
+}
+
+
+
 /**
  * 
  * @param {datos} datos Tiene datos organizacion se diferencia del otro
@@ -22,6 +32,10 @@ const obtenerUnaOrg = async (id)=>{
  */
 const crearAdmin = async (datos)=>{
     return  await HttpClient.post("/registro/user/nuevo", datos)
+} 
+
+const crearMedEmergencia = async (datos)=>{
+    return  await HttpClient.get("/medico/medico_emergencia/nuevo", datos)
 }
 
 export default {
@@ -29,6 +43,9 @@ export default {
     crearAdmin,
     obtenerUnaOrg,
     obtenerUsuario,
-    obtenerTipo
+    obtenerTipo,
+    obtenerNivelAcceso,
+    eliminarUsuario,
+    crearMedEmergencia,
     
 }

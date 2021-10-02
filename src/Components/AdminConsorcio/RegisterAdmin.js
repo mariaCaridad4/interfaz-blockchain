@@ -69,11 +69,6 @@ const RegisterAdmin = () => {
     const [success, setSuccess] = React.useState(false);
     const timer = React.useRef();
 
-    const [org, setOrg] = useState({
-        org: '',
-        name: '',
-    });
-
     const [cedula, setCedula] = useState("");
     const [password, setPassword] = useState("")
 
@@ -168,6 +163,7 @@ const RegisterAdmin = () => {
                     <div className="login-input">
                         <TextField
                             value={cedula}
+                            type="number"
                             autoComplete="firstName"
                             name="firstName"
                             variant="outlined"

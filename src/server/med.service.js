@@ -7,6 +7,10 @@ const obtenerNotificaciones = async (id)=>{
     return  await HttpClient.get(`/medico/obtenerNotificaciones/${id}`)
 }
 
+const obtenerMedico = async ()=>{
+    return  await HttpClient.get('/medico/obtener')
+}
+
 /**
  * 
  * @param {datos} datos Tiene datos.organizacion se diferencia del otro
@@ -25,5 +29,6 @@ const consumirAcceso= async (datos)=>{
 export default {
     solicitarAcceso,
     obtenerNotificaciones,
-    consumirAcceso
+    consumirAcceso,
+    obtenerMedico
 }

@@ -3,8 +3,8 @@
 import { HttpClient } from "./http.client";
 
 
-const obtenerMedicosConfianza = async (id)=>{
-    return  await HttpClient.get(`/paciente/obtenerMedicosConfianza/${id}`)
+const obtenerMedicosConfianza = async ()=>{
+    return  await HttpClient.get('/medico/medico_emergencia/obtener')
 }
 
 const obtenerNotificaciones = async (id)=>{
@@ -18,11 +18,11 @@ const obtenerNotificaciones = async (id)=>{
  * @returns 
  */
 const agregarMedicoConfianza = async (datos)=>{
-    return  await HttpClient.post("/paciente/medico_confianza/nuevo", datos)
+    return  await HttpClient.post("/medico/medico_emergencia/nuevo", datos)
 }
 
 const eliminarMedicoConfianza = async (datos)=>{
-    return  await HttpClient.delete("/paciente/medico_confianza/eliminar", datos)
+    return  await HttpClient.delete("/medico/medico_emergencia/eliminar", datos)
 }
 
 const eliminarAcceso= async (datos)=>{

@@ -36,7 +36,6 @@ import Copyright from '../footer';
         marginBottom: theme.spacing(2),
     },
     root: {
-        //display: 'flex',
         width: 600,
         marginTop: theme.spacing(5),
     },
@@ -70,16 +69,6 @@ const datos = [
     
 ]
 
-const solicitudes = [
-    {
-    cedula: 'cedula 1',
-    nombre: 'nombre 1',
-    estado: "Pendiente",
-    ver: false,
-    fecha: "",
-    }
-   
-]
 
 
 
@@ -87,9 +76,8 @@ export default function SignIn() {
     const classes = useStyles();
 
 
-    let [soli] = useState({
-        solicitudes: solicitudes
-    })
+    let [soli, setSoli] = useState();
+    let [pac, setPac] = useState();
 
 
     let ehr = async ( paciente, medico, estado) => {
@@ -110,29 +98,26 @@ export default function SignIn() {
             alert("Su solicitud de acceso aún está pendiente");
         }
     }
+    
     useEffect(()=>{
-       /* try {
+       try {
             const user = JSON.parse(String(sessionStorage.getItem("user")));
             console.log(user)
             medService.obtenerNotificaciones(user.sub)
             .then(response =>{
-                // console.log(response)
-                if(response.status == 200){
-                    // console.log(response.data.msg)
-                    setSoli({solicitudes: response.data.msg})
-                    setState(response.data.msg)
+                if(response.status === 200){
+                    setSoli(response.data.msg)
                 }
             })
-            orgService.obtenerTipo(1).
-            then(response =>{
-              if(response.status == 200){
+            orgService.obtenerTipo(1)
+            .then(response =>{
+              if(response.status === 200){
                   setPac({paciente:response.data.msg})
-                //   console.log(response.data.msg)
               }  
             })
         } catch (error) {
             
-        }*/
+        }
     },[])
 
     return (
@@ -145,16 +130,16 @@ export default function SignIn() {
                 <Typography component="h1" variant="h5">Solicitudes de Acceso</Typography>
 
                 <Card className={classes.root}>
-                    {soli.solicitudes.map(({ paciente, medico, fecha_autorizacion, acceso}) => (
-                        <React.Fragment key={paciente}>
+                    {soli.map((solicitud) => (
+                        <React.Fragment key={solicitud.paciente}>
                             <div className={classes.details}>
                                 <div className={classes.demo}>
                                     <List>
                                         <ListItem>
-                                            <ListItemText primary={paciente} secondary={fecha_autorizacion} />
-                                            <ListItemText secondary={acceso?"Autorizado":"No autorizado"} />
+                                            <ListItemText primary={solicitud.paciente} secondary={solicitud.fecha_autorizacion} />
+                                            <ListItemText secondary={solicitud.acceso?"Autorizado":"No autorizado"} />
                                             <ListItemSecondaryAction>
-                                                {acceso&&<IconButton onClick={() => ehr(paciente, medico,acceso?"Autorizado":"No autorizado")} edge="end" aria-label="delete">
+                                                {solicitud.acceso&&<IconButton onClick={() => ehr(solicitud.paciente, solicitud.medico,solicitud.acceso?"Autorizado":"No autorizado")} edge="end" aria-label="delete">
                                                     <VisibilityIcon />
                                                     <Link path='/ehr'> </Link>
                                                 </IconButton>}

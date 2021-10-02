@@ -64,13 +64,13 @@ const Register = () => {
     const [email, setEmail] = useState('');
     // const [password, setPassword] = useState('');
 
-  
+
     const handleChange = e => {
         if (e.currentTarget.name === 'email') {
             setEmail(e.currentTarget.value);
         } else if (e.currentTarget.name === 'cedula') {
             setCedula(e.currentTarget.value);
-        } 
+        }
     };
 
 
@@ -83,9 +83,9 @@ const Register = () => {
         console.log(event.target.value)
         if (event.target.value == 20) {
             setRol1(PACIENTE);
-        } else if(event.target.value == 10){
+        } else if (event.target.value == 10) {
             setRol1(MEDICO);
-        }else{
+        } else {
             setRol1(-1);
 
         }
@@ -94,62 +94,56 @@ const Register = () => {
 
     const handleButtonClick = () => {
         if (!loading) {
-          setLoading(true);
-          if (cedula !== "" && email !== "" &&  rol1 !== -1) {
-            const newUsuario = {
-                cedula: cedula,
-                correo: email,
-                id_tipo: rol1,
-            }
-            console.log(newUsuario);
-            try {
-                orgService.crearAdmin(newUsuario)
-                .then( (response)=>{
-                    if(response.status === 201){
-                        setCedula("")
-                        setEmail("")
-                        setRol1(-1)
-                        setRol({
-                            rol: '',
-                            name: '',
-                        });
-                        // setOrg1(-1)
-                        alert("Usuario creado correctamente, se ha enviado un correo con las credenciales!");
-                        
-                        // setOrganizaciones(response.data.msg)
-                    }else{
-                        setLoading(false);
-                        console.log("here error", response)
-                        alert(response.data.msg)
-                    }
-                })
-            } catch (error) {
-                
-                    // console.log(result.message);
-                    // navigate('/');
-                // } else {
+            setLoading(true);
+            if (cedula !== "" && email !== "" && rol1 !== -1) {
+                const newUsuario = {
+                    cedula: cedula,
+                    correo: email,
+                    id_tipo: rol1,
+                }
+                console.log(newUsuario);
+                try {
+                    orgService.crearAdmin(newUsuario)
+                        .then((response) => {
+                            if (response.status === 201) {
+                                setCedula("")
+                                setEmail("")
+                                setRol1(-1)
+                                setRol({
+                                    rol: '',
+                                    name: '',
+                                });
+                                // setOrg1(-1)
+                                alert("Usuario creado correctamente, se ha enviado un correo con las credenciales!");
+                                setLoading(false);
+                                // setOrganizaciones(response.data.msg)
+                            } else {
+                                setLoading(false);
+                                console.log("here error", response)
+                                alert(response.data.msg)
+                            }
+                        })
+                } catch (error) {
                     console.log(error);
-                // }
-            }
-            
-        } else {
-            if(org === -1){
-                alert("No se encuentra logueado en el sistema");
+                }
 
-            }else{
-                alert(rol1)
-                alert("Ningún campo debe estar vacío. Verifique su información.");
+            } else {
+                if (org === -1) {
+                    alert("No se encuentra logueado en el sistema");
+                } else {
+                    alert(rol1)
+                    alert("Ningún campo debe estar vacío. Verifique su información.");
 
+                }
             }
-        }
 
         }
-      };
+    };
 
-    useEffect( () =>{
+    useEffect(() => {
         const user = JSON.parse(String(sessionStorage.getItem("user")));
-        orgService.obtenerUnaOrg(user.org).then( (response) =>{
-            if(response.data.success){
+        orgService.obtenerUnaOrg(user.org).then((response) => {
+            if (response.data.success) {
                 setOrg1(response.data.msg.name)
                 setOrg(response.data.msg.id)
             }
@@ -159,19 +153,9 @@ const Register = () => {
         return () => {
             // eslint-disable-next-line react-hooks/exhaustive-deps
             clearTimeout(timer.current);
-          };
+        };
     }, [])
-    // useEffect( () =>{
-    //     const user = JSON.parse(String(sessionStorage.getItem("user")));
-    //     orgService.obtenerUnaOrg(user.org).then( (response) =>{
-    //         if(response.data.success){
-    //             setOrg1(response.data.msg.name)
-    //             setOrg(response.data.msg.id)
-    //         }
-    //     })
-    //     // console.log(user.org)
-    //     setOrg1(user.org)
-    // }, [org1])
+
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -180,7 +164,7 @@ const Register = () => {
                     <PersonAddIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Crear Usuario 
+                    Crear Usuario
                 </Typography>
                 <Typography component="h1" variant="h5">
                     de Organizacion: {org1}
@@ -231,19 +215,19 @@ const Register = () => {
                                 <option value={20}>Paciente</option>
                             </Select>
                         </FormControl>
-                
-                            <Button
-                                fullWidth
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                                disabled={loading}
-                                onClick={handleButtonClick}
-                            >
-                                Crear
-                            </Button>
-                            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+
+                        <Button
+                            fullWidth
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            disabled={loading}
+                            onClick={handleButtonClick}
+                        >
+                            Crear
+                        </Button>
+                        {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                         <br></br>
                         <br></br>
 
@@ -262,4 +246,4 @@ const Register = () => {
 export default Register;
 
 
-                     
+

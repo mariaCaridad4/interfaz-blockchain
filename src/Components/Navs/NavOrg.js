@@ -96,7 +96,7 @@ export default function FullWidthTabs2() {
                     >
                         <Tab label="Crear Nivel de Acceso" {...a11yProps(0)} />
                         <Tab label="Actualizar Nivel de Acceso" {...a11yProps(1)} />
-                        <Tab label="Actualizar Organización" {...a11yProps(2)} />
+                        <Tab label="Ver Organización" {...a11yProps(2)} />
                         <Tab label="Crear Usuarios" {...a11yProps(3)} />
                         <Tab label="Registrar Administrador" {...a11yProps(4)} />
                     </Tabs>

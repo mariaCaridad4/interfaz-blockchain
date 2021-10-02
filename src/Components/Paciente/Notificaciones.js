@@ -13,7 +13,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Box from '@material-ui/core/Box';
 
-import datos from '../datos/medicos.json';
 import usuService from '../../server/usu.service';
 import Copyright from '../footer';
 
@@ -52,15 +51,13 @@ const useStyles = makeStyles((theme) => ({
     demo: {
         backgroundColor: theme.palette.background.paper,
         align: 'center',
-        //paddingLeft: theme.spacing(7),
-        //marginTop: theme.spacing(-2),
     },
 }));
 
  
 export default function Notificaciones() {
     const classes = useStyles();
-    let [state, setState] = useState([]);
+    let [state, setState] = useState();
 
 
     let onClick = async (tipo, medico, paciente) => {
@@ -71,14 +68,9 @@ export default function Notificaciones() {
             alert("Solicitud para acceso del médico Aceptada!");
         } else {
             let respu = await usuService.eliminarAcceso({medico:medico, paciente:paciente})
-
+            console.log(respu)
             alert("Solicitud para acceso del médico Rechazada!");
         }
-        // console.log(id, fecha);
-        // if (state.length === 1) {
-        //     alert("No hay solicitudes pendientes");
-        // }
-        // setState({ datos: state.datos.filter(item => item.id !== id) });
     }
 
     useEffect(()=>{

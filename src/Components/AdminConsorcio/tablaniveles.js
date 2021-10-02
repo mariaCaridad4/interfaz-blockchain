@@ -19,28 +19,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 
-const rows = [
-  {
-    id: 1,
-    nivel: 'Nivel 1',
-    nombre: 'Informacion Basica',
-  },
-  {
-    id: 2,
-    nivel: 'Nivel 2',
-    nombre: 'Informacion de Emergencia',
-  },
-  {
-      id: 3,
-      nivel: 'Nivel 3',
-      nombre: 'Informacion Cronica',
-  },
-  {
-    id: 4,
-    nivel: 'Nivel 4',
-    nombre: 'Informacion de Ejemplo',
-  },
-]
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -205,7 +183,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function EnhancedTable() {
+export default function EnhancedTable(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('nombre');
@@ -221,7 +199,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
+      const newSelecteds = props.rows.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -277,10 +255,10 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={props.rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(props.rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -316,7 +294,7 @@ export default function EnhancedTable() {
         <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={props.rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
