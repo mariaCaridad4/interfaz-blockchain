@@ -90,7 +90,7 @@ export default function FullWidthTabs2() {
                         aria-label="full width tabs example"
                     >
                         <Tab label="Crear Nivel de Acceso" {...a11yProps(0)} />
-                        <Tab label="Actualizar Nivel de Acceso" {...a11yProps(1)} />
+                        <Tab label="Ver Niveles de Acceso" {...a11yProps(1)} />
                         <Tab label="Ver Organización" {...a11yProps(2)} />
                         <Tab label="Crear Usuarios" {...a11yProps(3)} />
                     </Tabs>

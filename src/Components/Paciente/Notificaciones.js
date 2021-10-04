@@ -12,6 +12,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import usuService from '../../server/usu.service';
 import Copyright from '../footer';
@@ -54,33 +55,47 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
- 
+
 export default function Notificaciones() {
     const classes = useStyles();
-    let [state, setState] = useState();
+    const [loading, setLoading] = React.useState(false);
+
+    let [state, setState] = useState([]);
 
 
     let onClick = async (tipo, medico, paciente) => {
-        if (tipo) {
-            console.log(medico, paciente)
-            let respu = await usuService.autorizarAcceso({medico:medico, paciente:paciente})
-            console.log(respu)
-            alert("Solicitud para acceso del médico Aceptada!");
-        } else {
-            let respu = await usuService.eliminarAcceso({medico:medico, paciente:paciente})
-            console.log(respu)
-            alert("Solicitud para acceso del médico Rechazada!");
+        if (!loading){
+            setLoading(true);
+            if (tipo) {
+                console.log(medico, paciente)
+                let respu = await usuService.autorizarAcceso({ medico: medico, paciente: paciente })
+                console.log(respu)
+                alert("Solicitud para acceso del médico Aceptada!");
+            } else {
+                let respu = await usuService.eliminarAcceso({ medico: medico, paciente: paciente })
+                console.log(respu)
+                alert("Solicitud para acceso del médico Rechazada!");
+            }
+            const user = JSON.parse(String(sessionStorage.getItem("user")));
+                usuService.obtenerNotificaciones(user.sub)
+                    .then(response => {
+                        if (response.status === 200) {
+                            setState(response.data.msg)
+                        }
+                    })
+            setLoading(false);
         }
+       
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         const user = JSON.parse(String(sessionStorage.getItem("user")));
         usuService.obtenerNotificaciones(user.sub)
-        .then(response =>{
-            if(response.status === 200){
-                setState(response.data.msg)
-            }
-        })
+            .then(response => {
+                if (response.status === 200) {
+                    setState(response.data.msg)
+                }
+            })
     }, [])
 
     return (
@@ -91,6 +106,8 @@ export default function Notificaciones() {
                     <NotificationsIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">Notificaciones</Typography>
+                {loading && <CircularProgress size={24} className={classes.buttonProgress} /> }
+                
                 {state.map((notificacion) => (
                     <React.Fragment key={notificacion.medico}>
                         <Card className={classes.root}>
@@ -100,10 +117,10 @@ export default function Notificaciones() {
                                     <div className={classes.demo}>
                                         <List >
                                             <ListItem>
-                                                <ListItemText primary={notificacion.medico}  />
+                                                <ListItemText primary={notificacion.medico} />
                                             </ListItem>
                                             <ListItem>
-                                                <ListItemText secondary={notificacion.acceso? "Autorizado": 'No autorizado'} />
+                                                <ListItemText secondary={notificacion.acceso ? "Autorizado" : 'No autorizado'} />
                                             </ListItem>
                                             <ListItem>
                                                 <ListItemText secondary={notificacion.fecha_autorizacion} />
@@ -122,7 +139,7 @@ export default function Notificaciones() {
                                         className={classes.submit}
                                         onClick={() => onClick(true, notificacion.medico, notificacion.paciente)}
                                     > Aceptar
-                            </Button>
+                                    </Button>
                                     <br></br>
                                     <Button
                                         type="submit"
@@ -132,7 +149,7 @@ export default function Notificaciones() {
                                         className={classes.submit}
                                         onClick={() => onClick(false, notificacion.medico, notificacion.paciente)}
                                     > Rechazar
-                            </Button>
+                                    </Button>
                                 </CardContent>
                             </div>}
                         </Card>

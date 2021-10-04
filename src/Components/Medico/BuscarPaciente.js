@@ -14,7 +14,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
+import { PACIENTE } from '../../constantes/constantes_roles';
 
 import medService from '../../server/med.service';
 import orgService from '../../server/org.service';
@@ -182,7 +182,6 @@ export default function SignIn() {
             console.log(id);
             console.log('AQUI');
             const user = JSON.parse(String(sessionStorage.getItem("user")));
-
             let resu = await medService.solicitarAcceso({ paciente: id, medico: user.sub })
             if (resu.data.success) {
                 alert("Solicitud de acceso enviada!");
@@ -190,43 +189,14 @@ export default function SignIn() {
                 setLoading(false);
 
             }else{
-                alert("Error al enviar la solicitud!");
-                console.log(resu)
+                alert(resu.data.errorMsg);
+                console.dir(resu.data,{depth:null})
             }
-            
         }
         setLoading(false);
 
     }
 
-    // let onSubmit = e => {
-    //     let si = true;
-    //     for (let i in state.datos) {
-    //         if (e.target.value === state.datos[i].cedula) {
-    //             const newPaciente = {
-    //                 person: '/public/logo192.png',
-    //                 cedula: e.target.value,
-    //                 nombre: state.datos[i].nombre
-    //             };
-    //             si = false;
-    //             setPac({
-    //                 paciente: [newPaciente]
-    //             })
-    //         };
-    //     }
-    //     if (si && e.target.value !== '') {
-    //         alert("Paciente no encontrado.");
-    //         const newPaciente = {
-    //             person: '/public/logo192.png',
-    //             cedula: '',
-    //             nombre: ''
-    //         };
-    //         setPac({
-    //             paciente: [newPaciente]
-    //         })
-    //     }
-    //     e.preventDefault();
-    // }
 
     useEffect(() => {
         try {
@@ -241,9 +211,9 @@ export default function SignIn() {
                         setState(response.data.msg)
                     }
                 })
-            orgService.obtenerTipo(1)
+            orgService.obtenerTipo(PACIENTE)
                 .then(response => {
-                    if (response.status == 200) {
+                    if (response.status === 200) {
                         setPac({ paciente: response.data.msg })
                         //   console.log(response.data.msg)
                     }

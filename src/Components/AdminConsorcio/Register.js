@@ -189,6 +189,14 @@ const Register = () => {
                     de Organizacion: {org1}
                 </Typography>
                 <br></br>
+                {loading && 
+                <div>
+                    <CircularProgress size={24} className={classes.buttonProgress} />
+                    <br></br>
+                    <br></br>
+                </div>
+                }
+                
                 <form className={classes.form} noValidate>
                     <div className="login-input">
                         <TextField
@@ -265,7 +273,7 @@ const Register = () => {
                         >
                             Crear
                         </Button>
-                        {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                        
                         <br></br>
                         <br></br>
 

@@ -7,6 +7,10 @@ const obtenerPoliticas = async (id)=>{
     return  await HttpClient.get(`/politicas/politica/obtener/${id}`)
 }
 
+const obtenerPoliticasTodas = async ()=>{
+    return  await HttpClient.get(`/politicas/politica/obtener/`)
+}
+
 const obtenerAtributos = async ()=>{
     return  await HttpClient.get(`/politicas/atributo/obtener`)
 }
@@ -28,6 +32,7 @@ export default {
     crearAtributo,
     crearPolitica,
     obtenerAtributos,
-    obtenerPoliticas
+    obtenerPoliticas,
+    obtenerPoliticasTodas
     
 }

@@ -13,15 +13,18 @@ import Card from '@material-ui/core/Card';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Box from '@material-ui/core/Box';
-import { Link } from  'react-router-dom';
-  
+import { Link } from 'react-router-dom';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Modal from '@mui/material/Modal';
+import Divider from '@mui/material/Divider';
 
 import medService from '../../server/med.service';
 import orgService from '../../server/org.service';
 
+import Tabla from '../Medico/tabla';
 import Copyright from '../footer';
 
-  const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(2),
         display: 'flex',
@@ -65,70 +68,123 @@ import Copyright from '../footer';
     },
 }));
 
-const datos = [
-    
-]
-
-
-
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
 export default function SignIn() {
     const classes = useStyles();
+    const [loading, setLoading] = useState(false);
 
+    let [soli, setSoli] = useState([]);
+    let [pac, setPac] = useState([]);
+    let [atributos, setAtributos] = useState([]);
 
-    let [soli, setSoli] = useState();
-    let [pac, setPac] = useState();
+    const [open, setOpen] = React.useState(false);
 
-
-    let ehr = async ( paciente, medico, estado) => {
-        console.log(estado)
+    const handleOpen = async (paciente, medico, estado) => {
         if (estado === "Autorizado"){
             let respu = await medService.consumirAcceso({medico:medico, paciente:paciente})
-            if(respu.status == 200){
-                if(respu.data.msg[0]){
+            console.log(respu)
+            if(respu.status === 200){
+                if(respu?.data?.msg[0]){
+                    
+                    setAtributos(respu.data.msg[1]);
+                    setOpen(true);
+                    console.dir(respu.data.msg[1],{depth: null})
                     alert(`Se le presenta la siguiente informacion ${respu.data.msg[1]}` )
                 }else{
-                    alert("Su acceso ya fue consumido")
+                    alert("Su acceso ya fue consumido.")
                 }
             }
-            // <EHR />
         }else if (estado === "No autorizado"){
             alert("No tiene acceso a la información de este paciente porque su solicitud de acceso ha sido rechazada.");
         }else{
             alert("Su solicitud de acceso aún está pendiente");
-        }
+        }    
     }
-    
-    useEffect(()=>{
-       try {
+
+    const handleClose = () => setOpen(false);
+
+    useEffect(() => {
+        setLoading(true);
+        try {
             const user = JSON.parse(String(sessionStorage.getItem("user")));
-            console.log(user)
             medService.obtenerNotificaciones(user.sub)
-            .then(response =>{
-                if(response.status === 200){
-                    setSoli(response.data.msg)
-                }
-            })
+                .then(response => {
+
+                    if (response.status === 200) {
+                        setSoli(response.data.msg)
+                    }
+                })
             orgService.obtenerTipo(1)
-            .then(response =>{
-              if(response.status === 200){
-                  setPac({paciente:response.data.msg})
-              }  
-            })
+                .then(response => {
+                    if (response.status === 200) {
+                        setPac({ paciente: response.data.msg })
+                    }
+                })
         } catch (error) {
-            
+
         }
-    },[])
+        setLoading(false);
+
+    }, [])
 
     return (
         <Container component="main">
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Historial Clínico Unificado
+                    </Typography>
+                    <h1 align="center">Historial Clínico Unificado</h1>
+                    {/* <h1 align="center">{atributos}</h1> */}
+                    <Card className={classes.root}>
+                        {/* <Tabla titulo={"Datos del Paciente y Motivos de la Consulta"} />  */}
+                        {atributos.map((atr) => (
+                            <React.Fragment key={atr}>
+                            <div className={classes.details}>
+                                <div className={classes.demo}>
+                                    <List>
+                                        <ListItem>
+                                            <ListItemText primary={atr}  />
+                                            <ListItemText secondary={atr}  />
+                                        </ListItem>
+                                    </List>
+                                    <Divider />
+                                </div>
+                            </div>
+                        </React.Fragment>
+                        ))} 
+                    </Card>
+                </Box>
+            </Modal>
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <AssignmentIndIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">Solicitudes de Acceso</Typography>
-
+                {loading &&
+                    <div>
+                        <CircularProgress size={24} className={classes.buttonProgress} />
+                        <br></br>
+                        <br></br>
+                    </div>
+                }
                 <Card className={classes.root}>
                     {soli.map((solicitud) => (
                         <React.Fragment key={solicitud.paciente}>
@@ -137,9 +193,9 @@ export default function SignIn() {
                                     <List>
                                         <ListItem>
                                             <ListItemText primary={solicitud.paciente} secondary={solicitud.fecha_autorizacion} />
-                                            <ListItemText secondary={solicitud.acceso?"Autorizado":"No autorizado"} />
+                                            <ListItemText secondary={solicitud.acceso ? "Autorizado" : "No autorizado"} />
                                             <ListItemSecondaryAction>
-                                                {solicitud.acceso&&<IconButton onClick={() => ehr(solicitud.paciente, solicitud.medico,solicitud.acceso?"Autorizado":"No autorizado")} edge="end" aria-label="delete">
+                                                {solicitud.acceso && <IconButton onClick={()=>handleOpen(solicitud.paciente, solicitud.medico,solicitud.acceso?"Autorizado":"No autorizado")}>
                                                     <VisibilityIcon />
                                                     <Link path='/ehr'> </Link>
                                                 </IconButton>}
@@ -148,16 +204,14 @@ export default function SignIn() {
                                     </List>
                                 </div>
                             </div>
-
                         </React.Fragment>
                     ))}
                 </Card>
             </div>
             <Box mt={8}>
-        <Copyright />
-      </Box>
+                <Copyright />
+            </Box>
         </Container>
     );
 }
-
 

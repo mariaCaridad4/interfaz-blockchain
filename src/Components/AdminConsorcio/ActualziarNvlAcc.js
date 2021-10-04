@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import Box from '@material-ui/core/Box';
-  
-import datos from '../datos/org.json';
+import CardContent from '@material-ui/core/CardContent';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@mui/material/Divider';
+import Card from '@material-ui/core/Card';
+
 import Copyright from '../footer';
-import Tabla from './tablaniveles'
+
+import polService from '../../server/pol.service';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -27,87 +32,76 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(2),
     },
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width: '100%',
         marginTop: theme.spacing(3),
     },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-    formControl: {
-        margin: theme.spacing(1),
-        minWidth: 180,
-    },
     root: {
-        //display: 'flex',
-        width: 600,
+        width: '100%',
         marginTop: theme.spacing(5),
     },
 
 }));
 
-const nivel = [
-    {
-        id: 'id',
-        nombre: 'Descripcion',
-    },
-]
 
-const lista = [
-    {
-        id: '3',
-        nombre: 'Informacion Cronica',
-        nivel: 'Nivel 3',
-    },
-    {
-      id: '1',
-      nombre: 'Informacion Basica',
-      nivel: 'Nivel 1',
-    },
-    {
-      id: '2',
-      nombre: 'Informacion de Emergencia',
-      nivel: 'Nivel 2',
-    },
-    {
-      id: '4',
-      nombre: 'Informacion de Ejemplo',
-      nivel: 'Nivel 2',
-    },
-  ]
-  
 
 export default function SignUp() {
     const classes = useStyles();
 
-    let [state, setState] = React.useState({
-        datos: datos
-    });
+    let [politicas, setPoliticas] = useState([]);
 
+    useEffect(() => {
+        try {
+            polService.obtenerPoliticasTodas()
+                .then(response => {
+                    if (response.data.success) {
+                        setPoliticas(response.data.msg);
+                    } else {
+                        console.log("Error al obtener las políticas", response.data.errorMsg)
+                    }
+                })
+        } catch (error) {
+            console.log("Error en la llamada a la red.", error)
+        }
+    }, [])
 
-    let [niv, setNivel] = React.useState({
-        nivel: nivel
-    });
-
-
- 
     return (
-        <Container component="main" >
+        <Container component="main" maxWidth="sm">
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOpenIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">Gestionar Nivel de Acceso</Typography>
-
                 <Card className={classes.root}>
                     <div className={classes.details}>
-                        <Tabla rows={lista}/>
+                        <CardContent className={classes.content}>
+                            {politicas.map(pol => (
+                                <React.Fragment key={pol.nivel_acceso}>
+                                    <div className={classes.demo}>
+                                        <List >
+                                            <ListItem>
+                                                <ListItemText primary={'Nivel de Acceso: ' + pol.nivel_acceso} />
+                                            </ListItem>
+                                            <ListItem>
+                                                {pol.atributos.map(atr => {
+                                                    return (
+                                                        <ListItemText secondary={atr} />
+                                                    )
+                                                })}
+                                            </ListItem>
+                                        </List>
+                                        <Divider />
+                                    </div>
+                                </React.Fragment>
+
+                            ))}
+                        </CardContent>
                     </div>
                 </Card>
             </div>
             <Box mt={8}>
-        <Copyright />
-      </Box>
+                <Copyright />
+            </Box>
         </Container>
 
     );

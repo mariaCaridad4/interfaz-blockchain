@@ -127,7 +127,6 @@ export default function SignUp() {
     }
 
 
-    
 
     useEffect( () =>{
         try {
@@ -135,7 +134,12 @@ export default function SignUp() {
             .then( (response)=>{
                 console.log("medicos", response)
                 if(response.status === 200){
-                    setPac(response.data.msg)
+                    if (response.success){
+                        setPac(response.data.msg)
+                    }else{
+                        alert(response.errorMsg)
+                    }
+                    
                 }
             })
             usuService.obtenerMedicosConfianza()

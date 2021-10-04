@@ -99,8 +99,8 @@ export default function FullWidthTabs() {
                         <Tab label="Actualizar Usuario" {...a11yProps(0)} />
                         <Tab label="Crear Atributos" {...a11yProps(1)} />
                         <Tab label="Crear Política" {...a11yProps(2)} />
-                        <Tab label="Actualizar Política" {...a11yProps(3)} />
-                        <Tab label="Médico de Emergencia" {...a11yProps(4)} />
+                        {/* <Tab label="Actualizar Política" {...a11yProps(3)} /> */}
+                        <Tab label="Médico de Emergencia" {...a11yProps(3)} />
                     </Tabs>
                 </AppBar>
                 <SwipeableViews
@@ -118,11 +118,11 @@ export default function FullWidthTabs() {
                     <TabPanel value={value} index={2} dir={theme.direction}>
                         <CrearPolitica />
                     </TabPanel>
-                    <TabPanel value={value} index={3} dir={theme.direction}>
+                    {/* <TabPanel value={value} index={3} dir={theme.direction}>
                         <ActualizarPolitica />
-                    </TabPanel>
-                    <TabPanel value={value} index={4} dir={theme.direction}>
-                        {/* <MedicoConfianza /> */}
+                    </TabPanel> */}
+                    <TabPanel value={value} index={3} dir={theme.direction}>
+                        <MedicoConfianza />
                     </TabPanel>
                     
                 </SwipeableViews>
