@@ -102,6 +102,8 @@ export default function SignUp() {
                         Crear atributo
                     </Typography>
                     <br></br>
+                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    <br></br>
                     <form onSubmit={onSubmit2} className={classes.form} noValidate>
                         <TextField
                             value={id}
@@ -126,7 +128,7 @@ export default function SignUp() {
                         </Button>
 
                     </form>
-                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                   
 
                 </div>
                 <Box mt={8}>

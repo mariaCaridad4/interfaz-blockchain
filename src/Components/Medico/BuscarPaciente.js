@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(2),
     },
     root: {
-        width: 600,
+        width: 650,
         marginTop: theme.spacing(5),
     },
     details: {
@@ -68,48 +68,11 @@ const useStyles = makeStyles((theme) => ({
             width: 'auto',
         },
     },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    inputRoot: {
-        color: 'inherit',
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
-    },
     large: {
         width: theme.spacing(7),
         height: theme.spacing(7),
     },
-    titulo: {
-        paddingBottom: theme.spacing(3),
-        paddingTop: theme.spacing(3),
-        paddingLeft: theme.spacing(3),
-    },
 }));
-
-const datos = [
-
-]
-
-const solicitudes = [
-
-]
 
 const paciente = [
     {
@@ -132,95 +95,71 @@ export default function SignIn() {
     const classes = useStyles();
     const [loading, setLoading] = React.useState(false);
 
-    let [state, setState] = useState({
-        datos: datos
-    });
 
     let [pac, setPac] = useState({
         paciente: paciente
     });
 
     let [soli, setSoli] = useState({
-        solicitudes: solicitudes
+        solicitudes: []
     })
 
-    let [pol, setPol] = React.useState({
-        politica: politica
-    });
-
-    const [nivelacceso, setnivelacceso] = React.useState({
-        nivelacceso: '',
-        name: '',
-    });
 
 
-    const handleChange1 = (event) => {
-        const name = event.target.name;
-        setnivelacceso({
-            ...nivelacceso,
-            [name]: event.target.value,
-        });
-        let newPolitica;
-        for (let i in state.datos) {
-            newPolitica = {
-                cedula: state.datos[i].cedula,
-                nombre: state.datos[i].nombre,
-                nivelacceso: event.target.value,
-                atributo: [],
-            };
-            setPol({
-                politica: [newPolitica]
-            });
-        };
-        console.log(pol.politica);
-    };
 
-    let onClick = async (id, nombre) => {
+    let onClick = async (id) => {
         if (!loading) {
             setLoading(true);
-
-            console.log(id);
-            console.log('AQUI');
             const user = JSON.parse(String(sessionStorage.getItem("user")));
             let resu = await medService.solicitarAcceso({ paciente: id, medico: user.sub })
             if (resu.data.success) {
                 alert("Solicitud de acceso enviada!");
-                //QUITAR PACIENTE DE LA LISTA
+                cargarDatos();
                 setLoading(false);
-
-            }else{
+            } else {
                 alert(resu.data.errorMsg);
-                console.dir(resu.data,{depth:null})
+                console.dir(resu.data, { depth: null })
             }
         }
         setLoading(false);
-
     }
 
-
-    useEffect(() => {
+    let cargarDatos = () => {
         try {
             const user = JSON.parse(String(sessionStorage.getItem("user")));
             console.log(user)
             medService.obtenerNotificaciones(user.sub)
                 .then(response => {
-                    // console.log(response)
-                    if (response.status == 200) {
-                        // console.log(response.data.msg)
-                        setSoli({ solicitudes: response.data.msg })
-                        setState(response.data.msg)
-                    }
-                })
-            orgService.obtenerTipo(PACIENTE)
-                .then(response => {
                     if (response.status === 200) {
-                        setPac({ paciente: response.data.msg })
-                        //   console.log(response.data.msg)
+                        if (response.data.success) {
+                            setSoli({ solicitudes: response.data.msg })
+                            let solicitudesAux = response.data.msg
+                            console.log('solicitudes aux', solicitudesAux)
+
+                            orgService.obtenerTipo(PACIENTE)
+                                .then(response => {
+                                    console.log('Pacientes', response)
+                                    if (response.status === 200) {
+                                        if (response.data.success) {
+                                            let otroAux = response.data.msg
+                                            otroAux = otroAux.filter(item => !solicitudesAux.includes(item.cedula))
+                                            setPac({ paciente: otroAux })
+                                        }
+                                        setPac({ paciente: response.data.msg })
+                                    }
+                                })
+                        }
+
                     }
                 })
         } catch (error) {
 
         }
+    }
+
+
+    useEffect(() => {
+        cargarDatos();
     }, [])
 
     return (
@@ -234,46 +173,33 @@ export default function SignIn() {
                 <br></br>
                 {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                 <Card className={classes.root}>
-                    {/* <div onClick={onSubmit} className={classes.search} >
-                        <div className={classes.searchIcon}>
-                            <SearchIcon />
-                        </div>
-                        <InputBase
-                            placeholder="Search…"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            name="buscar"
-                            inputProps={{ 'aria-label': 'search' }}
-                        ></InputBase>
-                    </div> */}
-                    
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
-                            {pac.paciente.map(({ person, cedula, nombre, fecha }) => (
+                            {pac.paciente.map(({ cedula, correo }) => (
                                 <React.Fragment key={cedula}>
                                     <div className={classes.demo}>
                                         <List>
                                             <ListItem>
                                                 <ListItemAvatar>
-                                                    <Avatar alt="Remy Sharp" src={person} className={classes.large} />
+                                                    <Avatar alt="Remy Sharp" src='/public/logo192.png' className={classes.large} />
                                                 </ListItemAvatar>
-                                                <ListItemText primary={nombre} secondary={cedula} />
+                                                <ListItemText primary={cedula} secondary={correo} />
                                                 <ListItemText></ListItemText>
-                                                <ListItemText className={classes.buttons} >
-                                                    <Button
-                                                        type="submit"
-                                                        //fullWidth
-                                                        variant="contained"
-                                                        color="primary"
-                                                        className={classes.submit}
-                                                        onClick={() => onClick(cedula, nombre)}
-                                                    > Solicitar Acceso
-                                                    </Button>
-                                                </ListItemText>
+                                                <div>
+                                                    <ListItemText className={classes.buttons} >
+                                                        <Button
+                                                            type="submit"
+                                                            variant="contained"
+                                                            color="primary"
+                                                            className={classes.submit}
+                                                            onClick={() => onClick(cedula)}
+                                                        > Solicitar Acceso
+                                                        </Button>
+                                                    </ListItemText>
+                                                </div>
+
                                             </ListItem>
-                                           
+
                                             <br></br>
                                         </List>
                                     </div>
@@ -282,7 +208,6 @@ export default function SignIn() {
                         </CardContent>
                     </div>
                 </Card>
-
             </div>
             <Box mt={8}>
                 <Copyright />

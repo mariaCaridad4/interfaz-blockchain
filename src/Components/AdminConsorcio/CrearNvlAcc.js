@@ -73,9 +73,6 @@ export default function SignUp() {
         };
     }, []);
 
-    // const handleButtonClick = () => {
-        
-    // };
 
     let onSubmit = (e) => {
         e.preventDefault();
@@ -107,9 +104,7 @@ export default function SignUp() {
             } else {
                 alert("Ningún campo debe estar vacío. Verifique su información.");
             }
-        }
-
-        
+        }  
     }
 
     return (

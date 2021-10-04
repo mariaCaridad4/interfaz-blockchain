@@ -52,13 +52,12 @@ const useStyles = makeStyles((theme) => ({
         left: '50%',
         marginTop: -12,
         marginLeft: -12,
-      },
+    },
 }));
 
 export default function SignUp() {
     const classes = useStyles();
     const [loading, setLoading] = React.useState(false);
-    const [success, setSuccess] = React.useState(false);
     const timer = React.useRef();
 
     const [rol, setRol] = React.useState({
@@ -70,12 +69,6 @@ export default function SignUp() {
         name: '',
     });
 
-    const [org, setOrg] = React.useState({
-        org: '',
-        name: '',
-    });
-
-    const [id, setId] = React.useState(null);
     const [atributos, setAtributos] = React.useState([]);
     const [atributo, setAtributo] = React.useState(null);
     const [na, setNA] = React.useState([]);
@@ -84,7 +77,7 @@ export default function SignUp() {
 
     const handleChange1 = (event) => {
         const name = event.target.name;
-        console.log(event.target.value)
+        console.log(event.target.name, event.target.value)
         setRol({
             ...rol,
             [name]: event.target.value,
@@ -94,86 +87,89 @@ export default function SignUp() {
 
     const handleChange2 = (event) => {
         const name = event.target.name;
-        // console.log(event.target.value)
         setRol2({
             ...rol,
             [name]: event.target.value,
         });
         setAtributo(event.target.value)
     };
-    let onSubmit = (e) => {
+
+
+    const handleButtonClick = () => {
+        setLoading(true);
+        console.log(loading);
+
         if (atributo !== null && nivel_acceso !== null) {
             const newUsuario = {
                 nivel_acceso: nivel_acceso,
                 atributo: atributo,
             }
             console.log(newUsuario);
-            polservice.crearPolitica(newUsuario) 
-            .then( (response)=>{
-                console.log(response)
-                if(response.status === 201){
-                    alert("Política creada correctamente!");
-                    setAtributo(null)
-                    setNivelAcceso(null)
-                }else{
-                    alert("Hubo un incoveniente")
-                }
-                
-            })
+            polservice.crearPolitica(newUsuario)
+                .then((response) => {
+                    console.log(response)
+                    if (response.status === 201) {
+                        if (response.data.msg) {
+                            alert("Política creada correctamente!");
+                            setAtributo(null)
+                            setNivelAcceso(null)
+                            setRol2({
+                                ...rol,
+                                'rol': '',
+                            });
+                            setRol({
+                                ...rol,
+                                'rol': '',
+                            });
+                        } else {
+                            alert("Error al crear la política, intente nuevamente.")
+                        }
+                    } else {
+                        alert("Hubo un incoveniente")
+                    }
+                })
         } else {
             alert("Ningún campo debe estar vacío. Verifique su información.");
         }
-        e.preventDefault();
     }
 
-    const handleButtonClick = () => {
-        if (!loading) {
-          setSuccess(false);
-          setLoading(true);
-          timer.current = window.setTimeout(() => {
-            setSuccess(true);
-            setLoading(false);
-          }, 2000);
-        }
-      };
 
-    
-    useEffect( () =>{     
+    useEffect(() => {
         try {
             polservice.obtenerAtributos()
-            .then( (response)=>{
-                if(response.status === 200){
-                    console.log(response.data.msg)
-                    setAtributos(response.data.msg)
-                }
-            })
+                .then((response) => {
+                    if (response.status === 200) {
+                        console.log(response.data.msg)
+                        setAtributos(response.data.msg)
+                    }
+                })
             orgservice.obtenerNivelAcceso()
-            .then( (response)=>{
-                if(response.status === 200){
-                    console.log(response.data.msg)
-                    setNA(response.data.msg)
-                }
-            })
-            
+                .then((response) => {
+                    if (response.status === 200) {
+                        console.log(response.data.msg)
+                        setNA(response.data.msg)
+                    }
+                })
+
         } catch (error) {
-            
+
         }
         return () => {
             clearTimeout(timer.current);
-          };
+        };
     }, [])
     return (
         <>
-        <Container component="main" maxWidth="xs" >
-            <CssBaseline />
-            <div className={classes.paper} align="center">
-                <Avatar className={classes.avatar}>
-                    <GavelIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Crear Política
-                </Typography>
-                <form onSubmit={onSubmit} className={classes.form} noValidate>
+            <Container component="main" maxWidth="xs" >
+                <CssBaseline />
+                <div className={classes.paper} align="center">
+                    <Avatar className={classes.avatar}>
+                        <GavelIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Crear Política
+                    </Typography>
+                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <FormControl variant="outlined" className={classes.formControl}>
@@ -189,11 +185,11 @@ export default function SignUp() {
                                     }}
                                 >
                                     <option aria-label="None" value="" />
-                                    {na.map( (atrcosaibuto) =>{
-                                        return(
-                                        <option value={atrcosaibuto}>{atrcosaibuto}</option>
+                                    {na.map((atrcosaibuto) => {
+                                        return (
+                                            <option value={atrcosaibuto}>{atrcosaibuto}</option>
                                         )
-                                    })} 
+                                    })}
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -212,36 +208,33 @@ export default function SignUp() {
                                 >
                                     <option aria-label="None" value="" />
 
-                                    {atributos.map( (atrcosaibuto) =>{
-                                        return(
-                                        <option value={atrcosaibuto}>{atrcosaibuto}</option>
+                                    {atributos.map((atrcosaibuto) => {
+                                        return (
+                                            <option value={atrcosaibuto}>{atrcosaibuto}</option>
                                         )
-                                    })} 
-                                
+                                    })}
+
                                 </Select>
                             </FormControl>
                         </Grid>
 
                     </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            onClick={handleButtonClick}
-                        >
-                            Crear politica
-                        </Button>
-                        {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={handleButtonClick}
+                    >
+                        Crear politica
+                    </Button>
+                </div>
 
-                </form>
-            </div>
-
-            <Box mt={8}>
-                <Copyright />
-            </Box>
-        </Container>
+                <Box mt={8}>
+                    <Copyright />
+                </Box>
+            </Container>
 
         </>
 

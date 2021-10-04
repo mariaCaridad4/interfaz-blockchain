@@ -21,7 +21,7 @@ import Divider from '@mui/material/Divider';
 import medService from '../../server/med.service';
 import orgService from '../../server/org.service';
 
-import Tabla from '../Medico/tabla';
+
 import Copyright from '../footer';
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         width: 600,
         marginTop: theme.spacing(5),
+        alignSelf: 'center'
     },
     details: {
         display: 'flex',
@@ -55,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
     demo: {
         backgroundColor: theme.palette.background.paper,
         paddingLeft: theme.spacing(7),
+        paddingRight: theme.spacing(7),
         marginTop: theme.spacing(-2),
     },
     large: {
@@ -73,12 +75,12 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 800,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-  };
+};
 
 export default function SignIn() {
     const classes = useStyles();
@@ -88,28 +90,31 @@ export default function SignIn() {
     let [pac, setPac] = useState([]);
     let [atributos, setAtributos] = useState([]);
 
+    let [paciente_Actual, setPcnAct] = useState();
+
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = async (paciente, medico, estado) => {
-        if (estado === "Autorizado"){
-            let respu = await medService.consumirAcceso({medico:medico, paciente:paciente})
+        setPcnAct(paciente);
+        if (estado === "Autorizado") {
+            let respu = await medService.consumirAcceso({ medico: medico, paciente: paciente })
             console.log(respu)
-            if(respu.status === 200){
-                if(respu?.data?.msg[0]){
-                    
+            if (respu.status === 200) {
+                if (respu?.data?.msg[0]) {
+
                     setAtributos(respu.data.msg[1]);
                     setOpen(true);
-                    console.dir(respu.data.msg[1],{depth: null})
-                    alert(`Se le presenta la siguiente informacion ${respu.data.msg[1]}` )
-                }else{
+                    console.dir(respu.data.msg[1], { depth: null })
+                    alert(`Se le presenta la siguiente informacion ${respu.data.msg[1]}`)
+                } else {
                     alert("Su acceso ya fue consumido.")
                 }
             }
-        }else if (estado === "No autorizado"){
+        } else if (estado === "No autorizado") {
             alert("No tiene acceso a la información de este paciente porque su solicitud de acceso ha sido rechazada.");
-        }else{
+        } else {
             alert("Su solicitud de acceso aún está pendiente");
-        }    
+        }
     }
 
     const handleClose = () => setOpen(false);
@@ -120,13 +125,14 @@ export default function SignIn() {
             const user = JSON.parse(String(sessionStorage.getItem("user")));
             medService.obtenerNotificaciones(user.sub)
                 .then(response => {
-
+                    console.log('notificaciones', response)
                     if (response.status === 200) {
                         setSoli(response.data.msg)
                     }
                 })
             orgService.obtenerTipo(1)
                 .then(response => {
+                    console.log('obtener tipo', response)
                     if (response.status === 200) {
                         setPac({ paciente: response.data.msg })
                     }
@@ -147,28 +153,39 @@ export default function SignIn() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                    Historial Clínico Unificado
-                    </Typography>
                     <h1 align="center">Historial Clínico Unificado</h1>
-                    {/* <h1 align="center">{atributos}</h1> */}
+                    <Typography id="modal-modal-title" variant="h6" component="h2" align="center">
+                        del paciente {paciente_Actual}
+                    </Typography>
                     <Card className={classes.root}>
-                        {/* <Tabla titulo={"Datos del Paciente y Motivos de la Consulta"} />  */}
+                        <div className={classes.details}>
+                            <div className={classes.demo}>
+                                <List>
+                                    <ListItem>
+                                        <ListItemText primary={'Atributo'} />
+                                        <ListItemText primary={'Información'} />
+                                    </ListItem>
+                                </List>
+                                <Divider />
+                            </div>
+                        </div>
+                        <Card className={classes.root} align="center">
+                        </Card>
                         {atributos.map((atr) => (
                             <React.Fragment key={atr}>
-                            <div className={classes.details}>
-                                <div className={classes.demo}>
-                                    <List>
-                                        <ListItem>
-                                            <ListItemText primary={atr}  />
-                                            <ListItemText secondary={atr}  />
-                                        </ListItem>
-                                    </List>
-                                    <Divider />
+                                <div className={classes.details}>
+                                    <div className={classes.demo}>
+                                        <List>
+                                            <ListItem>
+                                                <ListItemText primary={atr} />
+                                                <ListItemText secondary={atr} />
+                                            </ListItem>
+                                        </List>
+                                        <Divider />
+                                    </div>
                                 </div>
-                            </div>
-                        </React.Fragment>
-                        ))} 
+                            </React.Fragment>
+                        ))}
                     </Card>
                 </Box>
             </Modal>
@@ -195,7 +212,7 @@ export default function SignIn() {
                                             <ListItemText primary={solicitud.paciente} secondary={solicitud.fecha_autorizacion} />
                                             <ListItemText secondary={solicitud.acceso ? "Autorizado" : "No autorizado"} />
                                             <ListItemSecondaryAction>
-                                                {solicitud.acceso && <IconButton onClick={()=>handleOpen(solicitud.paciente, solicitud.medico,solicitud.acceso?"Autorizado":"No autorizado")}>
+                                                {solicitud.acceso && <IconButton onClick={() => handleOpen(solicitud.paciente, solicitud.medico, solicitud.acceso ? "Autorizado" : "No autorizado")}>
                                                     <VisibilityIcon />
                                                     <Link path='/ehr'> </Link>
                                                 </IconButton>}

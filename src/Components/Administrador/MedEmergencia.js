@@ -15,6 +15,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import usuService from '../../server/usu.service';
 import medService from '../../server/med.service';
@@ -62,61 +63,38 @@ const paciente = [
 export default function SignUp() {
     const classes = useStyles();
     const current = new Date();
-    const date  = `${current.getDate()}/${current.getMonth()+1}/${current.getFullYear()}`;
+    const date = `${current.getDate()}/${current.getMonth() + 1}/${current.getFullYear()}`;
     const [loading, setLoading] = React.useState(false);
 
 
-    let [pac, setPac] = React.useState([]);
+    let [pac, setPac] = React.useState(
+        { paciente: paciente }
+    );
     let [emer, setEmer] = React.useState([]);
 
 
     let Agregar = (cedulaemr) => {
-        if (!loading) {
-            setLoading(true);
-            if (cedulaemr !== '') {
-                console.log(cedulaemr)
-                try {
-                    usuService.agregarMedicoConfianza(cedulaemr)
-                        .then((response) => {
-                            if (response.status === 201) {
-                                 //PONER LISTA SIN MEDICOS DE EMERGENCIA                        
-                                alert('Médico agregado correctamente a la lista.');   
+        console.log(loading)
+        // if (!loading) {
+        setLoading(true);
+        if (cedulaemr !== '') {
+            console.log(cedulaemr)
+            try {
+                usuService.agregarMedicoConfianza({ medico: cedulaemr })
+                    .then((response) => {
+                        if (response.status === 200) {
+                            if (response.data.success) {
+                                cargarDatos();                  
+                                alert('Médico agregado correctamente a la lista.');
                                 setLoading(false);
                             } else {
                                 setLoading(false);
-                                console.log("here error", response)
+                                console.log("here error successa agregar", response)
                                 alert(response.data.msg)
                             }
-                        })
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-        }
-    };
-
-    let onClick = (id,fecha) => {
-        if (!loading) {
-            setLoading(true);
-            try {
-                usuService.eliminarMedicoConfianza(id)
-                    .then((response) => {
-                        if (response.status === 201) {
-                            try {
-                                usuService.obtenerMedEmergencia()
-                                .then( (response)=>{
-                                    if(response.status === 200){
-                                        setEmer(response.data.msg)
-                                    }
-                                })
-                            } catch (error) {
-                                
-                            }        
-                            alert("El médico ya no se encuentra en su lista de Médicos de Emergencia!");
-                            setLoading(false);
                         } else {
                             setLoading(false);
-                            console.log("here error", response)
+                            console.log("here error agregar", response)
                             alert(response.data.msg)
                         }
                     })
@@ -124,34 +102,71 @@ export default function SignUp() {
                 console.log(error);
             }
         }
+        // }
+    };
+
+    let onClick = (id, fecha) => {
+        // if (!loading) {
+        setLoading(true);
+        try {
+            usuService.eliminarMedicoConfianza(id)
+                .then((response) => {
+                    if (response.status === 200) {
+                        if(response.data.success){
+                            cargarDatos();      
+                            alert("El médico ya no se encuentra en su lista de Médicos de Emergencia!");
+                            setLoading(false);  
+                        }else{
+                            console.log("here error on click 1", response)
+                        }
+                    } else {
+                        setLoading(false);
+                        console.log("here error on click", response)
+                        alert(response.data.msg)
+                    }
+                })
+        } catch (error) {
+            console.log(error);
+        }
+        // }
     }
 
-
-
-    useEffect( () =>{
+    let cargarDatos = () => {
+        setLoading(true);
         try {
-            medService.obtenerMedico()
-            .then( (response)=>{
-                console.log("medicos", response)
-                if(response.status === 200){
-                    if (response.success){
-                        setPac(response.data.msg)
-                    }else{
-                        alert(response.errorMsg)
-                    }
-                    
-                }
-            })
             usuService.obtenerMedicosConfianza()
-            .then( (response)=>{
-                console.log("AQUI2", response)
-                if(response.status === 200){
-                    setEmer(response.data.msg)
-                }
-            })
+                .then((response) => {
+                    console.log("medicos", response)
+                    if (response.status === 200) {
+                        if (response.data.success) {
+                            setEmer(response.data.msg)
+                            let medicosAux = response.data.msg
+                            console.log('medicos aux', medicosAux)
+                            medService.obtenerMedico()
+                                .then((response) => {
+                                    console.log("AQUI2", response)
+                                    if (response.status === 200) {
+                                        if (response.data.success) {
+                                            let otroAux = response.data.msg
+                                            otroAux = otroAux.filter(item => !medicosAux.includes(item.cedula))
+                                            setPac({ paciente: otroAux })
+                                        }
+                                    }
+                                })
+                        } else {
+                            alert('aqui alert', response.errorMsg)
+                        }
+                    }
+                })
         } catch (error) {
             console.log("here", error)
         }
+        setLoading(false);
+    }
+
+
+    useEffect(() => {
+        cargarDatos();
     }, [])
 
     return (
@@ -162,61 +177,66 @@ export default function SignUp() {
                     <PersonAddIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">Médicos de Emergencia </Typography>
-                
+
+                {loading &&
+                    <div>
+                        <CircularProgress size={24} className={classes.buttonProgress} />
+                        <br></br>
+                        <br></br>
+                    </div>
+                }
+
                 <br></br>
                 <br></br>
                 <br></br>
                 <Typography component="h6" variant="h6">Médicos para agregar a la lista</Typography>
+
                 <Card className={classes.root}>
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
                             {pac.paciente.map((medico) => (
                                 <React.Fragment key={medico.cedula}>
                                     <div className={classes.demo}>
-                                        
                                         <List>
                                             <ListItem>
-                                                <ListItemText primary={medico.nombre} secondary={medico.cedula} />
+                                                <ListItemText primary={medico.correo} secondary={medico.cedula} />
                                                 <ListItemSecondaryAction>
                                                     <Button
-                                                        onClick={()=>Agregar(medico.cedula)}
+                                                        onClick={() => Agregar(medico.cedula)}
                                                         type="submit"
                                                         fullWidth
                                                         variant="contained"
                                                         color="primary"
                                                         className={classes.submit}
                                                     > Agregar
-                                            </Button>
+                                                    </Button>
                                                 </ListItemSecondaryAction>
                                             </ListItem>
                                             <ListItem>
                                                 <ListItemText secondary={medico.rolusuario} />
                                             </ListItem>
                                         </List>
-                                       
                                     </div>
                                 </React.Fragment>
                             ))}
                         </CardContent>
                     </div>
                 </Card>
-                
+
                 <br></br>
                 <br></br>
                 <br></br>
                 <Typography component="h6" variant="h6">Médicos para eliminar de la lista</Typography>
                 <Card className={classes.root} >
                     {emer.map((medico) => (
-                        <React.Fragment key={medico.cedula}>
+                        <React.Fragment key={medico}>
                             <div className={classes.details}>
                                 <div className={classes.demo}>
                                     <List>
                                         <ListItem>
-                                            <ListItemText primary={medico.cedula} secondary={date} />
-                                            <ListItemText primary={medico.rolusuario}/>
-                                            <ListItemText primary="Nivel de acceso"/>
+                                            <ListItemText primary={medico} secondary={date} />
                                             <ListItemSecondaryAction>
-                                                <IconButton edge="end" aria-label="delete" onClick={() => onClick(medico.cedula, date)}>
+                                                <IconButton edge="end" aria-label="delete" onClick={() => onClick(medico, date)}>
                                                     <DeleteIcon />
                                                 </IconButton>
                                             </ListItemSecondaryAction>
@@ -231,8 +251,8 @@ export default function SignUp() {
 
             </div>
             <Box mt={8}>
-        <Copyright />
-      </Box>
+                <Copyright />
+            </Box>
         </Container>
     );
 }

@@ -13,6 +13,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import usuService from '../../server/usu.service';
 import Copyright from '../footer';
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         width: 100,
         align: 'center',
+        marginLeft: 30,
     },
     submit: {
         margin: theme.spacing(3, 0, 0),
@@ -67,22 +69,19 @@ export default function Notificaciones() {
         if (!loading){
             setLoading(true);
             if (tipo) {
-                console.log(medico, paciente)
-                let respu = await usuService.autorizarAcceso({ medico: medico, paciente: paciente })
-                console.log(respu)
+                await usuService.autorizarAcceso({ medico: medico, paciente: paciente })
                 alert("Solicitud para acceso del médico Aceptada!");
             } else {
-                let respu = await usuService.eliminarAcceso({ medico: medico, paciente: paciente })
-                console.log(respu)
+                await usuService.eliminarAcceso({ medico: medico, paciente: paciente })
                 alert("Solicitud para acceso del médico Rechazada!");
             }
-            const user = JSON.parse(String(sessionStorage.getItem("user")));
-                usuService.obtenerNotificaciones(user.sub)
-                    .then(response => {
-                        if (response.status === 200) {
-                            setState(response.data.msg)
-                        }
-                    })
+            // const user = JSON.parse(String(sessionStorage.getItem("user")));
+            //     usuService.obtenerNotificaciones(user.sub)
+            //         .then(response => {
+            //             if (response.status === 200) {
+            //                 setState(response.data.msg)
+            //             }
+            //         })
             setLoading(false);
         }
        
@@ -92,6 +91,7 @@ export default function Notificaciones() {
         const user = JSON.parse(String(sessionStorage.getItem("user")));
         usuService.obtenerNotificaciones(user.sub)
             .then(response => {
+                console.log(response)
                 if (response.status === 200) {
                     setState(response.data.msg)
                 }
@@ -124,6 +124,9 @@ export default function Notificaciones() {
                                             </ListItem>
                                             <ListItem>
                                                 <ListItemText secondary={notificacion.fecha_autorizacion} />
+                                            </ListItem>
+                                            <ListItem>
+                                                <ListItemText primary={'Nivel de Acceso mínimo: '+notificacion.nivel_acceso} />
                                             </ListItem>
                                         </List>
                                     </div>

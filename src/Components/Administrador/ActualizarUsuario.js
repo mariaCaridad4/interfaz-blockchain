@@ -15,7 +15,6 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import orgService from '../../server/org.service';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import TextField from '@material-ui/core/TextField';
 
 import Copyright from '../footer';
 
@@ -49,30 +48,6 @@ const useStyles = makeStyles((theme) => ({
             width: 'auto',
         },
     },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    inputRoot: {
-        color: 'inherit',
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
-    },
 }));
 
 const paciente = [
@@ -86,7 +61,6 @@ const paciente = [
 export default function SignUp() {
     const classes = useStyles();
     const [loading, setLoading] = React.useState(false);
-    const [success, setSuccess] = React.useState(false);
     const timer = React.useRef();
 
     let [pac, setPac] = React.useState({
@@ -96,45 +70,38 @@ export default function SignUp() {
 
     const Baja = (cedula) => {
         console.log(cedula.cedula)
-        if (!loading) {
-            setSuccess(false);
-            setLoading(true);
-
-            if (cedula) {
-                console.log()
-                try {
-                    orgService.eliminarUsuario(cedula.cedula)
-                        .then((response) => {
-                            if (response.status === 201) {
-                                try {
-                                    orgService.obtenerUsuario()
-                                        .then((response) => {
-                                            setLoading(false);
-                                            if (response.status === 200) {
-                                                setPac({ paciente: response.data.msg })
-                                            }
-                                        }).catch( error =>{
-                                            console.log("error delet3", error)
-                                        })
-                                } catch (error) {
-                                    setLoading(false);
-                                    console.log("error delet3", error)
-                                }
-                                alert('Usuario dado de baja correctamente.');
-                            } else {
-                                setLoading(false);
-                                console.log("here error", response)
-                                alert(response.data.msg)
-                            }
-                        })
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-            setLoading(false);
-
-        }
         setLoading(true);
+        if (cedula) {
+            try {
+                orgService.eliminarUsuario(cedula.cedula)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            try {
+                                orgService.obtenerUsuario()
+                                    .then((response) => {
+                                        setLoading(false);
+                                        if (response.status === 200) {
+                                            setPac({ paciente: response.data.msg })
+                                        }
+                                    }).catch(error => {
+                                        console.log("error delet3", error)
+                                    })
+                            } catch (error) {
+                                setLoading(false);
+                                console.log("error delet3", error)
+                            }
+                            alert('Usuario dado de baja correctamente.');
+                        } else {
+                            setLoading(false);
+                            console.log("here error", response)
+                            alert(response.data.msg)
+                        }
+                    })
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        setLoading(false);
     };
 
 
@@ -142,6 +109,7 @@ export default function SignUp() {
         try {
             orgService.obtenerUsuario()
                 .then((response) => {
+                    console.log(response)
                     if (response.status === 200) {
                         setPac({ paciente: response.data.msg })
                     }
@@ -167,15 +135,14 @@ export default function SignUp() {
                 <Card className={classes.root}>
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
-                            {pac.paciente.map(({ cedula, nombre, rolusuario }) => (
-
+                            {pac.paciente.map(({ cedula, tipoId }) => (
                                 <React.Fragment key={cedula}>
                                     <div className={classes.demo}>
                                         <List>
                                             <ListItem>
                                                 <ListItemText
-                                                    primary={nombre}
-                                                    secondary={cedula} />
+                                                    primary={cedula}
+                                                    secondary={tipoId == 1 ? 'Paciente' : (tipoId == 2 ? 'Médico' : 'Administrador')} />
                                                 <ListItemSecondaryAction>
                                                     <Button
                                                         onClick={() => Baja({ cedula })}
@@ -187,9 +154,6 @@ export default function SignUp() {
                                                     > Dar de Baja
                                                     </Button>
                                                 </ListItemSecondaryAction>
-                                            </ListItem>
-                                            <ListItem>
-                                                <ListItemText secondary={rolusuario} />
                                             </ListItem>
                                         </List>
                                     </div>
