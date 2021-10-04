@@ -88,7 +88,7 @@ export default function FullWidthTabs() {
                     >
                         <Tab label="Buscar Paciente" {...a11yProps(0)} />
                         <Tab label="Solicitudes de Acceso" {...a11yProps(1)} />
-                        <Tab label="EHR" {...a11yProps(2)} />
+                        {/* <Tab label="EHR" {...a11yProps(2)} /> */}
                     </Tabs>
                 </AppBar>
                 <SwipeableViews
@@ -102,9 +102,9 @@ export default function FullWidthTabs() {
                     <TabPanel value={value} index={1} dir={theme.direction}>
                     <Solicitudes />
                     </TabPanel>
-                    <TabPanel value={value} index={2} dir={theme.direction}>
+                    {/* <TabPanel value={value} index={2} dir={theme.direction}>
                         <EHR />
-                    </TabPanel>
+                    </TabPanel> */}
                 </SwipeableViews>
             </div>
         </Container>
